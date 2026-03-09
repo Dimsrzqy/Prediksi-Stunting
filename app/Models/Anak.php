@@ -19,6 +19,8 @@ class Anak extends Model
         'jenis_kelamin',
         'nama_ortu',
         'bb_lahir',
-        'tb_lahir'
+        'tb_lahir',
+        'berat_badan',
+        'tinggi_badan'
     ];
 }
