@@ -29,6 +29,6 @@ class Prediksi extends Model
      */
     public function anak()
     {
-        return $this->belongsTo(Anak::class, 'id_anak', 'id_anak');
+        return $this->belongsTo(Anak::class, 'id_anak');
     }
 }

@@ -13,6 +13,7 @@ class Anak extends Model
     protected $collection = 'anak';
 
     protected $fillable = [
+        'user_id',
         'nik',
         'nama_anak',
         'tgl_lahir',
