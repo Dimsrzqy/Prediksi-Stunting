@@ -75,12 +75,12 @@ class AuthController extends Controller
     // ---------------------------------------------
     public function registerApi(Request $request)
     {
-        // 1. Hapus aturan unique
+        // 1. Validasi HANYA data yang dikirim dari Flutter
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|min:6',
-            'role' => 'required'
+            // Aturan 'role' Kakak hapus karena Flutter nggak ngirim data ini
         ]);
 
         // 2. Cek manual apakah email sudah ada di database
@@ -88,25 +88,27 @@ class AuthController extends Controller
         if ($cekEmail) {
             return response()->json([
                 'pesan' => 'Waduh, email ini sudah terdaftar bro!'
-            ], 400); // 400 artinya Bad Request
+            ], 400); 
         }
 
         // 3. Simpan user ke MongoDB
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
-            'role' => $request->role
+            // WAJIB pakai Hash::make biar passwordnya aman & bisa dipakai login!
+            'password' => Hash::make($request->password), 
+            'role' => 'user' // Kita set 'user' otomatis dari backend
         ]);
 
         // 4. Buatkan Token API
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Bikin status code 200/201 biar dibaca "Sukses" sama Flutter
         return response()->json([
             'pesan' => 'Alhamdulillah, akun berhasil dibuat!',
             'data' => $user,
             'token' => $token
-        ], 201);
+        ], 201); 
     }
     // ---------------------------------------------
     // FUNGSI LOGIN (Masuk Aplikasi) - API
