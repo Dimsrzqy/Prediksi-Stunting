@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Anak;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class AnakController extends Controller
 {
 
     public function index()
     {
-        $data = Anak::all();
+        // Sebaiknya hanya tampilkan data anak milik user yang sedang login
+        $user = Auth::user();
+        $data = Anak::where('user_id', $user->id)->get();
+
         return response()->json([
             'pesan' => 'Berhasil mengambil data anak',
             'data' => $data
@@ -25,9 +30,13 @@ class AnakController extends Controller
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
             'nama_ortu' => 'required',
+            // Tambahan opsional: 'berat_lahir' => 'numeric', dll
         ]);
 
-        $anak = Anak::create($request->all());
+        $input = $request->all();
+        $input['user_id'] = Auth::id(); // Wajib ditambahkan agar terhubung dengan relasi User
+
+        $anak = Anak::create($input);
 
         return response()->json([
             'pesan' => 'Mantap! Data anak berhasil disimpan',
@@ -46,7 +55,7 @@ class AnakController extends Controller
         return response()->json([
             'pesan' => 'Detail data anak',
             'data' => $anak
-        ]);
+        ]); 
     }
 
     // Fungsi untuk MENGUPDATE data anak
@@ -82,4 +91,5 @@ class AnakController extends Controller
             'pesan' => 'Data anak berhasil dihapus dari sistem'
         ]);
     }
-}
+
+} 
