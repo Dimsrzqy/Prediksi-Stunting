@@ -9,104 +9,45 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Web Authentication
-    public function create()
-    {
-        return view('auth.register');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'user',
-        ]);
-
-        Auth::login($user);
-
-        return redirect()->route('dashboard');
-    }
-
-    public function login()
-    {
-        return view('auth.login');
-    }
-
-    public function authenticate(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-    }
-
-
     // ---------------------------------------------
     // FUNGSI REGISTER (Daftar Akun Baru) - API
     // ---------------------------------------------
     public function registerApi(Request $request)
     {
-        // 1. Hapus aturan unique
+        // 1. Validasi HANYA data yang dikirim dari Flutter
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|min:6',
-            'role' => 'required'
+            // Aturan 'role' Kakak hapus karena Flutter nggak ngirim data ini
         ]);
 
         // 2. Cek manual apakah email sudah ada di database
         $cekEmail = User::where('email', $request->email)->first();
         if ($cekEmail) {
             return response()->json([
-                'pesan' => 'email ini sudah terdaftar'
-            ], 400); // 400 artinya Bad Request
+                'pesan' => 'Waduh, email ini sudah terdaftar bro!'
+            ], 400); 
         }
 
         // 3. Simpan user ke MongoDB
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
-            'role' => $request->role
+            // WAJIB pakai Hash::make biar passwordnya aman & bisa dipakai login!
+            'password' => Hash::make($request->password), 
+            'role' => 'user' // Kita set 'user' otomatis dari backend
         ]);
 
         // 4. Buatkan Token API
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Bikin status code 200/201 biar dibaca "Sukses" sama Flutter
         return response()->json([
             'pesan' => 'akun berhasil dibuat!',
             'data' => $user,
             'token' => $token
-        ], 201);
+        ], 201); 
     }
     // ---------------------------------------------
     // FUNGSI LOGIN (Masuk Aplikasi) - API
