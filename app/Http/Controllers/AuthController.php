@@ -79,4 +79,70 @@ class AuthController extends Controller
             'role' => $user->role
         ]);
     }
+
+    // ---------------------------------------------
+    // FUNGSI WEB (Tampil Form & Proses Web)
+    // ---------------------------------------------
+    
+    // Tampilkan halaman register
+    public function create()
+    {
+        return view('auth.register');
+    }
+
+    // Proses register untuk web
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password), 
+            'role' => 'user'
+        ]);
+
+        return redirect()->route('login')->with('success', 'Akun berhasil dibuat, silakan login!');
+    }
+
+    // Tampilkan halaman login
+    public function login()
+    {
+        return view('auth.login');
+    }
+
+    // Proses login untuk web
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            
+            // Redirect ke halaman dashboard
+            return redirect()->intended('dashboard');
+        }
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah!',
+        ])->onlyInput('email');
+    }
+
+    // Proses logout untuk web
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
 }
