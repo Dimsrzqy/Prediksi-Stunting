@@ -87,7 +87,7 @@ class AuthController extends Controller
         $cekEmail = User::where('email', $request->email)->first();
         if ($cekEmail) {
             return response()->json([
-                'pesan' => 'Waduh, email ini sudah terdaftar bro!'
+                'pesan' => 'email ini sudah terdaftar'
             ], 400); // 400 artinya Bad Request
         }
 
@@ -103,7 +103,7 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'pesan' => 'Alhamdulillah, akun berhasil dibuat!',
+            'pesan' => 'akun berhasil dibuat!',
             'data' => $user,
             'token' => $token
         ], 201);
