@@ -44,7 +44,7 @@ class AuthController extends Controller
 
         // Bikin status code 200/201 biar dibaca "Sukses" sama Flutter
         return response()->json([
-            'pesan' => 'Alhamdulillah, akun berhasil dibuat!',
+            'pesan' => 'akun berhasil dibuat!',
             'data' => $user,
             'token' => $token
         ], 201); 

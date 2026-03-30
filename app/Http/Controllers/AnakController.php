@@ -49,7 +49,7 @@ class AnakController extends Controller
         $anak = Anak::find($id);
         
         if (!$anak) {
-            return response()->json(['pesan' => 'Waduh, data anak tidak ditemukan!'], 404);
+            return response()->json(['pesan' => 'data anak tidak ditemukan!'], 404);
         }
 
         return response()->json([
@@ -71,7 +71,7 @@ class AnakController extends Controller
         $anak->update($request->all());
 
         return response()->json([
-            'pesan' => 'Sip! Data anak berhasil diperbarui',
+            'pesan' => 'Data anak berhasil diperbarui',
             'data' => $anak
         ]);
     }

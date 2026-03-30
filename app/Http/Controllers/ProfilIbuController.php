@@ -47,7 +47,7 @@ class ProfilIbuController extends Controller
 
         // 1. Validasi: Cek apakah anak ada dan dimiliki oleh user yang sedang login
         if (!$anak || $anak->user_id !== $user->id) {
-            return response()->json(['message' => 'Data anak tidak ditemukan atau tidak sah.'], 403);
+            return response()->json(['message' => 'Data anak tidak ditemukan'], 403);
         }
 
         // 2. Validasi: Cek apakah profil untuk anak ini sudah ada
