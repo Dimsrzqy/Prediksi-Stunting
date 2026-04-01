@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HistoriPrediksiController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HistoriPrediksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
