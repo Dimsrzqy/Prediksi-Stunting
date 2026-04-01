@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Anak;
 use App\Models\ProfilIbu;
@@ -47,7 +49,7 @@ class ProfilIbuController extends Controller
 
         // 1. Validasi: Cek apakah anak ada dan dimiliki oleh user yang sedang login
         if (!$anak || $anak->user_id !== $user->id) {
-            return response()->json(['message' => 'Data anak tidak ditemukan atau tidak sah.'], 403);
+            return response()->json(['message' => 'Data anak tidak ditemukan'], 403);
         }
 
         // 2. Validasi: Cek apakah profil untuk anak ini sudah ada
