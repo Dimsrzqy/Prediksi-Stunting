@@ -19,6 +19,10 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/menus', function () {
+        return view('admin.menus.index');
+    })->name('menus.index');
+
     Route::resource('histori-prediksi', HistoriPrediksiController::class)->only([
         'index', 'destroy'
     ])->names([

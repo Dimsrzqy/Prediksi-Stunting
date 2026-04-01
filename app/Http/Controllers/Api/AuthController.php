@@ -128,8 +128,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             
-            // Redirect ke halaman dashboard
-            return redirect()->intended('dashboard');
+            // Redirect ke halaman menu
+            return redirect()->route('menus.index');
         }
 
         return back()->withErrors([
