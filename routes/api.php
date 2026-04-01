@@ -2,13 +2,14 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AnakController;
-use App\Http\Controllers\ProfilIbuController;
-use App\Http\Controllers\PrediksiController;
-use App\Http\Controllers\NutrisiController;
-use App\Http\Controllers\RekomendasiNutrisiController;
-use App\Http\Controllers\MakananController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AnakController;
+use App\Http\Controllers\Api\ProfilIbuController;
+use App\Http\Controllers\Api\PrediksiController;
+use App\Http\Controllers\Api\NutrisiController;
+use App\Http\Controllers\Api\RekomendasiNutrisiController;
+use App\Http\Controllers\Api\MakananController;
+use App\Http\Controllers\Api\PengukuranController;
 
 // ==========================================
 // 🔓 AREA PUBLIK (Bebas Masuk Tanpa Token)
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Semua rute di dalam kotak ini sudah digembok!
     Route::apiResource('anak', AnakController::class);
     Route::apiResource('profil-ibu', ProfilIbuController::class);
+    Route::apiResource('pengukuran', PengukuranController::class);
     Route::apiResource('prediksi', PrediksiController::class);
     Route::apiResource('nutrisi', NutrisiController::class);
     Route::apiResource('rekomendasi-nutrisi', RekomendasiNutrisiController::class);
