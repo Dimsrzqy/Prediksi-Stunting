@@ -21,8 +21,8 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="group flex items-center rounded-xl px-4 py-3 text-slate-600 transition-colors hover:bg-slate-50 hover:text-indigo-600">
-                    <i class="fa-solid fa-child-reaching w-6 text-center text-lg group-hover:text-indigo-600 transition-colors"></i>
+                <a href="{{ route('anak.index') }}" class="group flex items-center rounded-xl px-4 py-3 {{ request()->routeIs('anak.index') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600' }} transition-all">
+                    <i class="fa-solid fa-child-reaching w-6 text-center text-lg {{ request()->routeIs('anak.index') ? '' : 'group-hover:text-indigo-600' }} transition-colors"></i>
                     <span class="ml-3 font-medium">Data Anak</span>
                 </a>
             </li>
@@ -32,7 +32,7 @@
             </li>
             
             <li>
-                <a href="#" class="flex items-center rounded-xl px-4 py-3 bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 transition-all hover:bg-indigo-700">
+                <a href="{{ route('menus.index') }}" class="flex items-center rounded-xl px-4 py-3 {{ request()->routeIs('menus.index') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600' }} transition-all">
                     <i class="fa-solid fa-utensils w-6 text-center text-lg"></i>
                     <span class="ml-3 font-semibold">Menu Makanan</span>
                 </a>
