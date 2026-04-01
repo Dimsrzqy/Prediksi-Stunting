@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HistoriPrediksiController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HistoriPrediksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +18,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/menus', function () {
+        return view('admin.menus.index');
+    })->name('menus.index');
 
     Route::resource('histori-prediksi', HistoriPrediksiController::class)->only([
         'index', 'destroy'
