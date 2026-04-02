@@ -11,14 +11,12 @@
                 <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Manajemen Data Anak</h1>
                 <p class="mt-1 text-sm text-slate-500">Kelola daftar anak untuk pencatatan prediksi stunting dan pemantauan.</p>
             </div>
-            <!-- Tombol Tambah Anak -->
             <button onclick="openModal('tambah')" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-95">
                 <i class="fa-solid fa-plus"></i>
                 Tambah Data Anak
             </button>
         </div>
 
-        <!-- NOTIFICATION CONTAINER -->
         <div id="notificationWrapper" class="hidden mb-6 rounded-lg bg-green-50 p-4 border border-green-200">
             <div class="flex">
                 <div class="flex-shrink-0">
@@ -39,7 +37,6 @@
 
         <!-- TABEL DATA -->
         <div class="flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-            <!-- Table Header -->
             <div class="flex items-center justify-between p-5 border-b border-slate-200 bg-slate-50/50">
                 <h2 class="text-lg font-bold text-slate-800">Daftar Anak</h2>
                 <button onclick="fetchDataAnak()" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 shadow-sm transition-colors hover:bg-slate-50">
@@ -47,9 +44,7 @@
                 </button>
             </div>
 
-            <!-- Table Wrapper -->
             <div class="overflow-x-auto relative">
-                <!-- Loading State -->
                 <div id="tableLoading" class="absolute inset-0 bg-white/80 z-10 flex items-center justify-center backdrop-blur-sm hidden">
                     <div class="flex flex-col items-center">
                         <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600 mb-2"></i>
@@ -64,12 +59,12 @@
                             <th scope="col" class="px-6 py-4 font-semibold">Nama Anak</th>
                             <th scope="col" class="px-6 py-4 font-semibold">Tgl Lahir / Usia</th>
                             <th scope="col" class="px-6 py-4 font-semibold">Jenis Kelamin</th>
-                            <th scope="col" class="px-6 py-4 font-semibold">Nama Ortu</th>
+                            <th scope="col" class="px-6 py-4 font-semibold">Nama Ibu (Ortu)</th>
                             <th scope="col" class="px-6 py-4 font-semibold text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-100 bg-white">
-                        <!-- Data will be injected here via Javascript -->
+                        <!-- Data injected by JS -->
                     </tbody>
                 </table>
             </div>
@@ -103,10 +98,19 @@
                         <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                             <h3 id="modalTitle" class="text-lg font-semibold leading-6 text-slate-900" id="modal-title">Tambah Data Anak</h3>
                             <div class="mt-4">
-                                <!-- HTML FORM -->
                                 <form id="anakForm" class="space-y-4">
                                     <input type="hidden" id="anakId" name="id">
                                     
+                                    <div>
+                                        <label for="id_ibu" class="flex justify-between items-center text-sm font-medium text-slate-700">
+                                            <span>Pilih Ortu/Ibu Kandung <span class="text-rose-500">*</span></span>
+                                            <a href="/ibu" class="text-xs text-indigo-600 hover:underline">Kelola Data Ibu</a>
+                                        </label>
+                                        <select id="id_ibu" name="id_ibu" required class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2.5 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white sm:text-sm">
+                                            <option value="" disabled selected>Memuat data orang tua...</option>
+                                        </select>
+                                    </div>
+
                                     <div>
                                         <label for="nik" class="block text-sm font-medium text-slate-700">NIK (Nomor Induk Kependudukan)</label>
                                         <input type="text" id="nik" name="nik" required class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
@@ -132,11 +136,6 @@
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <label for="nama_ortu" class="block text-sm font-medium text-slate-700">Nama Orang Tua</label>
-                                        <input type="text" id="nama_ortu" name="nama_ortu" required class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                                    </div>
-                                    
                                     <div class="hidden">
                                         <!-- Error Message Box -->
                                         <p id="formError" class="text-sm text-red-500 mt-2 bg-red-50 p-2 rounded"></p>
@@ -156,11 +155,10 @@
 </div>
 
 <script>
-    // --- VARIABLES ---
     const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const ENDPOINT = '/api-anak';
+    const ENDPOINT_IBU = '/api-ibu';
     
-    // UI Elements
     const formModal = document.getElementById('formModal');
     const anakForm = document.getElementById('anakForm');
     const tableBody = document.getElementById('tableBody');
@@ -169,19 +167,39 @@
     const notificationWrapper = document.getElementById('notificationWrapper');
     const notificationMessage = document.getElementById('notificationMessage');
     
-    // Modal State
     let isEditMode = false;
+    let dataIbuArr = [];
 
-    // --- INIT ---
     document.addEventListener("DOMContentLoaded", () => {
-        fetchDataAnak();
+        loadDataDependencies();
     });
 
-    // --- FETCH DATA ---
-    async function fetchDataAnak() {
+    async function loadDataDependencies() {
         tableLoading.classList.remove('hidden');
+        await fetchPilihanIbu();
+        await fetchDataAnak();
+    }
+
+    async function fetchPilihanIbu() {
+        try {
+            const res = await fetch(ENDPOINT_IBU, { headers: { 'Accept': 'application/json' }});
+            const result = await res.json();
+            dataIbuArr = result || [];
+            
+            const dropdown = document.getElementById('id_ibu');
+            if(dataIbuArr.length === 0) {
+                dropdown.innerHTML = '<option value="" disabled selected>Belum ada data Profil Ibu. Tambahkan di menu Data Ibu.</option>';
+            } else {
+                dropdown.innerHTML = '<option value="" disabled selected>Pilih orang tua...</option>' + 
+                    dataIbuArr.map(n => `<option value="${n._id || n.id}">${n.nama_ibu}</option>`).join('');
+            }
+        } catch (error) {
+            console.error("Gagal load pilihan Ibu", error);
+        }
+    }
+
+    async function fetchDataAnak() {
         emptyState.classList.add('hidden');
-        
         try {
             const res = await fetch(ENDPOINT, {
                 headers: {
@@ -199,18 +217,16 @@
                 emptyState.classList.remove('hidden');
             }
         } catch (error) {
-            console.error("Gagal mengambil data anak: ", error);
+            console.error("Gagal", error);
             showNotification("Gagal mengambil data dari server", true);
         } finally {
             tableLoading.classList.add('hidden');
         }
     }
 
-    // --- RENDER TABLE ---
     function renderTable(dataArray) {
         let html = '';
         dataArray.forEach(anak => {
-            // Kalkulasi Umur Kasar
             let umurText = '-';
             if(anak.tgl_lahir) {
                 const birthDate = new Date(anak.tgl_lahir);
@@ -224,6 +240,8 @@
             const genderBadge = anak.jenis_kelamin === 'L' 
                 ? `<span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold text-blue-700"><i class="fa-solid fa-mars"></i> Laki-laki</span>` 
                 : `<span class="inline-flex items-center gap-1.5 rounded-full bg-pink-100 px-2.5 py-1 text-[11px] font-semibold text-pink-700"><i class="fa-solid fa-venus"></i> Perempuan</span>`;
+
+            const namaIbu = anak.ibu ? anak.ibu.nama_ibu : '<span class="text-rose-400">Belum Tertaut</span>';
 
             html += `
                 <tr class="group transition-colors hover:bg-slate-50/70">
@@ -243,14 +261,14 @@
                         ${genderBadge}
                     </td>
                     <td class="px-6 py-4">
-                        <span class="text-sm text-slate-600">${anak.nama_ortu || '-'}</span>
+                        <span class="text-sm text-slate-600">${namaIbu}</span>
                     </td>
                     <td class="px-6 py-4 text-center">
                         <div class="flex items-center justify-center gap-2">
                             <button onclick='openModal("edit", ${JSON.stringify(anak).replace(/'/g, "&#39;")})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white" title="Edit Data">
                                 <i class="fa-solid fa-pen-to-square text-sm"></i>
                             </button>
-                            <button onclick='deleteData(${anak.id})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 transition-colors hover:bg-rose-600 hover:text-white" title="Hapus Data">
+                            <button onclick='deleteData("${anak._id || anak.id}")' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 transition-colors hover:bg-rose-600 hover:text-white" title="Hapus Data">
                                 <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>
@@ -262,7 +280,6 @@
         emptyState.classList.add('hidden');
     }
 
-    // --- MODAL HANDLING ---
     function openModal(mode, data = null) {
         document.getElementById('formError').parentElement.classList.add('hidden');
         if (mode === 'tambah') {
@@ -276,13 +293,12 @@
             document.getElementById('modalTitle').innerText = 'Edit Data Anak';
             document.getElementById('modalIcon').className = 'fa-solid fa-pen text-indigo-600';
             
-            // Populate form
-            document.getElementById('anakId').value = data.id;
+            document.getElementById('anakId').value = data._id || data.id;
+            document.getElementById('id_ibu').value = data.id_ibu || '';
             document.getElementById('nik').value = data.nik || '';
             document.getElementById('nama_anak').value = data.nama_anak || '';
             document.getElementById('tgl_lahir').value = data.tgl_lahir || '';
             document.getElementById('jenis_kelamin').value = data.jenis_kelamin || '';
-            document.getElementById('nama_ortu').value = data.nama_ortu || '';
         }
         formModal.classList.remove('hidden');
     }
@@ -291,9 +307,7 @@
         formModal.classList.add('hidden');
     }
 
-    // --- SUBMIT DATA (CREATE/UPDATE) ---
     async function submitForm() {
-        // Validation check
         if(!anakForm.checkValidity()) {
             anakForm.reportValidity();
             return;
@@ -308,8 +322,6 @@
         if (isEditMode) {
             targetUrl = `${ENDPOINT}/${dataObj.id}`;
             pMethod = 'PUT';
-            // for Laravel, we can send PUT JSON or send POST with _method=PUT
-            // using exact fetch PUT JSON works well
         }
 
         const btnSubmit = document.getElementById('btnSubmit');
@@ -329,7 +341,7 @@
 
             const result = await res.json();
 
-            if (res.ok) {
+            if (res.ok || res.status === 201) {
                 closeModal();
                 showNotification(result.pesan || "Data berhasil disimpan!");
                 fetchDataAnak();
@@ -345,7 +357,6 @@
         }
     }
 
-    // --- DELETE DATA ---
     async function deleteData(id) {
         if (!confirm('Apakah Anda yakin ingin menghapus data anak ini? Data tidak dapat dikembalikan.')) return;
 
@@ -354,7 +365,6 @@
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 }
             });
@@ -372,7 +382,6 @@
         }
     }
 
-    // --- NOTIFICATION UTILS ---
     function showNotification(message, isError = false) {
         notificationMessage.innerText = message;
         
@@ -388,11 +397,7 @@
         }
         
         wrapper.classList.remove('hidden');
-        
-        // Auto hide after 4 seconds
-        setTimeout(() => {
-            closeNotification();
-        }, 4000);
+        setTimeout(() => closeNotification(), 4000);
     }
 
     function closeNotification() {

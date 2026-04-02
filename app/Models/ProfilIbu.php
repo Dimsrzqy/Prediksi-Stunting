@@ -18,7 +18,8 @@ class ProfilIbu extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'id_anak',
+        'user_id',
+        'nama_ibu',
         'usia_ibu',
         'tinggi_ibu',
         'pendidikan_ibu',
@@ -26,10 +27,10 @@ class ProfilIbu extends Model
     ];
 
     /**
-     * Get the anak that owns the profile.
+     * Get the anak associated with this profile.
      */
     public function anak()
     {
-        return $this->belongsTo(Anak::class, 'id_anak');
+        return $this->hasMany(Anak::class, 'id_ibu');
     }
 }

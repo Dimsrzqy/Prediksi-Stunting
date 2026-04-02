@@ -157,7 +157,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             
             // Berhasil login sebagai admin
-            return redirect()->route('menus.index');
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
