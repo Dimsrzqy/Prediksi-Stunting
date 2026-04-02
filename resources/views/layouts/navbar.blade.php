@@ -9,9 +9,27 @@
 
         <!-- Breadcrumbs -->
         <nav class="hidden md:flex items-center text-sm font-medium text-slate-500">
-            <a href="#" class="hover:text-indigo-600 transition-colors">Manajemen Gizi</a>
-            <i class="fa-solid fa-chevron-right text-[10px] mx-3 text-slate-300"></i>
-            <span class="text-slate-800">Menu Makanan</span>
+            @if(request()->routeIs('dashboard'))
+                <a href="#" class="hover:text-indigo-600 transition-colors">Utama</a>
+                <i class="fa-solid fa-chevron-right text-[10px] mx-3 text-slate-300"></i>
+                <span class="text-slate-800">Dashboard</span>
+            @elseif(request()->routeIs('anak.index'))
+                <a href="#" class="hover:text-indigo-600 transition-colors">Master Data</a>
+                <i class="fa-solid fa-chevron-right text-[10px] mx-3 text-slate-300"></i>
+                <span class="text-slate-800">Data Anak</span>
+            @elseif(request()->routeIs('ibu.index'))
+                <a href="#" class="hover:text-indigo-600 transition-colors">Master Data</a>
+                <i class="fa-solid fa-chevron-right text-[10px] mx-3 text-slate-300"></i>
+                <span class="text-slate-800">Data Ibu</span>
+            @elseif(request()->routeIs('makanan.index'))
+                <a href="#" class="hover:text-indigo-600 transition-colors">Manajemen Gizi</a>
+                <i class="fa-solid fa-chevron-right text-[10px] mx-3 text-slate-300"></i>
+                <span class="text-slate-800">Menu Makanan</span>
+            @else
+                <a href="#" class="hover:text-indigo-600 transition-colors">Halaman</a>
+                <i class="fa-solid fa-chevron-right text-[10px] mx-3 text-slate-300"></i>
+                <span class="text-slate-800">Sistem</span>
+            @endif
         </nav>
     </div>
 

@@ -18,10 +18,15 @@ class Anak extends Model
         'nama_anak',
         'tgl_lahir',
         'jenis_kelamin',
-        'nama_ortu',
+        'id_ibu',
         'bb_lahir',
         'tb_lahir',
         'berat_badan',
         'tinggi_badan'
     ];
+
+    public function ibu()
+    {
+        return $this->belongsTo(ProfilIbu::class, 'id_ibu');
+    }
 }

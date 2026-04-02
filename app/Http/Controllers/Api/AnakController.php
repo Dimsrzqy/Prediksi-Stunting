@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Anak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +13,8 @@ class AnakController extends Controller
 
     public function index()
     {
-        // Sebaiknya hanya tampilkan data anak milik user yang sedang login
         $user = Auth::user();
-        $data = Anak::where('user_id', $user->id)->get();
+        $data = Anak::where('user_id', $user->id)->with('ibu')->get();
 
         return response()->json([
             'pesan' => 'Berhasil mengambil data anak',
@@ -31,8 +29,7 @@ class AnakController extends Controller
             'nama_anak' => 'required',
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
-            'nama_ortu' => 'required',
-            // Tambahan opsional: 'berat_lahir' => 'numeric', dll
+            'id_ibu' => 'required',
         ]);
 
         $input = $request->all();
@@ -48,7 +45,7 @@ class AnakController extends Controller
 
     public function show($id)
     {
-        $anak = Anak::find($id);
+        $anak = Anak::with('ibu')->find($id);
         
         if (!$anak) {
             return response()->json(['pesan' => 'data anak tidak ditemukan!'], 404);
@@ -60,7 +57,6 @@ class AnakController extends Controller
         ]); 
     }
 
-    // Fungsi untuk MENGUPDATE data anak
     public function update(Request $request, $id)
     {
         $anak = Anak::find($id);
@@ -69,7 +65,6 @@ class AnakController extends Controller
             return response()->json(['pesan' => 'Data anak tidak ditemukan!'], 404);
         }
 
-        // Update data dengan isian baru dari Flutter
         $anak->update($request->all());
 
         return response()->json([
@@ -78,7 +73,6 @@ class AnakController extends Controller
         ]);
     }
 
-    // Fungsi untuk MENGHAPUS data anak
     public function destroy($id)
     {
         $anak = Anak::find($id);
@@ -93,5 +87,4 @@ class AnakController extends Controller
             'pesan' => 'Data anak berhasil dihapus dari sistem'
         ]);
     }
-
-} 
+}

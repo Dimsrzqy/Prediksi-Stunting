@@ -129,7 +129,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             
             // Redirect ke halaman menu
-            return redirect()->route('menus.index');
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([

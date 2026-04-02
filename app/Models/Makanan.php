@@ -35,6 +35,6 @@ class Makanan extends Model
      */
     public function nutrisi()
     {
-        return $this->belongsTo(Nutrisi::class, 'id_nutrisi', 'id_nutrisi');
+        return $this->belongsTo(Nutrisi::class, 'id_nutrisi');
     }
 }
