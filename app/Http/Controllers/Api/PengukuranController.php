@@ -4,14 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengukuran;
+use App\Models\Anak;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PengukuranController extends Controller
 {
     public function index()
     {
-        // Secara ideal hanya menampilkan pengukuran anak sesuai relasi milik ibu yang login, tapi ini contoh dasar
-        $data = Pengukuran::with('anak')->get();
+        // Hanya ambil List Anak yang dimiliki si Ibu
+        $anakIds = Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
+
+        // Cari pengukuran yang bersangkutan dengan List Anak tersebut
+        $data = Pengukuran::whereIn('id_anak', $anakIds)->with('anak')->get();
         return response()->json([
             'pesan' => 'Berhasil mengambil data pengukuran anak',
             'data' => $data
@@ -28,6 +33,12 @@ class PengukuranController extends Controller
             'tanggal_ukur' => 'required|date',
         ]);
 
+        // CEK SISTEM KEAMANAN: Apakah Anak ini benar-benar milik user yang Login?
+        $anak = Anak::where('_id', $request->id_anak)->where('user_id', Auth::id())->first();
+        if (!$anak) {
+            return response()->json(['pesan' => 'Akses Dilarang! Anak ini bukan milik Anda.'], 403);
+        }
+
         $pengukuran = Pengukuran::create($request->all());
 
         return response()->json([
@@ -40,8 +51,9 @@ class PengukuranController extends Controller
     {
         $pengukuran = Pengukuran::with('anak')->find($id);
 
-        if (!$pengukuran) {
-            return response()->json(['pesan' => 'Data pengukuran tidak ditemukan!'], 404);
+        // Jika data hilang ATAU anak yg dicek bukan mili Auth
+        if (!$pengukuran || $pengukuran->anak->user_id !== Auth::id()) {
+            return response()->json(['pesan' => 'Data pengukuran tidak ditemukan atau Anda dilarang mengakses!'], 403);
         }
 
         return response()->json([
@@ -52,10 +64,10 @@ class PengukuranController extends Controller
 
     public function update(Request $request, $id)
     {
-        $pengukuran = Pengukuran::find($id);
+        $pengukuran = Pengukuran::with('anak')->find($id);
 
-        if (!$pengukuran) {
-            return response()->json(['pesan' => 'Data pengukuran tidak ditemukan!'], 404);
+        if (!$pengukuran || $pengukuran->anak->user_id !== Auth::id()) {
+            return response()->json(['pesan' => 'Data pengukuran tidak ditemukan atau Anda dilarang mengakses!'], 403);
         }
 
         $pengukuran->update($request->all());
@@ -68,10 +80,10 @@ class PengukuranController extends Controller
 
     public function destroy($id)
     {
-        $pengukuran = Pengukuran::find($id);
+        $pengukuran = Pengukuran::with('anak')->find($id);
 
-        if (!$pengukuran) {
-            return response()->json(['pesan' => 'Data pengukuran tidak ditemukan!'], 404);
+        if (!$pengukuran || $pengukuran->anak->user_id !== Auth::id()) {
+            return response()->json(['pesan' => 'Data pengukuran tidak ditemukan atau Anda dilarang mengakses!'], 403);
         }
 
         $pengukuran->delete();

@@ -14,7 +14,10 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Rute yang butuh Login
 Route::middleware('auth')->group(function () {
+    
+    // Kembali menggunakan dashboard web bawaan
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
