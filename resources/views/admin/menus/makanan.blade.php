@@ -318,9 +318,13 @@
         }
         document.getElementById('nutrisiEmptyState').classList.add('hidden');
         
-        tbody.innerHTML = dataArray.map((item, idx) => `
+        tbody.innerHTML = dataArray.map((item, idx) => {
+            const rowId = item._id || item.id;
+            return `
             <tr class="group transition-colors hover:bg-slate-50/70">
-                <td class="px-6 py-4 font-medium text-slate-500">#${item.id}</td>
+                <td class="px-6 py-4 font-medium text-slate-500 text-xs">
+                    <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded">UID: ${rowId}</span>
+                </td>
                 <td class="px-6 py-4 font-bold text-slate-800">
                     <i class="fa-solid fa-caret-right text-green-500 mr-2 text-xs"></i> 
                     ${item.nama_nutrisi}
@@ -330,19 +334,20 @@
                         <button onclick='openModalNutrisi("edit", ${JSON.stringify(item).replace(/'/g, "&#39;")})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white" title="Edit">
                             <i class="fa-solid fa-pen-to-square text-sm"></i>
                         </button>
-                        <button onclick='deleteNutrisi(${item.id})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white" title="Hapus">
+                        <button onclick='deleteNutrisi("${item._id || item.id}")' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white" title="Hapus">
                             <i class="fa-solid fa-trash-can text-sm"></i>
                         </button>
                     </div>
                 </td>
             </tr>
-        `).join('');
+            `;
+        }).join('');
     }
 
     function populateSelectNutrisi() {
         const sel = document.getElementById('id_nutrisi');
         sel.innerHTML = '<option value="" disabled selected>Pilih Kategori...</option>' + 
-            globalNutrisiData.map(n => `<option value="${n.id}">${n.nama_nutrisi}</option>`).join('');
+            globalNutrisiData.map(n => `<option value="${n._id || n.id}">${n.nama_nutrisi}</option>`).join('');
     }
 
     function openModalNutrisi(mode, data = null) {
@@ -357,7 +362,7 @@
         } else {
             isEditNutrisi = true;
             document.getElementById('modalNutrisiTitle').innerHTML = '<i class="fa-solid fa-pen text-green-600"></i> Edit Kategori Nutrisi';
-            document.getElementById('nutrisiId').value = data.id;
+            document.getElementById('nutrisiId').value = data._id || data.id;
             document.getElementById('nama_nutrisi').value = data.nama_nutrisi;
         }
         document.getElementById('modalNutrisi').classList.remove('hidden');
@@ -465,7 +470,7 @@
                         <button onclick='openModalMakanan("edit", ${JSON.stringify(item).replace(/'/g, "&#39;")})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white" title="Edit">
                             <i class="fa-solid fa-pen-to-square text-sm"></i>
                         </button>
-                        <button onclick='deleteMakanan(${item.id})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white" title="Hapus">
+                        <button onclick='deleteMakanan("${item._id || item.id}")' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white" title="Hapus">
                             <i class="fa-solid fa-trash-can text-sm"></i>
                         </button>
                     </div>
@@ -486,7 +491,7 @@
         } else {
             isEditMakanan = true;
             document.getElementById('modalMakananTitle').innerHTML = '<i class="fa-solid fa-pen text-indigo-600"></i> Edit Menu Makanan';
-            document.getElementById('makananId').value = data.id;
+            document.getElementById('makananId').value = data._id || data.id;
             document.getElementById('nama_makanan').value = data.nama_makanan;
             document.getElementById('id_nutrisi').value = data.id_nutrisi;
             document.getElementById('deskripsi').value = data.deskripsi || '';

@@ -22,18 +22,23 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/menus', function () {
-        return view('admin.menus.index');
-    })->name('menus.index');
+    Route::get('/makanan', function () {
+        return view('admin.menus.makanan');
+    })->name('makanan.index');
 
     Route::get('/anak', function () {
         return view('admin.menus.anak');
     })->name('anak.index');
 
+    Route::get('/ibu', function () {
+        return view('admin.menus.ibu');
+    })->name('ibu.index');
+
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
     Route::apiResource('api-anak', \App\Http\Controllers\Api\AnakController::class);
     Route::apiResource('api-nutrisi', \App\Http\Controllers\Api\NutrisiController::class);
     Route::apiResource('api-makanan', \App\Http\Controllers\Api\MakananController::class);
+    Route::apiResource('api-ibu', \App\Http\Controllers\Api\ProfilIbuController::class);
 
 
     Route::resource('histori-prediksi', HistoriPrediksiController::class)->only([
