@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Create Account - StuntCheck</title>
+    <title>Reset Password - StuntCheck</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -71,79 +71,71 @@
                     </div>
                     <span class="text-2xl font-bold text-gray-900 tracking-tight">StuntCheck</span>
                 </div>
-                <h1 class="text-3xl font-extrabold text-primary-blue mt-4">Create Account</h1>
-                <p class="text-gray-900 font-semibold text-sm text-center mt-4 leading-tight">Create an account so you can explore all the existing features</p>
+                <h1 class="text-3xl font-extrabold text-primary-blue mt-4 text-center">Reset Password</h1>
+                <p class="text-gray-600 font-medium text-sm text-center mt-4 leading-relaxed">
+                    Set your new password below.
+                </p>
             </div>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-5">
-                @csrf
-                
-                <div>
-                    <input id="name" name="name" type="text" value="{{ old('name') }}" required
-                        class="block w-full px-5 py-3.5 rounded-2xl bg-custom-blue text-gray-900 border-2 border-gray-300 focus:border-primary-blue focus:bg-white outline-none transition-all duration-300 placeholder:text-black"
-                        placeholder="Full Name">
-                    @error('name')
-                        <p class="mt-1 text-xs text-red-500 font-medium ml-2">{{ $message }}</p>
-                    @enderror
+            @if (session('status'))
+                <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 p-4 rounded-2xl border border-green-200">
+                    {{ session('status') }}
                 </div>
+            @endif
 
-                <div>
-                    <input id="email" name="email" type="email" value="{{ old('email') }}" required
-                        class="block w-full px-5 py-3.5 rounded-2xl bg-custom-blue text-gray-900 border-2 border-gray-300 focus:border-primary-blue focus:bg-white outline-none transition-all duration-300 placeholder:text-black"
-                        placeholder="Email">
-                    @error('email')
-                        <p class="mt-1 text-xs text-red-500 font-medium ml-2">{{ $message }}</p>
-                    @enderror
-                </div>
+            <form method="POST" action="{{ route('password.update') }}" class="space-y-6">
+                @csrf
+                <input type="hidden" name="token" value="{{ $token }}">
+                <input type="hidden" name="email" value="{{ old('email', $email) }}">
+                
+                @error('email')
+                    <p class="mt-2 text-xs text-red-500 font-medium ml-2">{{ $message }}</p>
+                @enderror
+                @error('token')
+                    <p class="mt-2 text-xs text-red-500 font-medium ml-2 text-center">{{ $message }}</p>
+                @enderror
 
                 <div class="relative group">
-                    <input id="password" name="password" type="password" required
+                    <input id="password" name="password" type="password" required autofocus
                         class="block w-full px-5 py-3.5 rounded-2xl bg-custom-blue text-gray-900 border-2 border-gray-300 focus:border-primary-blue focus:bg-white outline-none transition-all duration-300 placeholder:text-black"
-                        placeholder="Password">
-                    <button type="button" onclick="togglePassword('password')" class="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-primary-blue transition-colors">
-                        <svg class="h-5 w-5" fill="none" id="eye-icon-password" stroke="currentColor" viewBox="0 0 24 24">
+                        placeholder="New Password">
+                    <button type="button" onclick="togglePassword('password', 'eye-icon-1')" class="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-primary-blue transition-colors">
+                        <svg class="h-5 w-5" fill="none" id="eye-icon-1" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                     </button>
+                    @error('password')
+                        <p class="mt-2 text-xs text-red-500 font-medium ml-2">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="relative group">
                     <input id="password_confirmation" name="password_confirmation" type="password" required
                         class="block w-full px-5 py-3.5 rounded-2xl bg-custom-blue text-gray-900 border-2 border-gray-300 focus:border-primary-blue focus:bg-white outline-none transition-all duration-300 placeholder:text-black"
-                        placeholder="Confirm Password">
-                    <button type="button" onclick="togglePassword('password_confirmation')" class="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-primary-blue transition-colors">
-                        <svg class="h-5 w-5" fill="none" id="eye-icon-password_confirmation" stroke="currentColor" viewBox="0 0 24 24">
+                        placeholder="Confirm New Password">
+                    <button type="button" onclick="togglePassword('password_confirmation', 'eye-icon-2')" class="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-primary-blue transition-colors">
+                        <svg class="h-5 w-5" fill="none" id="eye-icon-2" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                     </button>
                 </div>
-                
-                @error('password')
-                    <p class="mt-1 text-xs text-red-500 font-medium ml-2">{{ $message }}</p>
-                @enderror
 
                 <div class="pt-4">
                     <button type="submit"
                         class="w-full flex justify-center py-4 px-4 rounded-2xl shadow-xl text-lg font-bold text-white bg-primary-blue hover:bg-blue-800 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-blue-200">
-                        Sign Up
+                        Reset Password
                     </button>
                 </div>
             </form>
-
-            <div class="mt-8 text-center">
-                <a href="{{ route('login') }}" class="text-gray-600 font-bold text-sm hover:text-primary-blue transition-colors">
-                    Already have an account? <span class="text-primary-blue">Sign In</span>
-                </a>
-            </div>
         </div>
     </div>
 
     <script>
-        function togglePassword(id) {
-            const input = document.getElementById(id);
-            const icon = document.getElementById('eye-icon-' + id);
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
             
             if (input.type === 'password') {
                 input.type = 'text';

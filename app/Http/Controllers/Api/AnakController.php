@@ -28,6 +28,11 @@ class AnakController extends Controller
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
             'nama_ortu' => 'required',
+            'bb_lahir' => 'nullable|numeric',
+            'tb_lahir' => 'nullable|numeric',
+            'berat_badan' => 'nullable|numeric',
+            'tinggi_badan' => 'nullable|numeric',
+            'tgl_pemeriksaan' => 'nullable|date',
         ]);
 
         $input = $request->all();
@@ -36,7 +41,7 @@ class AnakController extends Controller
         $anak = Anak::create($input);
 
         return response()->json([
-            'pesan' => 'Mantap! Data anak berhasil disimpan',
+            'pesan' => 'Data anak berhasil disimpan',
             'data' => $anak
         ], 201);
     }
@@ -62,6 +67,19 @@ class AnakController extends Controller
         if (!$anak) {
             return response()->json(['pesan' => 'Data anak tidak ditemukan atau Anda tidak memiliki akses!'], 403);
         }
+
+        $request->validate([
+            'nik' => 'nullable',
+            'nama_anak' => 'nullable',
+            'tgl_lahir' => 'nullable|date',
+            'jenis_kelamin' => 'nullable',
+            'nama_ortu' => 'nullable',
+            'bb_lahir' => 'nullable|numeric',
+            'tb_lahir' => 'nullable|numeric',
+            'berat_badan' => 'nullable|numeric',
+            'tinggi_badan' => 'nullable|numeric',
+            'tgl_pemeriksaan' => 'nullable|date',
+        ]);
 
         $anak->update($request->all());
 
