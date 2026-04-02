@@ -5,10 +5,11 @@ namespace App\Models;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens; 
-
-class User extends Authenticatable
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+class User extends Authenticatable implements CanResetPasswordContract
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, CanResetPassword;
 
     protected $connection = 'mongodb';
     protected $collection = 'users';
@@ -18,7 +19,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', 
+        'role',
     ];
 
     protected $hidden = [

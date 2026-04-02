@@ -20,15 +20,19 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email',
-            'password' => 'required|min:6',
-            // Aturan 'role' Kakak hapus karena Flutter nggak ngirim data ini
+            'password' => [
+                'required',
+                'min:8',
+                'regex:/[a-zA-Z]/', // ada huruf
+                'regex:/[0-9]/',    // ada angka
+            ],
         ]);
 
         // 2. Cek manual apakah email sudah ada di database
         $cekEmail = User::where('email', $request->email)->first();
         if ($cekEmail) {
             return response()->json([
-                'pesan' => 'Waduh, email ini sudah terdaftar bro!'
+                'pesan' => 'email ini sudah terdaftar!'
             ], 400); 
         }
 
@@ -68,7 +72,7 @@ class AuthController extends Controller
         // 3. Cek apakah user ada DAN passwordnya cocok (Hash::check)
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'pesan' => 'Waduh, Email atau Password salah bro!'
+                'pesan' => 'Email atau Password salah!'
             ], 401);
         }
 
@@ -98,10 +102,21 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => [
+                'required',
+                'min:8',
+                'confirmed',
+                'regex:/[a-zA-Z]/',      // harus ada huruf
+                'regex:/[0-9]/',       // harus ada angka
+            ],
+        ], [
+            'email.unique' => 'Email ini sudah terdaftar, silakan gunakan email lain.',
+            'password.min' => 'Password minimal harus 8 karakter.',
+            'password.regex' => 'Password harus kombinasi huruf dan angka.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password), 
@@ -126,9 +141,22 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            // Cek apakah role-nya login sebagai admin
+            if ($user->role !== 'admin') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withErrors([
+                    'email' => 'Anda bukan admin! Akses web dibatasi.',
+                ])->onlyInput('email');
+            }
+
             $request->session()->regenerate();
             
-            // Redirect ke halaman menu
+            // Berhasil login sebagai admin
             return redirect()->route('dashboard');
         }
 

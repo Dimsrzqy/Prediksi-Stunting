@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - StuntCheck</title>
+    <title>Forgot Password - StuntCheck</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -71,74 +71,43 @@
                     </div>
                     <span class="text-2xl font-bold text-gray-900 tracking-tight">StuntCheck</span>
                 </div>
-                <h1 class="text-3xl font-extrabold text-primary-blue mt-4">Login Here</h1>
-                <p class="text-gray-900 font-semibold text-lg text-center mt-4 leading-tight">Welcome back you've been missed!</p>
+                <h1 class="text-3xl font-extrabold text-primary-blue mt-4 text-center">Forgot Password?</h1>
+                <p class="text-gray-600 font-medium text-sm text-center mt-4 leading-relaxed">
+                    No problem! Just let us know your email address and we will email you a password reset link.
+                </p>
             </div>
 
-            @if (session('success'))
+            @if (session('status'))
                 <div class="mb-6 p-4 rounded-2xl bg-green-50 border border-green-100 text-green-600 text-sm font-medium">
-                    {{ session('success') }}
+                    {{ session('status') }}
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+            <form method="POST" action="{{ route('password.email') }}" class="space-y-6">
                 @csrf
                 
                 <div>
-                    <input id="email" name="email" type="email" value="{{ old('email') }}" required
+                    <input id="email" name="email" type="email" value="{{ old('email') }}" required autofocus
                         class="block w-full px-5 py-3.5 rounded-2xl bg-custom-blue text-gray-900 border-2 border-gray-300 focus:border-primary-blue focus:bg-white outline-none transition-all duration-300 placeholder:text-black"
-                        placeholder="Email">
+                        placeholder="Enter your email">
                     @error('email')
                         <p class="mt-2 text-xs text-red-500 font-medium ml-2">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="relative group">
-                    <input id="password" name="password" type="password" required
-                        class="block w-full px-5 py-3.5 rounded-2xl bg-custom-blue text-gray-900 border-2 border-gray-300 focus:border-primary-blue focus:bg-white outline-none transition-all duration-300 placeholder:text-black"
-                        placeholder="Password">
-                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-primary-blue transition-colors">
-                        <svg class="h-5 w-5" fill="none" id="eye-icon" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
-                </div>
-
-                @if (Route::has('password.request'))
-                    <div class="flex justify-end pr-2">
-                        <a href="{{ route('password.request') }}" class="text-sm font-bold text-primary-blue hover:underline">Lupa Password?</a>
-                    </div>
-                @endif
-
                 <div class="pt-4">
                     <button type="submit"
                         class="w-full flex justify-center py-4 px-4 rounded-2xl shadow-xl text-lg font-bold text-white bg-primary-blue hover:bg-blue-800 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-blue-200">
-                        Sign In
+                        Email Password Reset Link
                     </button>
                 </div>
             </form>
 
             <div class="mt-10 text-center">
-                <a href="{{ route('register') }}" class="text-gray-600 font-bold hover:text-primary-blue transition-colors text-sm">Create new account</a>
+                <a href="{{ route('login') }}" class="text-gray-600 font-bold hover:text-primary-blue transition-colors text-sm">Back to Login</a>
             </div>
         </div>
     </div>
-
-    <script>
-        function togglePassword() {
-            const input = document.getElementById('password');
-            const icon = document.getElementById('eye-icon');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.04m4.066-1.56a10.048 10.048 0 014.113-1.045c4.478 0 8.268 2.943 9.542 7a9.97 9.97 0 01-1.563 3.04m-4.066 1.56A10.048 10.048 0 0112 13c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.04M9 9l6 6M9 15l6-6" />';
-            } else {
-                input.type = 'password';
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />';
-            }
-        }
-    </script>
 </body>
 
 </html>
