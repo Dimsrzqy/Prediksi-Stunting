@@ -55,12 +55,14 @@
                 <table class="w-full text-left text-sm text-slate-600">
                     <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-200">
                         <tr>
-                            <th scope="col" class="px-6 py-4 font-semibold">NIK</th>
-                            <th scope="col" class="px-6 py-4 font-semibold">Nama Anak</th>
-                            <th scope="col" class="px-6 py-4 font-semibold">Tgl Lahir / Usia</th>
-                            <th scope="col" class="px-6 py-4 font-semibold">Jenis Kelamin</th>
-                            <th scope="col" class="px-6 py-4 font-semibold">Nama Ibu (Ortu)</th>
-                            <th scope="col" class="px-6 py-4 font-semibold text-center">Aksi</th>
+                            <th scope="col" class="px-4 py-4 font-semibold">NIK</th>
+                            <th scope="col" class="px-4 py-4 font-semibold">Nama Anak</th>
+                            <th scope="col" class="px-4 py-4 font-semibold">Tgl Lahir / Usia</th>
+                            <th scope="col" class="px-4 py-4 font-semibold">Jenis Kelamin</th>
+                            <th scope="col" class="px-4 py-4 font-semibold">Nama Ibu (Ortu)</th>
+                            <th scope="col" class="px-4 py-4 font-semibold">Data Lahir</th>
+                            <th scope="col" class="px-4 py-4 font-semibold">Pemeriksaan Tkh</th>
+                            <th scope="col" class="px-4 py-4 font-semibold text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-100 bg-white">
@@ -79,7 +81,7 @@
                     <p class="text-sm">Silakan tambahkan data anak untuk mulai memantau.</p>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </main>
@@ -100,7 +102,7 @@
                             <div class="mt-4">
                                 <form id="anakForm" class="space-y-4">
                                     <input type="hidden" id="anakId" name="id">
-                                    
+
                                     <div>
                                         <label for="id_ibu" class="flex justify-between items-center text-sm font-medium text-slate-700">
                                             <span>Pilih Ortu/Ibu Kandung <span class="text-rose-500">*</span></span>
@@ -112,22 +114,22 @@
                                     </div>
 
                                     <div>
-                                        <label for="nik" class="block text-sm font-medium text-slate-700">NIK (Nomor Induk Kependudukan)</label>
+                                        <label for="nik" class="block text-sm font-medium text-slate-700">NIK (Nomor Induk Kependudukan) <span class="text-rose-500">*</span></label>
                                         <input type="text" id="nik" name="nik" required class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                                     </div>
-                                    
+
                                     <div>
-                                        <label for="nama_anak" class="block text-sm font-medium text-slate-700">Nama Lengkap Anak</label>
+                                        <label for="nama_anak" class="block text-sm font-medium text-slate-700">Nama Lengkap Anak <span class="text-rose-500">*</span></label>
                                         <input type="text" id="nama_anak" name="nama_anak" required class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label for="tgl_lahir" class="block text-sm font-medium text-slate-700">Tanggal Lahir</label>
+                                            <label for="tgl_lahir" class="block text-sm font-medium text-slate-700">Tanggal Lahir <span class="text-rose-500">*</span></label>
                                             <input type="date" id="tgl_lahir" name="tgl_lahir" required class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                                         </div>
                                         <div>
-                                            <label for="jenis_kelamin" class="block text-sm font-medium text-slate-700">Jenis Kelamin</label>
+                                            <label for="jenis_kelamin" class="block text-sm font-medium text-slate-700">Jenis Kelamin <span class="text-rose-500">*</span></label>
                                             <select id="jenis_kelamin" name="jenis_kelamin" required class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2.5 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm bg-white">
                                                 <option value="" disabled selected>Pilih...</option>
                                                 <option value="L">Laki-laki</option>
@@ -136,8 +138,36 @@
                                         </div>
                                     </div>
 
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="bb_lahir" class="block text-sm font-medium text-slate-700">BB Lahir (kg)</label>
+                                            <input type="number" step="0.01" id="bb_lahir" name="bb_lahir" placeholder="Contoh: 3.2" class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                        </div>
+                                        <div>
+                                            <label for="tb_lahir" class="block text-sm font-medium text-slate-700">TB Lahir (cm)</label>
+                                            <input type="number" step="0.1" id="tb_lahir" name="tb_lahir" placeholder="Contoh: 50.5" class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                        </div>
+                                    </div>
+
+                                    <div class="border-t border-slate-200 pt-4 mt-2">
+                                        <h4 class="text-sm font-semibold text-slate-800 mb-3">Data Pemeriksaan Terakhir</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                            <div>
+                                                <label for="berat_badan" class="block text-sm font-medium text-slate-700">Berat Badan (kg)</label>
+                                                <input type="number" step="0.01" id="berat_badan" name="berat_badan" class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                            </div>
+                                            <div>
+                                                <label for="tinggi_badan" class="block text-sm font-medium text-slate-700">Tinggi Badan (cm)</label>
+                                                <input type="number" step="0.1" id="tinggi_badan" name="tinggi_badan" class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                            </div>
+                                            <div>
+                                                <label for="tgl_pemeriksaan" class="block text-sm font-medium text-slate-700">Tgl Pemeriksaan</label>
+                                                <input type="date" id="tgl_pemeriksaan" name="tgl_pemeriksaan" class="mt-1 block w-full rounded-lg border-slate-300 border px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="hidden">
-                                        <!-- Error Message Box -->
                                         <p id="formError" class="text-sm text-red-500 mt-2 bg-red-50 p-2 rounded"></p>
                                     </div>
                                 </form>
@@ -158,7 +188,7 @@
     const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const ENDPOINT = '/api-anak';
     const ENDPOINT_IBU = '/api-ibu';
-    
+
     const formModal = document.getElementById('formModal');
     const anakForm = document.getElementById('anakForm');
     const tableBody = document.getElementById('tableBody');
@@ -166,7 +196,7 @@
     const emptyState = document.getElementById('emptyState');
     const notificationWrapper = document.getElementById('notificationWrapper');
     const notificationMessage = document.getElementById('notificationMessage');
-    
+
     let isEditMode = false;
     let dataIbuArr = [];
 
@@ -182,15 +212,19 @@
 
     async function fetchPilihanIbu() {
         try {
-            const res = await fetch(ENDPOINT_IBU, { headers: { 'Accept': 'application/json' }});
+            const res = await fetch(ENDPOINT_IBU, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
             const result = await res.json();
             dataIbuArr = result || [];
-            
+
             const dropdown = document.getElementById('id_ibu');
-            if(dataIbuArr.length === 0) {
+            if (dataIbuArr.length === 0) {
                 dropdown.innerHTML = '<option value="" disabled selected>Belum ada data Profil Ibu. Tambahkan di menu Data Ibu.</option>';
             } else {
-                dropdown.innerHTML = '<option value="" disabled selected>Pilih orang tua...</option>' + 
+                dropdown.innerHTML = '<option value="" disabled selected>Pilih orang tua...</option>' +
                     dataIbuArr.map(n => `<option value="${n._id || n.id}">${n.nama_ibu}</option>`).join('');
             }
         } catch (error) {
@@ -209,7 +243,7 @@
                 }
             });
             const response = await res.json();
-            
+
             if (response.data && response.data.length > 0) {
                 renderTable(response.data);
             } else {
@@ -228,7 +262,7 @@
         let html = '';
         dataArray.forEach(anak => {
             let umurText = '-';
-            if(anak.tgl_lahir) {
+            if (anak.tgl_lahir) {
                 const birthDate = new Date(anak.tgl_lahir);
                 const today = new Date();
                 let months = (today.getFullYear() - birthDate.getFullYear()) * 12;
@@ -236,45 +270,67 @@
                 months += today.getMonth();
                 umurText = months > 0 ? `${months} Bulan` : 'Baru Lahir';
             }
-            
-            const genderBadge = anak.jenis_kelamin === 'L' 
-                ? `<span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold text-blue-700"><i class="fa-solid fa-mars"></i> Laki-laki</span>` 
-                : `<span class="inline-flex items-center gap-1.5 rounded-full bg-pink-100 px-2.5 py-1 text-[11px] font-semibold text-pink-700"><i class="fa-solid fa-venus"></i> Perempuan</span>`;
+
+            const genderBadge = anak.jenis_kelamin === 'L' ?
+                `<span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold text-blue-700"><i class="fa-solid fa-mars"></i> Laki-laki</span>` :
+                `<span class="inline-flex items-center gap-1.5 rounded-full bg-pink-100 px-2.5 py-1 text-[11px] font-semibold text-pink-700"><i class="fa-solid fa-venus"></i> Perempuan</span>`;
 
             const namaIbu = anak.ibu ? anak.ibu.nama_ibu : '<span class="text-rose-400">Belum Tertaut</span>';
 
+            // Menyiapkan format teks untuk data baru
+            const bbLahir = anak.bb_lahir ? `${anak.bb_lahir} kg` : '-';
+            const tbLahir = anak.tb_lahir ? `${anak.tb_lahir} cm` : '-';
+            const beratBadan = anak.berat_badan ? `${anak.berat_badan} kg` : '-';
+            const tinggiBadan = anak.tinggi_badan ? `${anak.tinggi_badan} cm` : '-';
+            const tglPeriksa = anak.tgl_pemeriksaan ? anak.tgl_pemeriksaan.split('T')[0] : '-';
+
             html += `
-                <tr class="group transition-colors hover:bg-slate-50/70">
-                    <td class="px-6 py-4">
-                        <span class="font-medium text-slate-800">${anak.nik || '-'}</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="font-bold text-slate-800">${anak.nama_anak}</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex flex-col">
-                            <span class="font-medium text-slate-800">${anak.tgl_lahir || '-'}</span>
-                            <span class="text-xs text-slate-500 mt-0.5">Umur: ${umurText}</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        ${genderBadge}
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="text-sm text-slate-600">${namaIbu}</span>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick='openModal("edit", ${JSON.stringify(anak).replace(/'/g, "&#39;")})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white" title="Edit Data">
-                                <i class="fa-solid fa-pen-to-square text-sm"></i>
-                            </button>
-                            <button onclick='deleteData("${anak._id || anak.id}")' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 transition-colors hover:bg-rose-600 hover:text-white" title="Hapus Data">
-                                <i class="fa-solid fa-trash-can text-sm"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
+            <tr class="group transition-colors hover:bg-slate-50/70">
+                <td class="px-4 py-4">
+                    <span class="font-medium text-slate-800">${anak.nik || '-'}</span>
+                </td>
+                <td class="px-4 py-4">
+                    <span class="font-bold text-slate-800">${anak.nama_anak}</span>
+                </td>
+                <td class="px-4 py-4">
+                    <div class="flex flex-col">
+                        <span class="font-medium text-slate-800">${anak.tgl_lahir || '-'}</span>
+                        <span class="text-xs text-slate-500 mt-0.5">Umur: ${umurText}</span>
+                    </div>
+                </td>
+                <td class="px-4 py-4">
+                    ${genderBadge}
+                </td>
+                <td class="px-4 py-4">
+                    <span class="text-sm text-slate-600">${namaIbu}</span>
+                </td>
+                
+                <td class="px-4 py-4">
+                    <div class="flex flex-col text-xs">
+                        <span class="text-slate-700"><span class="text-slate-500">BB:</span> ${bbLahir}</span>
+                        <span class="text-slate-700 mt-0.5"><span class="text-slate-500">TB:</span> ${tbLahir}</span>
+                    </div>
+                </td>
+
+                <td class="px-4 py-4">
+                    <div class="flex flex-col text-xs">
+                        <span class="text-slate-700 font-medium whitespace-nowrap"><i class="fa-regular fa-calendar text-slate-400 mr-1"></i> ${tglPeriksa}</span>
+                        <span class="text-slate-700 mt-0.5">BB: ${beratBadan} | TB: ${tinggiBadan}</span>
+                    </div>
+                </td>
+
+                <td class="px-4 py-4 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                        <button onclick='openModal("edit", ${JSON.stringify(anak).replace(/'/g, "&#39;")})' class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white" title="Edit Data">
+                            <i class="fa-solid fa-pen-to-square text-sm"></i>
+                        </button>
+                        <button onclick='deleteData("${anak._id || anak.id}")' class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 transition-colors hover:bg-rose-600 hover:text-white" title="Hapus Data">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
         });
         tableBody.innerHTML = html;
         emptyState.classList.add('hidden');
@@ -292,13 +348,24 @@
             isEditMode = true;
             document.getElementById('modalTitle').innerText = 'Edit Data Anak';
             document.getElementById('modalIcon').className = 'fa-solid fa-pen text-indigo-600';
-            
+
+            // Populate Data Utama
             document.getElementById('anakId').value = data._id || data.id;
             document.getElementById('id_ibu').value = data.id_ibu || '';
             document.getElementById('nik').value = data.nik || '';
             document.getElementById('nama_anak').value = data.nama_anak || '';
             document.getElementById('tgl_lahir').value = data.tgl_lahir || '';
             document.getElementById('jenis_kelamin').value = data.jenis_kelamin || '';
+
+            // Populate Data Tambahan (Pemeriksaan & Lahir)
+            document.getElementById('bb_lahir').value = data.bb_lahir || '';
+            document.getElementById('tb_lahir').value = data.tb_lahir || '';
+            document.getElementById('berat_badan').value = data.berat_badan || '';
+            document.getElementById('tinggi_badan').value = data.tinggi_badan || '';
+
+            // Memastikan format tanggal benar untuk input type="date" jika ada timestamp waktu
+            let tglPeriksa = data.tgl_pemeriksaan ? data.tgl_pemeriksaan.split('T')[0] : '';
+            document.getElementById('tgl_pemeriksaan').value = tglPeriksa;
         }
         formModal.classList.remove('hidden');
     }
@@ -308,14 +375,14 @@
     }
 
     async function submitForm() {
-        if(!anakForm.checkValidity()) {
+        if (!anakForm.checkValidity()) {
             anakForm.reportValidity();
             return;
         }
 
         const formData = new FormData(anakForm);
         const dataObj = Object.fromEntries(formData.entries());
-        
+
         let targetUrl = ENDPOINT;
         let pMethod = 'POST';
 
@@ -384,7 +451,7 @@
 
     function showNotification(message, isError = false) {
         notificationMessage.innerText = message;
-        
+
         const wrapper = notificationWrapper;
         if (isError) {
             wrapper.className = "mb-6 rounded-lg bg-red-50 p-4 border border-red-200";
@@ -395,7 +462,7 @@
             notificationMessage.className = "text-sm font-medium text-green-800";
             wrapper.querySelector('i').className = "fa-solid fa-check-circle text-green-400";
         }
-        
+
         wrapper.classList.remove('hidden');
         setTimeout(() => closeNotification(), 4000);
     }

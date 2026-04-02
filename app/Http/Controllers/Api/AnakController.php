@@ -12,7 +12,7 @@ class AnakController extends Controller
     public function index()
     {
         // Hanya tampilkan data anak milik user yang sedang login
-        $data = Anak::where('user_id', Auth::id())->get();
+        $data = Anak::with('ibu')->where('user_id', Auth::id())->get();
 
         return response()->json([
             'pesan' => 'Berhasil mengambil data anak',
@@ -27,7 +27,7 @@ class AnakController extends Controller
             'nama_anak' => 'required',
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
-            'nama_ortu' => 'required',
+            'id_ibu' => 'required',
             'bb_lahir' => 'nullable|numeric',
             'tb_lahir' => 'nullable|numeric',
             'berat_badan' => 'nullable|numeric',
@@ -39,6 +39,7 @@ class AnakController extends Controller
         $input['user_id'] = Auth::id(); // Mengunci anak ini kepada Ibu/Kader yang login
 
         $anak = Anak::create($input);
+        $anak->load('ibu');
 
         return response()->json([
             'pesan' => 'Data anak berhasil disimpan',
@@ -49,7 +50,7 @@ class AnakController extends Controller
     public function show($id)
     {
         $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
-        
+
         if (!$anak) {
             return response()->json(['pesan' => 'Data anak tidak ditemukan atau Anda tidak memiliki akses!'], 403);
         }
@@ -57,13 +58,13 @@ class AnakController extends Controller
         return response()->json([
             'pesan' => 'Detail data anak',
             'data' => $anak
-        ]); 
+        ]);
     }
 
     public function update(Request $request, $id)
     {
         $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
-        
+
         if (!$anak) {
             return response()->json(['pesan' => 'Data anak tidak ditemukan atau Anda tidak memiliki akses!'], 403);
         }
@@ -92,7 +93,7 @@ class AnakController extends Controller
     public function destroy($id)
     {
         $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
-        
+
         if (!$anak) {
             return response()->json(['pesan' => 'Data anak tidak ditemukan atau Anda tidak memiliki akses!'], 403);
         }
@@ -103,4 +104,4 @@ class AnakController extends Controller
             'pesan' => 'Data anak berhasil dihapus dari sistem'
         ]);
     }
-} 
+}
