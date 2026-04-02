@@ -31,6 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('rekomendasi-nutrisi', RekomendasiNutrisiController::class);
     Route::apiResource('makanan', MakananController::class);
 
+    // Endpoint khusus Profil Ibu
+    Route::get('/profil', [\App\Http\Controllers\Api\ProfilUserController::class, 'show']);
+    Route::put('/profil', [\App\Http\Controllers\Api\ProfilUserController::class, 'update']);
+
     // Bonus: Kita buatkan rute untuk Logout (Nanti kita buat fungsinya)
     // Route::post('/logout', [AuthController::class, 'logout']); 
 });

@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Prediksi;
+use App\Models\Anak;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PrediksiController extends Controller
 {
     public function index()
     {
-        $data = Prediksi::with('anak')->get();
+        $anakIds = Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
+        $data = Prediksi::whereIn('id_anak', $anakIds)->with('anak')->get();
+
         return response()->json([
             'pesan' => 'Berhasil mengambil data prediksi',
             'data' => $data
@@ -27,6 +30,12 @@ class PrediksiController extends Controller
             'tanggal_prediksi' => 'required|date',
         ]);
 
+        // BENTENG KEAMANAN: Cocokkan ID Ibu Login dengan tabel Anak
+        $anak = Anak::where('_id', $request->id_anak)->where('user_id', Auth::id())->first();
+        if (!$anak) {
+            return response()->json(['pesan' => 'Akses Dilarang! Anak ini bukan milik Anda.'], 403);
+        }
+
         $prediksi = Prediksi::create($request->all());
 
         return response()->json([
@@ -38,9 +47,9 @@ class PrediksiController extends Controller
     public function show($id)
     {
         $prediksi = Prediksi::with('anak')->find($id);
-        
-        if (!$prediksi) {
-            return response()->json(['pesan' => 'Data prediksi tidak ditemukan!'], 404);
+
+        if (!$prediksi || $prediksi->anak->user_id !== Auth::id()) {
+            return response()->json(['pesan' => 'Data prediksi tidak ditemukan atau dilarang diakses!'], 403);
         }
 
         return response()->json([
@@ -51,10 +60,10 @@ class PrediksiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $prediksi = Prediksi::find($id);
-        
-        if (!$prediksi) {
-            return response()->json(['pesan' => 'Data prediksi tidak ditemukan!'], 404);
+        $prediksi = Prediksi::with('anak')->find($id);
+
+        if (!$prediksi || $prediksi->anak->user_id !== Auth::id()) {
+            return response()->json(['pesan' => 'Data prediksi tidak ditemukan atau dilarang diakses!'], 403);
         }
 
         $prediksi->update($request->all());
@@ -67,10 +76,10 @@ class PrediksiController extends Controller
 
     public function destroy($id)
     {
-        $prediksi = Prediksi::find($id);
-        
-        if (!$prediksi) {
-            return response()->json(['pesan' => 'Data prediksi tidak ditemukan!'], 404);
+        $prediksi = Prediksi::with('anak')->find($id);
+
+        if (!$prediksi || $prediksi->anak->user_id !== Auth::id()) {
+            return response()->json(['pesan' => 'Data prediksi tidak ditemukan atau dilarang diakses!'], 403);
         }
 
         $prediksi->delete();
