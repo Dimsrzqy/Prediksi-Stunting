@@ -22,7 +22,8 @@ class Anak extends Model
         'bb_lahir',
         'tb_lahir',
         'berat_badan',
-        'tinggi_badan'
+        'tinggi_badan',
+        'tgl_pemeriksaan'
     ];
 
     public function ibu()
