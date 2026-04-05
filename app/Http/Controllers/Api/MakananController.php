@@ -73,13 +73,10 @@ class MakananController extends Controller
     public function destroy($id)
     {
         $makanan = Makanan::find($id);
-
         if (!$makanan) {
             return response()->json(['pesan' => 'Data makanan tidak ditemukan!'], 404);
         }
-
         $makanan->delete();
-
         return response()->json([
             'pesan' => 'Data makanan berhasil dihapus'
         ]);

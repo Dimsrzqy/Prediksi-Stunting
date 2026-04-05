@@ -18,18 +18,30 @@ class ProfilUserController extends Controller
     }
 
     // Fungsi Menyimpan Tulisan Editan Baru
+    // Fungsi Menyimpan Tulisan Editan Baru Termasuk Password
     public function update(Request $request)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
         
-        $request->validate([
+        $rules = [
             'name' => 'required|string',
-            // Pengecualian unik untuk email aslinya sendiri (Biar tidak dibilang kembar saat dia cuma ganti nama)
             'email' => 'required|email|unique:users,email,'.$user->id.',_id'
-        ]);
+        ];
 
-        $user->update($request->only(['name', 'email']));
+        if ($request->filled('password')) {
+            $rules['password'] = 'min:6';
+        }
+
+        $request->validate($rules);
+
+        $data = $request->only(['name', 'email']);
+        
+        if ($request->filled('password')) {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+        }
+
+        $user->update($data);
 
         return response()->json([
             'pesan' => 'Profil berhasil diperbarui dengan mulus!',

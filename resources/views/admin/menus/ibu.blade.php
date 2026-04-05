@@ -265,8 +265,18 @@
             document.getElementById('nama_ibu').value = data.nama_ibu || '';
             document.getElementById('usia_ibu').value = data.usia_ibu || '';
             document.getElementById('tinggi_ibu').value = data.tinggi_ibu || '';
-            document.getElementById('pendidikan_ibu').value = data.pendidikan_ibu || '';
-            document.getElementById('pekerjaan_ibu').value = data.pekerjaan_ibu || '';
+            
+            // Helper function utk memaksa dropdown menerima opsi dari Flutter app jika value nya d tidak sinkron dengan option list admin
+            const setSelectVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (!val) { el.value = ''; return; }
+                const isExists = Array.from(el.options).some(o => o.value == val);
+                if (!isExists) el.add(new Option(val, val));
+                el.value = val;
+            };
+
+            setSelectVal('pendidikan_ibu', data.pendidikan_ibu);
+            setSelectVal('pekerjaan_ibu', data.pekerjaan_ibu);
         }
         formModal.classList.remove('hidden');
     }

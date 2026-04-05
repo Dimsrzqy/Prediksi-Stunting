@@ -24,7 +24,9 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Semua rute di dalam kotak ini sudah digembok!
     Route::apiResource('anak', AnakController::class);
-    Route::apiResource('profil-ibu', ProfilIbuController::class);
+    // Rute Custom untuk Data Pelengkap Ibu
+    Route::get('profil-ibu', [\App\Http\Controllers\Api\ProfilIbuController::class, 'index']);
+    Route::post('profil-ibu', [\App\Http\Controllers\Api\ProfilIbuController::class, 'store']);
     Route::apiResource('pengukuran', PengukuranController::class);
     Route::apiResource('prediksi', PrediksiController::class);
     Route::apiResource('nutrisi', NutrisiController::class);
@@ -34,6 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Endpoint khusus Profil Ibu
     Route::get('/profil', [\App\Http\Controllers\Api\ProfilUserController::class, 'show']);
     Route::put('/profil', [\App\Http\Controllers\Api\ProfilUserController::class, 'update']);
+    
+    // Endpoint Eksekusi AI (Chatbot Server-Side)
+    Route::post('/chat', [\App\Http\Controllers\Api\ChatbotController::class, 'sendMessage']);
 
     // Bonus: Kita buatkan rute untuk Logout (Nanti kita buat fungsinya)
     // Route::post('/logout', [AuthController::class, 'logout']); 
