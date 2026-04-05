@@ -271,11 +271,11 @@
                 umurText = months > 0 ? `${months} Bulan` : 'Baru Lahir';
             }
 
-            const genderBadge = anak.jenis_kelamin === 'L' ?
+            const genderBadge = (anak.jenis_kelamin === 'L' || anak.jenis_kelamin === 'Laki-laki') ?
                 `<span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold text-blue-700"><i class="fa-solid fa-mars"></i> Laki-laki</span>` :
                 `<span class="inline-flex items-center gap-1.5 rounded-full bg-pink-100 px-2.5 py-1 text-[11px] font-semibold text-pink-700"><i class="fa-solid fa-venus"></i> Perempuan</span>`;
 
-            const namaIbu = anak.ibu ? anak.ibu.nama_ibu : '<span class="text-rose-400">Belum Tertaut</span>';
+            const namaIbu = anak.ibu ? anak.ibu.nama_ibu : (anak.nama_ortu ? `${anak.nama_ortu} <span class="text-xs text-amber-500/80 italic">(Belum Tertaut)</span>` : '<span class="text-rose-400">Belum Tertaut</span>');
 
             // Menyiapkan format teks untuk data baru
             const bbLahir = anak.bb_lahir ? `${anak.bb_lahir} kg` : '-';
@@ -355,7 +355,7 @@
             document.getElementById('nik').value = data.nik || '';
             document.getElementById('nama_anak').value = data.nama_anak || '';
             document.getElementById('tgl_lahir').value = data.tgl_lahir || '';
-            document.getElementById('jenis_kelamin').value = data.jenis_kelamin || '';
+            document.getElementById('jenis_kelamin').value = (data.jenis_kelamin === 'Laki-laki' ? 'L' : (data.jenis_kelamin === 'Perempuan' ? 'P' : data.jenis_kelamin)) || '';
 
             // Populate Data Tambahan (Pemeriksaan & Lahir)
             document.getElementById('bb_lahir').value = data.bb_lahir || '';

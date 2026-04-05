@@ -13,14 +13,18 @@ class ProfilIbuController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $profilIbu = ProfilIbu::where('user_id', $user->id)->with('anak')->get();
+        if ($user && $user->role === 'admin') {
+            $profilIbu = ProfilIbu::with('anak')->get();
+        } else {
+            $profilIbu = ProfilIbu::where('user_id', $user->id)->with('anak')->get();
+        }
         return response()->json($profilIbu);
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_ibu' => 'required|string',
+            'nama_ibu' => 'nullable|string', // Nullable agar Flutter tidak ditolak
             'usia_ibu' => 'required|integer|min:15',
             'tinggi_ibu' => 'required|numeric|min:100',
             'pendidikan_ibu' => 'required|string|max:255',
@@ -34,6 +38,13 @@ class ProfilIbuController extends Controller
         $user = Auth::user();
         $data = $request->all();
         $data['user_id'] = $user->id;
+        
+        // -----------------------------------------------------
+        // Fallback: Jika 'nama_ibu' tidak disubmit dari Flutter, salin paksa nama User (Akun Utama)
+        // -----------------------------------------------------
+        if (!isset($data['nama_ibu']) || empty($data['nama_ibu'])) {
+            $data['nama_ibu'] = $user->name;
+        }
 
         $profilIbu = ProfilIbu::create($data);
 
@@ -48,8 +59,8 @@ class ProfilIbuController extends Controller
             return response()->json(['message' => 'Profil tidak ditemukan.'], 404);
         }
 
-        // Otorisasi: Pastikan user hanya bisa melihat profil miliknya
-        if ($profilIbu->user_id !== Auth::id()) {
+        // Otorisasi: Pastikan user hanya bisa melihat profil miliknya, KECUALI Admin
+        if (Auth::user()->role !== 'admin' && $profilIbu->user_id !== Auth::id()) {
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
 
@@ -65,12 +76,12 @@ class ProfilIbuController extends Controller
             return response()->json(['message' => 'Profil tidak ditemukan.'], 404);
         }
 
-        if ($profilIbu->user_id !== Auth::id()) {
+        if (Auth::user()->role !== 'admin' && $profilIbu->user_id !== Auth::id()) {
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
 
         $validator = Validator::make($request->all(), [
-            'nama_ibu' => 'sometimes|required|string',
+            'nama_ibu' => 'sometimes|nullable|string',
             'usia_ibu' => 'sometimes|required|integer|min:15',
             'tinggi_ibu' => 'sometimes|required|numeric|min:100',
             'pendidikan_ibu' => 'sometimes|required|string|max:255',
@@ -95,7 +106,7 @@ class ProfilIbuController extends Controller
             return response()->json(['message' => 'Profil tidak ditemukan.'], 404);
         }
         
-        if ($profilIbu->user_id !== Auth::id()) {
+        if (Auth::user()->role !== 'admin' && $profilIbu->user_id !== Auth::id()) {
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
 

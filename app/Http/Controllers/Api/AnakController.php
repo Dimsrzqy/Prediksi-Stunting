@@ -11,8 +11,13 @@ class AnakController extends Controller
 {
     public function index()
     {
-        // Hanya tampilkan data anak milik user yang sedang login
-        $data = Anak::with('ibu')->where('user_id', Auth::id())->get();
+        // Bypass untuk admin agar semua data puskesmas terlihat
+        if (Auth::user()->role === 'admin') {
+            $data = Anak::with('ibu')->get();
+        } else {
+            // Hanya tampilkan data anak milik user yang sedang login
+            $data = Anak::with('ibu')->where('user_id', Auth::id())->get();
+        }
 
         return response()->json([
             'pesan' => 'Berhasil mengambil data anak',
@@ -27,7 +32,7 @@ class AnakController extends Controller
             'nama_anak' => 'required',
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
-            'id_ibu' => 'required',
+            'id_ibu' => 'nullable',
             'bb_lahir' => 'nullable|numeric',
             'tb_lahir' => 'nullable|numeric',
             'berat_badan' => 'nullable|numeric',
@@ -37,6 +42,14 @@ class AnakController extends Controller
 
         $input = $request->all();
         $input['user_id'] = Auth::id(); // Mengunci anak ini kepada Ibu/Kader yang login
+        
+        // Link otomatis ke profil ibu jika frontend tidak mengirim id_ibu
+        if (empty($input['id_ibu'])) {
+            $profilIbu = \App\Models\ProfilIbu::where('user_id', Auth::id())->first();
+            if ($profilIbu) {
+                $input['id_ibu'] = $profilIbu->_id ?? $profilIbu->id;
+            }
+        }
 
         $anak = Anak::create($input);
         $anak->load('ibu');
@@ -49,7 +62,11 @@ class AnakController extends Controller
 
     public function show($id)
     {
-        $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
+        if (Auth::user()->role === 'admin') {
+            $anak = Anak::where('_id', $id)->first();
+        } else {
+            $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
+        }
 
         if (!$anak) {
             return response()->json(['pesan' => 'Data anak tidak ditemukan atau Anda tidak memiliki akses!'], 403);
@@ -63,7 +80,11 @@ class AnakController extends Controller
 
     public function update(Request $request, $id)
     {
-        $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
+        if (Auth::user()->role === 'admin') {
+            $anak = Anak::where('_id', $id)->first();
+        } else {
+            $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
+        }
 
         if (!$anak) {
             return response()->json(['pesan' => 'Data anak tidak ditemukan atau Anda tidak memiliki akses!'], 403);
@@ -92,7 +113,11 @@ class AnakController extends Controller
 
     public function destroy($id)
     {
-        $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
+        if (Auth::user()->role === 'admin') {
+            $anak = Anak::where('_id', $id)->first();
+        } else {
+            $anak = Anak::where('_id', $id)->where('user_id', Auth::id())->first();
+        }
 
         if (!$anak) {
             return response()->json(['pesan' => 'Data anak tidak ditemukan atau Anda tidak memiliki akses!'], 403);
