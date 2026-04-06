@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\HistoriPrediksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('landing');
 });
 
 Route::get('/register', [AuthController::class, 'create'])->name('register');
