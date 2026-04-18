@@ -7,10 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Create Account - StuntCheck</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Nunito', sans-serif;
         }
 
         .bg-custom-blue {
@@ -63,13 +63,14 @@
         <div class="bg-white rounded-[32px] p-8 sm:p-10 shadow-premium border border-blue-50/50">
             <!-- Logo StuntCheck -->
             <div class="flex flex-col items-center mb-8">
-                <div class="flex items-center space-x-2 mb-2">
-                    <div class="w-10 h-10 bg-primary-blue rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
+                <div class="flex items-center mb-2">
+                    <div class="relative w-10 h-10 mr-3">
+                        <div class="absolute inset-0 bg-blue-500 rounded-full opacity-20 animate-ping"></div>
+                        <div class="relative w-10 h-10 bg-gradient-to-tr from-blue-600 to-cyan-400 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
+                            <span class="text-white font-black text-xl">S</span>
+                        </div>
                     </div>
-                    <span class="text-2xl font-bold text-gray-900 tracking-tight">StuntCheck</span>
+                    <span class="font-extrabold text-2xl tracking-tight text-blue-900">Stunt<span class="text-cyan-500">Check</span></span>
                 </div>
                 <h1 class="text-3xl font-extrabold text-primary-blue mt-4">Create Account</h1>
                 <p class="text-gray-900 font-semibold text-sm text-center mt-4 leading-tight">Create an account so you can explore all the existing features</p>
