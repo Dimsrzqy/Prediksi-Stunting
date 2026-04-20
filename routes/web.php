@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::apiResource('api-nutrisi', \App\Http\Controllers\Api\NutrisiController::class);
     Route::apiResource('api-makanan', \App\Http\Controllers\Api\MakananController::class);
     Route::apiResource('api-ibu', \App\Http\Controllers\Api\ProfilIbuController::class);
+    Route::get('/api-chart-histori', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'chartData']);
 
 
     Route::resource('histori-prediksi', HistoriPrediksiController::class)->only([

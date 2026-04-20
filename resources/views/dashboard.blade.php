@@ -97,72 +97,16 @@
 
         </div>
 
-        <!-- QUICK ACTIONS & INFO SECTION -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Papan Informasi Panduan -->
-            <div class="lg:col-span-2 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-8 text-white relative overflow-hidden shadow-lg shadow-indigo-200">
-                <!-- Background decoration -->
-                <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-1/4 translate-y-1/4">
-                    <i class="fa-solid fa-stethoscope" style="font-size: 20rem;"></i>
-                </div>
-                
-                <div class="relative z-10">
-                    <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-white/30 backdrop-blur-sm">
-                        Panduan Penggunaan
-                    </span>
-                    <h2 class="text-2xl font-bold mb-3">Pencegahan Stunting Dimulai dari Data yang Baik</h2>
-                    <p class="text-indigo-100 mb-6 max-w-lg leading-relaxed">
-                        Sistem ini dirancang untuk mendata dan memantau status stunting pada anak melalui manajemen gizi terpadu. Agar sistem bekerja optimal, ikuti urutan berikut:
-                    </p>
-                    
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center gap-3 bg-white/10 p-3 rounded-xl backdrop-blur-sm border border-white/10">
-                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-white text-indigo-600 flex items-center justify-center font-bold text-sm">1</div>
-                            <span class="font-medium text-white shadow-sm">Masukkan <strong class="text-yellow-300">Data Profil Ibu</strong> terlebih dahulu secara akurat.</span>
-                        </li>
-                        <li class="flex items-center gap-3 bg-white/10 p-3 rounded-xl backdrop-blur-sm border border-white/10">
-                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-white text-indigo-600 flex items-center justify-center font-bold text-sm">2</div>
-                            <span class="font-medium text-white shadow-sm">Tambahkan <strong class="text-blue-300">Data Anak</strong> dan tautkan ke Profil Ibu.</span>
-                        </li>
-                    </ul>
 
-                    <div class="flex gap-4">
-                        <a href="{{ route('ibu.index') }}" class="bg-white text-indigo-600 px-6 py-2.5 rounded-xl font-bold hover:bg-slate-50 transition-colors shadow-sm inline-flex items-center gap-2">
-                            Mulai Input Data <i class="fa-solid fa-arrow-right text-sm"></i>
-                        </a>
-                    </div>
-                </div>
+
+        <!-- CHART SECTION -->
+        <div class="mt-8 bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+            <div class="mb-4">
+                <h3 class="text-xl font-bold text-slate-800">Grafik Histori Prediksi Stunting</h3>
+                <p class="text-sm text-slate-500">Pemantauan klasifikasi hasil prediksi anak selama 12 bulan terakhir</p>
             </div>
-
-            <!-- Recent Activity / Access -->
-            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col">
-                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-bolt text-amber-500"></i> Pintasan Cepat
-                </h3>
-                
-                <div class="flex-1 flex flex-col gap-3">
-                    <a href="{{ route('makanan.index') }}" class="flex items-center p-4 border border-slate-100 rounded-2xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group">
-                        <div class="h-10 w-10 flex-shrink-0 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-utensils"></i>
-                        </div>
-                        <div class="ml-4 flex-1">
-                            <p class="text-sm font-bold text-slate-700 group-hover:text-indigo-700">Rekomendasi Makanan</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Atur menu sehat balita</p>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-indigo-400"></i>
-                    </a>
-
-                    <a href="{{ route('anak.index') }}" class="flex items-center p-4 border border-slate-100 rounded-2xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
-                        <div class="h-10 w-10 flex-shrink-0 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-child-reaching"></i>
-                        </div>
-                        <div class="ml-4 flex-1">
-                            <p class="text-sm font-bold text-slate-700 group-hover:text-blue-700">Pantau Data Anak</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Lihat list anak terbaru</p>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-blue-400"></i>
-                    </a>
-                </div>
+            <div class="relative w-full h-80 lg:h-96">
+                <canvas id="stuntingChart"></canvas>
             </div>
         </div>
 
@@ -200,7 +144,42 @@
             }
         }
 
+        async function fetchChart() {
+            try {
+                const res = await fetch('/api-chart-histori');
+                const chartData = await res.json();
+
+                const ctx = document.getElementById('stuntingChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error("Gagal load chart data", err);
+            }
+        }
+
         fetchStats();
+        fetchChart();
     });
 </script>
 @endsection
