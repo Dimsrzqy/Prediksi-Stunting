@@ -107,21 +107,24 @@ class HistoriPrediksiController extends Controller
                     'label' => 'Normal',
                     'data' => $dataNormal,
                     'borderColor' => '#10B981', // Hijau Toska
-                    'backgroundColor' => '#10B981',
+                    'backgroundColor' => 'rgba(16, 185, 129, 0.2)',
+                    'fill' => true,
                     'tension' => 0.4
                 ],
                 [
                     'label' => 'Berisiko',
                     'data' => $dataBerisiko,
                     'borderColor' => '#F59E0B', // Kuning Oranye
-                    'backgroundColor' => '#F59E0B',
+                    'backgroundColor' => 'rgba(245, 158, 11, 0.2)',
+                    'fill' => true,
                     'tension' => 0.4
                 ],
                 [
                     'label' => 'Stunting',
                     'data' => $dataStunting,
                     'borderColor' => '#EF4444', // Merah
-                    'backgroundColor' => '#EF4444',
+                    'backgroundColor' => 'rgba(239, 68, 68, 0.2)',
+                    'fill' => true,
                     'tension' => 0.4
                 ]
             ]

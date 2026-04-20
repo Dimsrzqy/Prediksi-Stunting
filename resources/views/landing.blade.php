@@ -290,9 +290,7 @@
                     Cek Sekarang
                     <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
-                <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-10 py-4 border-2 border-white/20 text-lg font-bold rounded-full text-white hover:bg-white hover:text-blue-600 shadow-lg hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm">
-                    Daftar Gratis
-                </a>
+
             </div>
         </div>
         
