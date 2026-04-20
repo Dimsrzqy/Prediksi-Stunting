@@ -120,9 +120,6 @@
                 </div>
             </form>
 
-            <div class="mt-10 text-center">
-                <a href="{{ route('register') }}" class="text-gray-600 font-bold hover:text-primary-blue transition-colors text-sm">Create new account</a>
-            </div>
         </div>
     </div>
 

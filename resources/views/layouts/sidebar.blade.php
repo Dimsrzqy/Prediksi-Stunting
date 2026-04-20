@@ -55,6 +55,12 @@
             </li>
             
             <li>
+                <a href="{{ route('user.index') }}" class="group flex items-center rounded-xl px-4 py-3 {{ request()->routeIs('user.index') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600' }} transition-all">
+                    <i class="fa-solid fa-users w-6 text-center text-lg {{ request()->routeIs('user.index') ? '' : 'group-hover:text-indigo-600' }} transition-colors"></i>
+                    <span class="ml-3 font-medium">Manajemen User</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="group flex items-center rounded-xl px-4 py-3 text-slate-600 transition-colors hover:bg-slate-50 hover:text-indigo-600">
                     <i class="fa-solid fa-gear w-6 text-center text-lg group-hover:text-indigo-600 transition-colors"></i>
                     <span class="ml-3 font-medium">Pengaturan</span>
