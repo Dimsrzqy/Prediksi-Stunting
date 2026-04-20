@@ -8,8 +8,6 @@ Route::get('/', function () {
     return view('landing');
 });
 
-Route::get('/register', [AuthController::class, 'create'])->name('register');
-Route::post('/register', [AuthController::class, 'store']);
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -38,11 +36,16 @@ Route::middleware('auth')->group(function () {
         return view('admin.menus.ibu');
     })->name('ibu.index');
 
+    Route::get('/users', function () {
+        return view('admin.menus.user');
+    })->name('user.index');
+
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
     Route::apiResource('api-anak', \App\Http\Controllers\Api\AnakController::class);
     Route::apiResource('api-nutrisi', \App\Http\Controllers\Api\NutrisiController::class);
     Route::apiResource('api-makanan', \App\Http\Controllers\Api\MakananController::class);
     Route::apiResource('api-ibu', \App\Http\Controllers\Api\ProfilIbuController::class);
+    Route::apiResource('api-users', \App\Http\Controllers\Api\AdminUserController::class);
     Route::get('/api-chart-histori', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'chartData']);
 
 

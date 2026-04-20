@@ -90,42 +90,6 @@ class AuthController extends Controller
     // FUNGSI WEB (Tampil Form & Proses Web)
     // ---------------------------------------------
     
-    // Tampilkan halaman register
-    public function create()
-    {
-        return view('auth.register');
-    }
-
-    // Proses register untuk web
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => [
-                'required',
-                'min:8',
-                'confirmed',
-                'regex:/[a-zA-Z]/',      // harus ada huruf
-                'regex:/[0-9]/',       // harus ada angka
-            ],
-        ], [
-            'email.unique' => 'Email ini sudah terdaftar, silakan gunakan email lain.',
-            'password.min' => 'Password minimal harus 8 karakter.',
-            'password.regex' => 'Password harus kombinasi huruf dan angka.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), 
-            'role' => 'user'
-        ]);
-
-        return redirect()->route('login')->with('success', 'Akun berhasil dibuat, silakan login!');
-    }
-
     // Tampilkan halaman login
     public function login()
     {
