@@ -88,4 +88,85 @@ class PrediksiController extends Controller
             'pesan' => 'Data prediksi berhasil dihapus'
         ]);
     }
+
+    public function predict(Request $request)
+    {
+        $request->validate([
+            'id_anak' => 'required',
+            'tinggi_badan' => 'required|numeric',
+            'berat_badan' => 'required|numeric',
+            'umur_bulan' => 'required|numeric',
+        ]);
+
+        // 1. Ambil Data Anak & Validasi Kepemilikan
+        $anak = Anak::where('_id', $request->id_anak)->where('user_id', Auth::id())->first();
+        if (!$anak) {
+            return response()->json(['pesan' => 'Anak tidak ditemukan atau akses dilarang!'], 403);
+        }
+
+        // 2. Simpan ke Riwayat Pengukuran (History)
+        \App\Models\Pengukuran::create([
+            'id_anak' => $request->id_anak,
+            'umur_bulan' => $request->umur_bulan,
+            'tinggi_badan' => $request->tinggi_badan,
+            'berat_badan' => $request->berat_badan,
+            'tanggal_ukur' => now()->toDateString(),
+        ]);
+
+        // 3. Update Data Terkini di tabel Anak
+        $anak->update([
+            'tinggi_badan' => $request->tinggi_badan,
+            'berat_badan' => $request->berat_badan,
+            'tgl_pemeriksaan' => now()->toDateString(),
+        ]);
+
+        // 4. Siapkan Data untuk ML API (Python/FastAPI)
+        $mlData = [
+            'nama' => $anak->nama_anak,
+            'tinggi_badan' => (float)$request->tinggi_badan,
+            'berat_badan' => (float)$request->berat_badan,
+            'umur_bulan' => (float)$request->umur_bulan,
+            'jenis_kelamin' => $anak->jenis_kelamin // misal: "Laki-laki" atau "Perempuan"
+        ];
+
+        // 5. Panggil ML API menggunakan library HTTP Laravel
+        try {
+            $apiUrl = env('ML_API_URL', 'http://127.0.0.1:8000') . '/predict';
+            $response = \Illuminate\Support\Facades\Http::post($apiUrl, $mlData);
+
+            if ($response->failed()) {
+                return response()->json([
+                    'pesan' => 'Gagal terhubung ke Server AI. Pastikan Server ML menyala.',
+                    'error' => $response->body()
+                ], 500);
+            }
+
+            $result = $response->json();
+            $hasilPrediksi = $result['prediksi']['keterangan']; // "Normal", "Resiko Stunting", "Stunting"
+            
+            // 6. Simpan Hasil Prediksi ke Database
+            $prediksi = Prediksi::create([
+                'id_anak' => $request->id_anak,
+                'hasil_prediksi' => $hasilPrediksi,
+                'probabilitas' => 1.0, // Model Random Forest ini tidak mengembalikan probabilitas secara raw di API sederhana tadi
+                'tanggal_prediksi' => now()->toDateString(),
+            ]);
+
+            return response()->json([
+                'pesan' => 'Prediksi berhasil dihitung!',
+                'data' => [
+                    'anak' => $anak->nama_anak,
+                    'hasil' => $hasilPrediksi,
+                    'detail_ai' => $result['prediksi'],
+                    'id_prediksi' => $prediksi->_id
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'pesan' => 'Terjadi kesalahan teknis saat menghubungi AI.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

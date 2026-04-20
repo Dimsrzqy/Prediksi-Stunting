@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profil', [\App\Http\Controllers\Api\ProfilUserController::class, 'show']);
     Route::put('/profil', [\App\Http\Controllers\Api\ProfilUserController::class, 'update']);
     
+    // Endpoint Eksekusi AI (Prediksi Stunting)
+    Route::post('/prediksi/hitung', [\App\Http\Controllers\Api\PrediksiController::class, 'predict']);
+    
     // Endpoint Eksekusi AI (Chatbot Server-Side)
     Route::post('/chat', [\App\Http\Controllers\Api\ChatbotController::class, 'sendMessage']);
 
