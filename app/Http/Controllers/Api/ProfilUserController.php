@@ -26,7 +26,8 @@ class ProfilUserController extends Controller
         
         $rules = [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,'.$user->id.',_id'
+            'email' => 'required|email|unique:users,email,'.$user->id.',_id',
+            'telepon' => 'nullable|string|max:20', // Tambah validasi telepon
         ];
 
         if ($request->filled('password')) {
@@ -35,7 +36,7 @@ class ProfilUserController extends Controller
 
         $request->validate($rules);
 
-        $data = $request->only(['name', 'email']);
+        $data = $request->only(['name', 'email', 'telepon']); // Sertakan telepon
         
         if ($request->filled('password')) {
             $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);

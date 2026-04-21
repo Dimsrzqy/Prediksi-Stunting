@@ -55,6 +55,19 @@ class AuthController extends Controller
             'token' => $token
         ], 201); 
     }
+
+    // ---------------------------------------------
+    // FUNGSI LOGOUT API (Cabut Token Sanctum)
+    // ---------------------------------------------
+    public function logoutApi(Request $request)
+    {
+        // Hapus token yang sedang digunakan (current token)
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'pesan' => 'Logout berhasil. Token telah dicabut dari server.'
+        ]);
+    }
     // ---------------------------------------------
     // FUNGSI LOGIN (Masuk Aplikasi) - API
     // ---------------------------------------------
