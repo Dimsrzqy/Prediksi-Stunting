@@ -43,6 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Endpoint Eksekusi AI (Chatbot Server-Side)
     Route::post('/chat', [\App\Http\Controllers\Api\ChatbotController::class, 'sendMessage']);
 
-    // Bonus: Kita buatkan rute untuk Logout (Nanti kita buat fungsinya)
-    // Route::post('/logout', [AuthController::class, 'logout']); 
+    // Logout: Cabut Token Sanctum dari Server
+    Route::post('/logout', [AuthController::class, 'logoutApi']); 
 });
