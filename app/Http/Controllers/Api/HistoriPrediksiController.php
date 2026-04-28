@@ -16,12 +16,57 @@ class HistoriPrediksiController extends Controller
     public function index()
     {
         if (Auth::user()->role === 'admin') {
-            $histori = HistoriPrediksi::all();
+            $histori = HistoriPrediksi::with('anak')->orderBy('created_at', 'desc')->get();
         } else {
-            $histori = HistoriPrediksi::where('user_id', Auth::id())->get();
+            // Ambil ID anak yang dimiliki user
+            $anakIds = \App\Models\Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
+            $histori = HistoriPrediksi::whereIn('id_anak', $anakIds)
+                ->with('anak')
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
 
         return view('histori.index', compact('histori'));
+    }
+
+    /**
+     * Export data to CSV (Excel compatible).
+     */
+    public function export()
+    {
+        if (Auth::user()->role === 'admin') {
+            $histori = HistoriPrediksi::with('anak')->orderBy('created_at', 'desc')->get();
+        } else {
+            $anakIds = \App\Models\Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
+            $histori = HistoriPrediksi::whereIn('id_anak', $anakIds)
+                ->with('anak')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        $filename = "histori_prediksi_" . date('Y-m-d_H-i-s') . ".csv";
+        $handle = fopen('php://output', 'w');
+        
+        // Add UTF-8 BOM for Excel compatibility
+        fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+        
+        // Header
+        fputcsv($handle, ['Nama Anak', 'Hasil Prediksi', 'Probabilitas', 'Tanggal Prediksi']);
+
+        foreach ($histori as $item) {
+            fputcsv($handle, [
+                $item->anak->nama_anak ?? 'Data Terhapus',
+                $item->hasil_prediksi,
+                number_format($item->probabilitas * 100, 2) . '%',
+                \Carbon\Carbon::parse($item->tanggal_prediksi ?? $item->created_at)->format('Y-m-d H:i:s')
+            ]);
+        }
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        
+        fclose($handle);
+        exit;
     }
 
     /**

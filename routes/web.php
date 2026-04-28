@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/api-chart-histori', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'chartData']);
 
 
+    Route::get('/histori-prediksi/export', [HistoriPrediksiController::class, 'export'])->name('histori.export');
+
     Route::resource('histori-prediksi', HistoriPrediksiController::class)->only([
         'index', 'destroy'
     ])->names([
