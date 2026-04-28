@@ -2,11 +2,11 @@
     <!-- Logo Section -->
     <div class="flex items-center justify-center py-6 border-b border-slate-200">
         <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-                <i class="fa-solid fa-leaf text-xl border-indigo-100"></i>
+            <div class="relative w-10 h-10 flex items-center justify-center bg-gradient-to-tr from-blue-600 to-cyan-400 rounded-full shadow-lg shadow-blue-500/20">
+                <span class="text-white font-black text-xl">S</span>
             </div>
-            <h2 class="text-xl font-bold tracking-wide text-slate-800">
-                Stunt<span class="text-indigo-600">Check</span>
+            <h2 class="text-xl font-extrabold tracking-tight text-slate-800">
+                Stunt<span class="text-cyan-500">Check</span>
             </h2>
         </div>
     </div>
@@ -21,6 +21,12 @@
                 <a href="{{ route('dashboard') }}" class="group flex items-center rounded-xl px-4 py-3 {{ request()->routeIs('dashboard') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600' }} transition-all">
                     <i class="fa-solid fa-chart-pie w-6 text-center text-lg {{ request()->routeIs('dashboard') ? '' : 'group-hover:text-indigo-600' }} transition-colors"></i>
                     <span class="ml-3 font-medium">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('histori.index') }}" class="group flex items-center rounded-xl px-4 py-3 {{ request()->routeIs('histori.index') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600' }} transition-all">
+                    <i class="fa-solid fa-clock-rotate-left w-6 text-center text-lg {{ request()->routeIs('histori.index') ? '' : 'group-hover:text-indigo-600' }} transition-colors"></i>
+                    <span class="ml-3 font-medium">Histori Prediksi</span>
                 </a>
             </li>
             <li class="pt-4 pb-2">
