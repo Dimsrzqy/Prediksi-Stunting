@@ -7,6 +7,8 @@ use App\Models\Prediksi;
 use App\Models\Anak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PrediksiController extends Controller
 {
@@ -144,12 +146,16 @@ class PrediksiController extends Controller
             $result = $response->json();
             $hasilPrediksi = $result['prediksi']['keterangan']; // "Normal", "Resiko Stunting", "Stunting"
             
-            // 6. Simpan Hasil Prediksi ke Database
+            // 7. Generate Rekomendasi AI Gemini
+            $rekomendasi = $this->generateGeminiRecommendation($hasilPrediksi, $request->umur_bulan, $anak->jenis_kelamin, $request->berat_badan, $request->tinggi_badan);
+
+            // 8. Simpan Hasil Prediksi ke Database
             $prediksi = Prediksi::create([
                 'id_anak' => $request->id_anak,
                 'hasil_prediksi' => $hasilPrediksi,
-                'probabilitas' => 1.0, // Model Random Forest ini tidak mengembalikan probabilitas secara raw di API sederhana tadi
+                'probabilitas' => 1.0, 
                 'tanggal_prediksi' => now()->toDateString(),
+                'rekomendasi_ai' => $rekomendasi
             ]);
 
             return response()->json([
@@ -158,6 +164,7 @@ class PrediksiController extends Controller
                     'anak' => $anak->nama_anak,
                     'hasil' => $hasilPrediksi,
                     'detail_ai' => $result['prediksi'],
+                    'rekomendasi' => $rekomendasi,
                     'id_prediksi' => $prediksi->_id
                 ]
             ]);
@@ -167,6 +174,47 @@ class PrediksiController extends Controller
                 'pesan' => 'Terjadi kesalahan teknis saat menghubungi AI.',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    private function generateGeminiRecommendation($hasil, $umur, $jk, $bb, $tb)
+    {
+        $apiKey = env('GEMINI_API_KEY');
+        if (!$apiKey) {
+            return "Rekomendasi tidak tersedia (API Key missing).";
+        }
+
+        $prompt = "Persona: Bertindak sebagai Ahli Gizi Anak dan Konsultan Kesehatan Bunda (KILA). Berikan saran gizi holistik.\n"
+            . "Input Anak: Status Prediksi: $hasil, Umur: $umur bulan, Jenis Kelamin: $jk, BB: $bb kg, TB: $tb cm.\n\n"
+            . "Instruksi Khusus:\n"
+            . "- Jika Status Normal: Berikan saran agar gizi tetap stabil dan mencegah stunting di masa depan.\n"
+            . "- Jika Status Resiko/Stunting: Berikan saran pemulihan gizi intensif.\n"
+            . "- Fokus pada gizi seimbang (karbohidrat, protein hewani seperti ayam/ikan, lemak, vitamin).\n"
+            . "- Berikan saran 3-5 jenis bahan makanan penunjang.\n"
+            . "- Berikan contoh menu harian yang praktis.\n\n"
+            . "Format Jawaban: Hanya gunakan poin-poin (bullet points), jangan ada kalimat pembuka/penutup yang panjang. Langsung ke intinya.";
+
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
+        
+        $payload = [
+            'contents' => [
+                ['parts' => [['text' => $prompt]]]
+            ]
+        ];
+
+        try {
+            $response = Http::withoutVerifying()
+                ->withHeaders(['Content-Type' => 'application/json'])
+                ->post($url, $payload);
+            
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data['candidates'][0]['content']['parts'][0]['text'] ?? "Gagal mendapatkan rekomendasi.";
+            }
+            return "Maaf, sistem rekomendasi sedang sibuk.";
+        } catch (\Exception $e) {
+            Log::error('Gemini Recommendation Error: ' . $e->getMessage());
+            return "Koneksi ke AI terputys.";
         }
     }
 }

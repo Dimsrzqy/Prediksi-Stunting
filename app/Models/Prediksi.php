@@ -22,6 +22,7 @@ class Prediksi extends Model
         'hasil_prediksi',
         'probabilitas',
         'tanggal_prediksi',
+        'rekomendasi_ai',
     ];
 
     /**
