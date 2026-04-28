@@ -18,7 +18,11 @@ class ProfilIbuController extends Controller
         } else {
             $profilIbu = ProfilIbu::where('user_id', $user->id)->with('anak')->get();
         }
-        return response()->json($profilIbu);
+        // Konsisten dengan controller lain: gunakan wrapper 'pesan' dan 'data'
+        return response()->json([
+            'pesan' => 'Berhasil mengambil data profil ibu',
+            'data'  => $profilIbu
+        ]);
     }
 
     public function store(Request $request)
