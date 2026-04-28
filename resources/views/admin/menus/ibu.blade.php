@@ -190,8 +190,11 @@
             const res = await fetch(API_IBU, { headers: { 'Accept': 'application/json' }});
             const responseData = await res.json();
             
-            if (Array.isArray(responseData) && responseData.length > 0) {
-                renderTable(responseData);
+            // Handle struktur data yang dibungkus dengan key 'data' (dari API)
+            const dataArray = responseData.data || responseData;
+            
+            if (Array.isArray(dataArray) && dataArray.length > 0) {
+                renderTable(dataArray);
             } else {
                 tableBody.innerHTML = '';
                 emptyState.classList.remove('hidden');

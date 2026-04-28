@@ -45,16 +45,7 @@
                 </a>
             </li>
             
-            <li class="pt-4 pb-2">
-                <span class="px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Manajemen Gizi</span>
-            </li>
-            
-            <li>
-                <a href="{{ route('makanan.index') }}" class="flex items-center rounded-xl px-4 py-3 {{ request()->routeIs('makanan.index') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600' }} transition-all">
-                    <i class="fa-solid fa-utensils w-6 text-center text-lg"></i>
-                    <span class="ml-3 font-semibold">Menu Makanan</span>
-                </a>
-            </li>
+
             
             <li class="pt-4 pb-2">
                 <span class="px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Sistem</span>

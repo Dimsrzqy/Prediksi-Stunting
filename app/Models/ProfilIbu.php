@@ -10,7 +10,7 @@ class ProfilIbu extends Model
     use HasFactory;
 
     protected $connection = 'mongodb';
-    protected $collection = 'ibu';
+    protected $collection = 'profil_ibus';
 
     /**
      * The attributes that are mass assignable.

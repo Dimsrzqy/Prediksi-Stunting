@@ -24,9 +24,7 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/makanan', function () {
-        return view('admin.menus.makanan');
-    })->name('makanan.index');
+
 
     Route::get('/anak', function () {
         return view('admin.menus.anak');
@@ -42,8 +40,7 @@ Route::middleware('auth')->group(function () {
 
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
     Route::apiResource('api-anak', \App\Http\Controllers\Api\AnakController::class);
-    Route::apiResource('api-nutrisi', \App\Http\Controllers\Api\NutrisiController::class);
-    Route::apiResource('api-makanan', \App\Http\Controllers\Api\MakananController::class);
+
     Route::apiResource('api-ibu', \App\Http\Controllers\Api\ProfilIbuController::class);
     Route::apiResource('api-users', \App\Http\Controllers\Api\AdminUserController::class);
     Route::get('/api-chart-histori', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'chartData']);
