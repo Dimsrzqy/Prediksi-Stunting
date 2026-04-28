@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\HistoriPrediksi;
+use App\Models\Prediksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,17 +16,17 @@ class HistoriPrediksiController extends Controller
     public function index()
     {
         if (Auth::user()->role === 'admin') {
-            $histori = HistoriPrediksi::with('anak')->orderBy('created_at', 'desc')->get();
+            $histori = Prediksi::with('anak')->orderBy('created_at', 'desc')->get();
         } else {
             // Ambil ID anak yang dimiliki user
             $anakIds = \App\Models\Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
-            $histori = HistoriPrediksi::whereIn('id_anak', $anakIds)
+            $histori = Prediksi::whereIn('id_anak', $anakIds)
                 ->with('anak')
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
 
-        return view('histori.index', compact('histori'));
+        return view('admin.menus.histori', compact('histori'));
     }
 
     /**
@@ -35,10 +35,10 @@ class HistoriPrediksiController extends Controller
     public function export()
     {
         if (Auth::user()->role === 'admin') {
-            $histori = HistoriPrediksi::with('anak')->orderBy('created_at', 'desc')->get();
+            $histori = Prediksi::with('anak')->orderBy('created_at', 'desc')->get();
         } else {
             $anakIds = \App\Models\Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
-            $histori = HistoriPrediksi::whereIn('id_anak', $anakIds)
+            $histori = Prediksi::whereIn('id_anak', $anakIds)
                 ->with('anak')
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -51,14 +51,15 @@ class HistoriPrediksiController extends Controller
         fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
         
         // Header
-        fputcsv($handle, ['Nama Anak', 'Hasil Prediksi', 'Probabilitas', 'Tanggal Prediksi']);
+        fputcsv($handle, ['Nama Anak', 'Hasil Prediksi', 'Probabilitas', 'Tanggal Prediksi', 'Rekomendasi AI']);
 
         foreach ($histori as $item) {
             fputcsv($handle, [
                 $item->anak->nama_anak ?? 'Data Terhapus',
                 $item->hasil_prediksi,
                 number_format($item->probabilitas * 100, 2) . '%',
-                \Carbon\Carbon::parse($item->tanggal_prediksi ?? $item->created_at)->format('Y-m-d H:i:s')
+                \Carbon\Carbon::parse($item->tanggal_prediksi ?? $item->created_at)->format('Y-m-d H:i:s'),
+                $item->rekomendasi_ai ?? '-'
             ]);
         }
 
@@ -72,13 +73,16 @@ class HistoriPrediksiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HistoriPrediksi $historiPrediksi)
+    public function destroy($id)
     {
         if (Auth::user()->role !== 'admin') {
             return redirect()->route('histori.index')->with('error', 'Anda tidak memiliki akses untuk menghapus data.');
         }
 
-        $historiPrediksi->delete();
+        $prediksi = Prediksi::find($id);
+        if ($prediksi) {
+            $prediksi->delete();
+        }
 
         return redirect()->route('histori.index')->with('success', 'Data histori prediksi berhasil dihapus.');
     }
@@ -90,12 +94,12 @@ class HistoriPrediksiController extends Controller
     {
         // Jika admin, ambil semua. Jika user, ambil miliknya saja.
         if (Auth::user()->role === 'admin') {
-            $histori = HistoriPrediksi::all();
+            $histori = Prediksi::all();
         } else {
             // Karena relasi belum disertakan di model (histori_prediksi tidak punya user_id), 
             // Sebagai pengaman kita kembalikan all() atau filter by id_anak yang dimiliki user. 
             // Berhubung dashboard admin yang diminta (role=admin), all() sudah cukup.
-            $histori = HistoriPrediksi::all();
+            $histori = Prediksi::all();
         }
 
         // Siapkan array bulan untuk 12 bulan terakhir
@@ -123,6 +127,12 @@ class HistoriPrediksiController extends Controller
 
                 if (isset($months[$key])) {
                     $res = ucfirst(strtolower($item->hasil_prediksi));
+                    
+                    // Map "Resiko stunting" and "Resiko" to "Berisiko"
+                    if ($res === 'Resiko stunting' || $res === 'Resiko') {
+                        $res = 'Berisiko';
+                    }
+
                     if (isset($months[$key][$res])) {
                         $months[$key][$res]++;
                     }
