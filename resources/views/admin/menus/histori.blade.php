@@ -45,6 +45,7 @@
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Hasil Prediksi</th>
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-center">Probabilitas</th>
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Tanggal Prediksi</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Rekomendasi AI</th>
                         @if(Auth::user()->role === 'admin')
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Aksi</th>
                         @endif
@@ -92,6 +93,11 @@
                                 </span>
                             </div>
                         </td>
+                        <td class="px-6 py-4">
+                            <div class="text-xs text-slate-600 line-clamp-3" title="{{ $item->rekomendasi_ai ?? 'Tidak ada rekomendasi' }}">
+                                {{ $item->rekomendasi_ai ?? '-' }}
+                            </div>
+                        </td>
                         @if(Auth::user()->role === 'admin')
                         <td class="px-6 py-4 text-right">
                             <form action="{{ route('histori.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
@@ -106,7 +112,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="{{ Auth::user()->role === 'admin' ? 5 : 4 }}" class="px-6 py-12 text-center">
+                        <td colspan="{{ Auth::user()->role === 'admin' ? 6 : 5 }}" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300">
                                     <i class="fa-solid fa-folder-open text-3xl"></i>
