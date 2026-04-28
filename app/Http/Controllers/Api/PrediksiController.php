@@ -122,25 +122,26 @@ class PrediksiController extends Controller
             'tgl_pemeriksaan' => now()->toDateString(),
         ]);
 
-        // 4. Siapkan Data untuk ML API (Python/FastAPI)
+        // 4. Siapkan Data untuk ML API (Python/FastAPI) - format sesuai predict_api.py v2
         $mlData = [
-            'nama' => $anak->nama_anak,
-            'tinggi_badan' => (float)$request->tinggi_badan,
-            'berat_badan' => (float)$request->berat_badan,
-            'umur_bulan' => (float)$request->umur_bulan,
-            'jenis_kelamin' => $anak->jenis_kelamin // misal: "Laki-laki" atau "Perempuan"
+            'nama'          => $anak->nama_anak,
+            'jenis_kelamin' => $anak->jenis_kelamin, // string: "Laki-laki" atau "Perempuan"
+            'umur_bulan'    => (float)$request->umur_bulan,
+            'berat_badan'   => (float)$request->berat_badan,
+            'tinggi_badan'  => (float)$request->tinggi_badan,
         ];
 
         // 5. Panggil ML API menggunakan library HTTP Laravel
         try {
-            $apiUrl = env('ML_API_URL', 'http://127.0.0.1:8000') . '/predict';
-            $response = \Illuminate\Support\Facades\Http::post($apiUrl, $mlData);
+            $apiUrl = env('ML_API_URL', 'http://127.0.0.1:8001') . '/predict';
+            $response = \Illuminate\Support\Facades\Http::timeout(30)->post($apiUrl, $mlData);
 
             if ($response->failed()) {
                 return response()->json([
-                    'pesan' => 'Gagal terhubung ke Server AI. Pastikan Server ML menyala.',
+                    'pesan' => 'Gagal terhubung ke Server AI. Pastikan Server ML sudah dijalankan.',
+                    'hint'  => 'Jalankan file run_ml_server.bat di folder Machine Learning SC',
                     'error' => $response->body()
-                ], 500);
+                ], 503);
             }
 
             $result = $response->json();
@@ -167,7 +168,7 @@ class PrediksiController extends Controller
                     'rekomendasi' => $rekomendasi,
                     'id_prediksi' => $prediksi->_id
                 ]
-            ]);
+            ], 201);
 
         } catch (\Exception $e) {
             return response()->json([

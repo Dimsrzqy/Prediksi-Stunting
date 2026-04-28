@@ -19,12 +19,14 @@ class AuthController extends Controller
         // 1. Validasi HANYA data yang dikirim dari Flutter
         $request->validate([
             'name' => 'required|string',
+            'no_hp' => 'required|string',
             'email' => 'required|email',
             'password' => [
                 'required',
                 'min:8',
                 'regex:/[a-zA-Z]/', // ada huruf
                 'regex:/[0-9]/',    // ada angka
+                'confirmed',
             ],
         ]);
 
@@ -36,9 +38,17 @@ class AuthController extends Controller
             ], 400); 
         }
 
+        $cekNoHp = User::where('no_hp', $request->no_hp)->first();
+        if ($cekNoHp) {
+            return response()->json([
+                'pesan' => 'nomor hp ini sudah dipakai!'
+            ], 400); 
+        }
+
         // 3. Simpan user ke MongoDB
         $user = User::create([
             'name' => $request->name,
+            'no_hp' => $request->no_hp,
             'email' => $request->email,
             // WAJIB pakai Hash::make biar passwordnya aman & bisa dipakai login!
             'password' => Hash::make($request->password), 
@@ -75,17 +85,18 @@ class AuthController extends Controller
     {
         // 1. Cek isian
         $request->validate([
-            'email' => 'required|email',
+            'identifier' => 'required',
             'password' => 'required'
         ]);
 
-        // 2. Cari user berdasarkan email di database
-        $user = User::where('email', $request->email)->first();
+        // 2. Cari user berdasarkan email atau no_hp di database
+        $fieldType = filter_var($request->identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'no_hp';
+        $user = User::where($fieldType, $request->identifier)->first();
 
         // 3. Cek apakah user ada DAN passwordnya cocok (Hash::check)
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'pesan' => 'Email atau Password salah!'
+                'pesan' => 'Email/Nomor HP atau Password salah!'
             ], 401);
         }
 

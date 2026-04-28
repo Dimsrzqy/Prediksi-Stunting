@@ -17,6 +17,7 @@ class User extends Authenticatable implements CanResetPasswordContract
     
     protected $fillable = [
         'name',
+        'no_hp',
         'email',
         'password',
         'role',
