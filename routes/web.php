@@ -12,6 +12,13 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/set-language/{lang}', function ($lang) {
+    if (in_array($lang, ['id', 'en'])) {
+        session()->put('locale', $lang);
+    }
+    return redirect()->back();
+})->name('set-language');
+
 Route::get('forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('reset-password/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
@@ -41,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profil', function () {
         return view('admin.menus.profil');
     })->name('profil.index');
+    Route::post('/profil', [\App\Http\Controllers\Api\AdminUserController::class, 'updateProfile'])->name('profil.update');
+    Route::post('/profil/avatar', [\App\Http\Controllers\Api\AdminUserController::class, 'updateAvatar'])->name('profil.avatar');
 
     Route::get('/pengaturan', function () {
         return view('admin.menus.pengaturan');
