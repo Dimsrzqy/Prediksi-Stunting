@@ -38,6 +38,14 @@ Route::middleware('auth')->group(function () {
         return view('admin.menus.user');
     })->name('user.index');
 
+    Route::get('/profil', function () {
+        return view('admin.menus.profil');
+    })->name('profil.index');
+
+    Route::get('/pengaturan', function () {
+        return view('admin.menus.pengaturan');
+    })->name('pengaturan.index');
+
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
     Route::apiResource('api-anak', \App\Http\Controllers\Api\AnakController::class);
 
