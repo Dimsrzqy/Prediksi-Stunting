@@ -11,6 +11,12 @@
                 <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Manajemen Data Anak</h1>
                 <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Kelola daftar anak untuk pencatatan prediksi stunting dan pemantauan.</p>
             </div>
+
+            <a href="{{ route('anak.export') }}" class="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
+                <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-500"></i>
+                Ekspor Excel
+            </a>
+
             <button onclick="openModal('tambah')" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 active:scale-95">
                 <i class="fa-solid fa-plus"></i>
                 Tambah Data Anak
@@ -90,7 +96,7 @@
     <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <div class="relative transform overflow-hidden rounded-[32px] bg-white dark:bg-slate-900 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-xl border border-slate-200 dark:border-slate-800">
-                
+
                 <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-sm">
@@ -188,7 +194,7 @@
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="px-6 py-5 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row-reverse gap-3">
                     <button type="button" onclick="submitForm()" id="btnSubmit" class="inline-flex w-full justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-700 sm:w-auto transition-all active:scale-95">Simpan Data</button>
                     <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-2xl bg-white dark:bg-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 sm:w-auto transition-all active:scale-95">Batal</button>
@@ -227,7 +233,11 @@
 
     async function fetchPilihanIbu() {
         try {
-            const res = await fetch(ENDPOINT_IBU, { headers: { 'Accept': 'application/json' }});
+            const res = await fetch(ENDPOINT_IBU, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
             const result = await res.json();
             dataIbuArr = result.data || result || [];
 
@@ -477,9 +487,17 @@
 
 <style>
     @keyframes fade-in {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
+
     .animate-fade-in {
         animation: fade-in 0.4s ease-out forwards;
     }

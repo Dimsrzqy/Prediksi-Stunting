@@ -11,6 +11,11 @@
                 <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Manajemen Data Ibu</h1>
                 <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">Kelola master data Profil Ibu. Buat profil di sini sebelum mendaftarkan data anak.</p>
             </div>
+            <!-- Tombol Ekspor Excel -->
+            <a href="{{ route('ibu.export') }}" class="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
+                <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-500"></i>
+                Ekspor Excel
+            </a>
             <button onclick="openModal('tambah')" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 active:scale-95">
                 <i class="fa-solid fa-plus"></i>
                 Tambah Profil Ibu
@@ -81,7 +86,7 @@
                     <p class="text-sm text-slate-500 dark:text-slate-500 mt-2 max-w-xs mx-auto">Silakan buat profil ibu kandung terlebih dahulu sebelum mendaftarkan data anak.</p>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </main>
@@ -92,7 +97,7 @@
     <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <div class="relative transform overflow-hidden rounded-[32px] bg-white dark:bg-slate-900 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-slate-200 dark:border-slate-800">
-                
+
                 <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-sm">
@@ -109,7 +114,7 @@
                     <form id="ibuForm" class="space-y-5">
                         @csrf
                         <input type="hidden" id="profilId" name="id">
-                        
+
                         <div>
                             <label for="nama_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">Nama Lengkap Ibu <span class="text-rose-500">*</span></label>
                             <input type="text" id="nama_ibu" name="nama_ibu" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="Nama Ibu">
@@ -149,13 +154,13 @@
                                 <option value="Lainnya">Lainnya</option>
                             </select>
                         </div>
-                        
+
                         <div id="formErrorWrapper" class="hidden">
                             <p id="formError" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-4 bg-rose-50 dark:bg-rose-900/20 p-3 rounded-xl border border-rose-100 dark:border-rose-900/30"></p>
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="px-6 py-5 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row-reverse gap-3">
                     <button type="button" onclick="submitForm()" id="btnSubmit" class="inline-flex w-full justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-700 sm:w-auto transition-all active:scale-95">Simpan Data</button>
                     <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-2xl bg-white dark:bg-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 sm:w-auto transition-all active:scale-95">Batal</button>
@@ -168,7 +173,7 @@
 <script>
     const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const API_IBU = '/api-ibu';
-    
+
     const formModal = document.getElementById('formModal');
     const ibuForm = document.getElementById('ibuForm');
     const tableBody = document.getElementById('tableBody');
@@ -177,7 +182,7 @@
     const notifWrapper = document.getElementById('notificationWrapper');
     const notifMsg = document.getElementById('notificationMessage');
     const notifIcon = document.getElementById('notificationIcon');
-    
+
     let isEditMode = false;
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -187,12 +192,16 @@
     async function fetchDataIbu() {
         tableLoading.classList.remove('hidden');
         emptyState.classList.add('hidden');
-        
+
         try {
-            const res = await fetch(API_IBU, { headers: { 'Accept': 'application/json' }});
+            const res = await fetch(API_IBU, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
             const responseData = await res.json();
             const dataArray = responseData.data || responseData;
-            
+
             if (Array.isArray(dataArray) && dataArray.length > 0) {
                 renderTable(dataArray);
                 emptyState.classList.add('hidden');
@@ -263,15 +272,18 @@
             isEditMode = true;
             document.getElementById('modalTitle').innerText = 'Edit Profil Ibu';
             document.getElementById('modalIcon').className = 'fa-solid fa-pen';
-            
-            document.getElementById('profilId').value = data._id || data.id; 
+
+            document.getElementById('profilId').value = data._id || data.id;
             document.getElementById('nama_ibu').value = data.nama_ibu || '';
             document.getElementById('usia_ibu').value = data.usia_ibu || '';
             document.getElementById('tinggi_ibu').value = data.tinggi_ibu || '';
-            
+
             const setSelectVal = (id, val) => {
                 const el = document.getElementById(id);
-                if (!val) { el.value = ''; return; }
+                if (!val) {
+                    el.value = '';
+                    return;
+                }
                 const isExists = Array.from(el.options).some(o => o.value == val);
                 if (!isExists) el.add(new Option(val, val));
                 el.value = val;
@@ -288,14 +300,14 @@
     }
 
     async function submitForm() {
-        if(!ibuForm.checkValidity()) {
+        if (!ibuForm.checkValidity()) {
             ibuForm.reportValidity();
             return;
         }
 
         const formData = new FormData(ibuForm);
         const dataObj = Object.fromEntries(formData.entries());
-        
+
         let targetUrl = API_IBU;
         let pMethod = 'POST';
 
@@ -383,9 +395,17 @@
 
 <style>
     @keyframes fade-in {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
+
     .animate-fade-in {
         animation: fade-in 0.4s ease-out forwards;
     }

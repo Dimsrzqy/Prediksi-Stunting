@@ -4,7 +4,7 @@
 
 @section('content')
 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/50 dark:bg-slate-950/50 p-6 md:p-10 transition-all duration-500">
-    
+
     <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="mb-12 animate-fade-in">
@@ -14,7 +14,7 @@
 
         <!-- Grid Layout -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            
+
             <!-- Menu 1: Keamanan Akun -->
             <div onclick="openSettingsModal('keamanan')" class="setting-card group animate-slide-up" style="animation-delay: 0.1s">
                 <div class="card-inner">
@@ -124,10 +124,10 @@
 <!-- Modal Overlay -->
 <div id="settingsModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="fixed inset-0 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-md transition-opacity duration-500" onclick="closeSettingsModal()"></div>
-    
+
     <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div id="modalContent" class="relative transform overflow-hidden rounded-[40px] bg-white dark:bg-slate-900 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-white dark:border-slate-800 scale-95 opacity-0 duration-300">
-            
+
             <!-- Modal Header -->
             <div class="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <div class="flex items-center gap-4">
@@ -154,39 +154,105 @@
 </div>
 
 <style>
-    .setting-card { @apply cursor-pointer transition-all duration-300 active:scale-[0.97]; }
-    .card-inner { @apply bg-white dark:bg-slate-900 p-8 md:p-10 rounded-[32px] border border-white dark:border-slate-800 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300; }
-    .setting-card:hover .card-inner { @apply shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:bg-slate-800/80 -translate-y-1.5; }
-    .icon-wrapper { @apply w-16 h-16 rounded-3xl flex items-center justify-center transition-all duration-300; }
-    .setting-card:hover .icon-wrapper { @apply scale-110 shadow-lg shadow-current/5 bg-white dark:bg-slate-700; }
+    .setting-card {
+        @apply cursor-pointer transition-all duration-300 active:scale-[0.97];
+    }
+
+    .card-inner {
+        @apply bg-white dark:bg-slate-900 p-8 md:p-10 rounded-[32px] border border-white dark:border-slate-800 shadow-[0_8px_30px_rgba(0, 0, 0, 0.04)] dark:shadow-none transition-all duration-300;
+    }
+
+    .setting-card:hover .card-inner {
+        @apply shadow-[0_20px_50px_rgba(0, 0, 0, 0.08)] dark:bg-slate-800/80 -translate-y-1.5;
+    }
+
+    .icon-wrapper {
+        @apply w-16 h-16 rounded-3xl flex items-center justify-center transition-all duration-300;
+    }
+
+    .setting-card:hover .icon-wrapper {
+        @apply scale-110 shadow-lg shadow-current/5 bg-white dark:bg-slate-700;
+    }
 
     /* Forms */
     .pill-input {
         @apply w-full px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-sm font-bold outline-none shadow-inner;
     }
-    
+
     /* iOS Switch */
-    .ios-switch { @apply relative inline-block w-12 h-7 flex-shrink-0; }
-    .ios-switch input { @apply opacity-0 w-0 h-0; }
-    .ios-slider { @apply absolute cursor-pointer inset-0 bg-slate-200 dark:bg-slate-700 transition-all rounded-full; }
-    .ios-slider:before { @apply absolute content-[''] h-5.5 w-5.5 left-[3px] bottom-[3px] bg-white transition-all rounded-full shadow-sm; }
-    input:checked + .ios-slider { @apply bg-emerald-500; }
-    input:checked + .ios-slider:before { transform: translateX(20px); }
+    .ios-switch {
+        @apply relative inline-block w-12 h-7 flex-shrink-0;
+    }
+
+    .ios-switch input {
+        @apply opacity-0 w-0 h-0;
+    }
+
+    .ios-slider {
+        @apply absolute cursor-pointer inset-0 bg-slate-200 dark:bg-slate-700 transition-all rounded-full;
+    }
+
+    .ios-slider:before {
+        @apply absolute content-[''] h-5.5 w-5.5 left-[3px] bottom-[3px] bg-white transition-all rounded-full shadow-sm;
+    }
+
+    input:checked+.ios-slider {
+        @apply bg-emerald-500;
+    }
+
+    input:checked+.ios-slider:before {
+        transform: translateX(20px);
+    }
 
     /* Theme Option */
-    .theme-opt { @apply p-4 rounded-3xl border-2 transition-all flex flex-col items-center gap-3; }
-    .theme-opt.active { @apply border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400; }
-    .theme-opt:not(.active) { @apply border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-500; }
+    .theme-opt {
+        @apply p-4 rounded-3xl border-2 transition-all flex flex-col items-center gap-3;
+    }
+
+    .theme-opt.active {
+        @apply border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400;
+    }
+
+    .theme-opt:not(.active) {
+        @apply border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-500;
+    }
 
     /* Lang Option */
-    .lang-opt { @apply w-full flex items-center justify-between p-5 rounded-[24px] border transition-all duration-300; }
-    .lang-opt.active { @apply border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 shadow-[0_10px_25px_-10px_rgba(16,185,129,0.2)]; }
-    .lang-opt:not(.active) { @apply border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800/50 text-slate-700 dark:text-slate-300; }
-    .lang-opt:hover:not(.active) { @apply bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 translate-x-2; }
+    .lang-opt {
+        @apply w-full flex items-center justify-between p-5 rounded-[24px] border transition-all duration-300;
+    }
 
-    @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-slide-up { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
+    .lang-opt.active {
+        @apply border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 shadow-[0_10px_25px_-10px_rgba(16, 185, 129, 0.2)];
+    }
+
+    .lang-opt:not(.active) {
+        @apply border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800/50 text-slate-700 dark:text-slate-300;
+    }
+
+    .lang-opt:hover:not(.active) {
+        @apply bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 translate-x-2;
+    }
+
+    @keyframes slide-up {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-slide-up {
+        animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.8s ease-out forwards;
+    }
 </style>
 
 <script>
@@ -207,7 +273,7 @@
 
         const currentLocale = '{{ app()->getLocale() }}';
 
-        switch(type) {
+        switch (type) {
             case 'keamanan':
                 modalTitle.innerText = '{{ __("Keamanan Akun") }}';
                 modalIcon.className = 'w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-inner bg-blue-50 text-blue-600';
@@ -236,7 +302,7 @@
                     </div>
                 `;
                 break;
-            
+
             case 'notifikasi':
                 modalTitle.innerText = '{{ __("Notifikasi") }}';
                 modalIcon.className = 'w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-inner bg-rose-50 text-rose-600';
@@ -387,7 +453,9 @@
     function closeSettingsModal() {
         modalContent.classList.add('scale-95', 'opacity-0');
         modalContent.classList.remove('scale-100', 'opacity-100');
-        setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
     }
 
     function setGlobalTheme(mode) {

@@ -1,5 +1,5 @@
 <header class="flex items-center justify-between bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-b border-white dark:border-slate-800 shadow-[0_4px_24px_rgba(0,0,0,0.02)] px-6 py-4 z-30 sticky top-0 transition-colors duration-300">
-    
+
     <!-- Left Section (Mobile Menu & Breadcrumbs) -->
     <div class="flex items-center gap-4">
         <!-- Hamburger (Visible on Mobile) -->
@@ -10,33 +10,37 @@
         <!-- Breadcrumbs -->
         <nav class="hidden md:flex items-center text-[13px] font-bold text-slate-400 dark:text-slate-500 tracking-wide">
             @if(request()->routeIs('dashboard'))
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">UTAMA</a>
-                <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-                <span class="text-slate-800 dark:text-slate-200">DASHBOARD</span>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">UTAMA</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">DASHBOARD</span>
             @elseif(request()->routeIs('anak.index'))
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
-                <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-                <span class="text-slate-800 dark:text-slate-200">DATA ANAK</span>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">DATA ANAK</span>
             @elseif(request()->routeIs('ibu.index'))
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
-                <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-                <span class="text-slate-800 dark:text-slate-200">DATA IBU</span>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">DATA IBU</span>
+            @elseif(request()->routeIs('makanan.index') || request()->routeIs('makanan.*'))
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">DATA GIZI & MENU</span>
             @elseif(request()->routeIs('user.index'))
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
-                <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-                <span class="text-slate-800 dark:text-slate-200">MANAJEMEN USER</span>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">MANAJEMEN USER</span>
             @elseif(request()->routeIs('profil.index'))
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
-                <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-                <span class="text-slate-800 dark:text-slate-200">PROFIL SAYA</span>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">PROFIL SAYA</span>
             @elseif(request()->routeIs('pengaturan.index'))
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
-                <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-                <span class="text-slate-800 dark:text-slate-200">PENGATURAN</span>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">PENGATURAN</span>
             @else
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
-                <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-                <span class="text-slate-800 dark:text-slate-200">LAINNYA</span>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">LAINNYA</span>
             @endif
         </nav>
     </div>
@@ -59,7 +63,7 @@
                 <i class="fa-regular fa-bell text-lg"></i>
                 <span class="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900 shadow-sm"></span>
             </button>
-            
+
             <!-- Dropdown Notifikasi -->
             <div id="notifDropdown" class="absolute right-0 mt-3 w-80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] ring-1 ring-slate-200/50 dark:ring-slate-800 overflow-hidden origin-top-right transition-all duration-300 ease-out opacity-0 invisible scale-95 translate-y-2 z-50">
                 <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 flex justify-between items-center">
@@ -89,9 +93,9 @@
             <div id="profileBtn" class="flex cursor-pointer items-center gap-3 pl-2 md:pl-5 border-l border-slate-200/50 dark:border-slate-800 group active:scale-95 transition-transform">
                 <div class="relative">
                     @php
-                        $navAvatarUrl = auth()->user()->avatar 
-                            ? asset('storage/' . auth()->user()->avatar) 
-                            : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=3b82f6&color=fff&bold=true';
+                    $navAvatarUrl = auth()->user()->avatar
+                    ? asset('storage/' . auth()->user()->avatar)
+                    : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=3b82f6&color=fff&bold=true';
                     @endphp
                     <img src="{{ $navAvatarUrl }}" alt="Profile" class="h-10 w-10 rounded-[14px] object-cover ring-2 ring-white dark:ring-slate-900 shadow-sm transition-transform group-hover:scale-105">
                     <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-slate-900"></div>
@@ -102,7 +106,7 @@
                 </div>
                 <i class="fa-solid fa-angle-down text-[10px] text-slate-400 dark:text-slate-600 ml-1 transition-transform group-hover:rotate-180"></i>
             </div>
-            
+
             <!-- Dropdown Profil -->
             <div id="profileDropdown" class="absolute right-0 mt-4 w-64 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-[28px] shadow-[0_12px_40px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/60 dark:ring-slate-800 overflow-hidden origin-top-right transition-all duration-300 ease-out opacity-0 invisible scale-95 translate-y-2 z-50">
                 <div class="px-5 py-4 border-b border-slate-200/60 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm">
@@ -121,7 +125,7 @@
                         <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 dark:text-slate-700 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300"></i>
                     </a>
                 </div>
-                
+
                 <div class="p-2 pt-0">
                     <div class="h-px w-[calc(100%-16px)] mx-auto bg-slate-200/60 dark:bg-slate-800/60 mb-2"></div>
                     <form method="POST" action="{{ route('logout') }}">
@@ -165,7 +169,7 @@
             dropdown.classList.add(...hideClasses);
         }
 
-        if(notifBtn) {
+        if (notifBtn) {
             notifBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (notifDropdown.classList.contains('invisible')) {
@@ -177,7 +181,7 @@
             });
         }
 
-        if(profileBtn) {
+        if (profileBtn) {
             profileBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (profileDropdown.classList.contains('invisible')) {

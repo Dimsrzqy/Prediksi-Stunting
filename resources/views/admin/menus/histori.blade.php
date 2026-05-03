@@ -57,12 +57,12 @@
                         </td>
                         <td class="px-6 py-5">
                             @php
-                                $statusClass = match(strtolower($item->hasil_prediksi)) {
-                                    'normal' => 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
-                                    'berisiko' => 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800',
-                                    'stunting' => 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800',
-                                    default => 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700'
-                                };
+                            $statusClass = match(strtolower($item->hasil_prediksi)) {
+                            'normal' => 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
+                            'berisiko' => 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800',
+                            'stunting' => 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800',
+                            default => 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700'
+                            };
                             @endphp
                             <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-black uppercase tracking-wider {{ $statusClass }}">
                                 {{ $item->hasil_prediksi }}
@@ -129,9 +129,17 @@
 
 <style>
     @keyframes fade-in {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
+
     .animate-fade-in {
         animation: fade-in 0.4s ease-out forwards;
     }

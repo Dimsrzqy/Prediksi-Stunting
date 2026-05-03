@@ -5,27 +5,37 @@
 @section('content')
 <style>
     /* iOS Style Utilities */
-    .ios-bg { background-color: #F2F2F7; }
-    .dark .ios-bg { background-color: #020617; } /* slate-950 */
-    
+    .ios-bg {
+        background-color: #F2F2F7;
+    }
+
+    .dark .ios-bg {
+        background-color: #020617;
+    }
+
+    /* slate-950 */
+
     .ios-card {
         background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(255, 255, 255, 0.8);
-        box-shadow: 0 8px 32px -8px rgba(0,0,0,0.06);
+        box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.06);
         border-radius: 28px;
     }
+
     .dark .ios-card {
-        background: rgba(30, 41, 59, 0.4); /* slate-800/40 */
+        background: rgba(30, 41, 59, 0.4);
+        /* slate-800/40 */
         border: 1px solid rgba(255, 255, 255, 0.05);
-        box-shadow: 0 8px 32px -8px rgba(0,0,0,0.4);
+        box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.4);
     }
 
     .ios-icon-box {
         border-radius: 22px;
-        box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 8px 16px -4px rgba(0,0,0,0.15);
+        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 8px 16px -4px rgba(0, 0, 0, 0.15);
     }
+
     .text-gradient {
         background-clip: text;
         -webkit-background-clip: text;
@@ -39,7 +49,7 @@
     <div class="fixed bottom-0 left-0 w-96 h-96 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-[100px] opacity-30 dark:opacity-20 pointer-events-none transform -translate-x-1/3 translate-y-1/3 transition-all duration-500"></div>
 
     <div class="mx-auto max-w-7xl relative z-10">
-        
+
         <!-- HEADER -->
         <div class="mb-10 px-2 mt-4">
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 transition-colors">
@@ -52,7 +62,7 @@
 
         <!-- STATS WIDGETS -->
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-            
+
             <!-- Widget 1: Anak -->
             <div class="ios-card p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.2)] dark:hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.4)] group cursor-pointer">
                 <div class="flex justify-between items-start mb-6">
@@ -143,7 +153,7 @@
                     <button id="btnBulan" class="px-5 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-full text-sm font-bold shadow-sm transition-all">Bulan</button>
                 </div>
             </div>
-            
+
             <div class="relative w-full h-80 lg:h-96">
                 <canvas id="stuntingChart"></canvas>
             </div>
@@ -156,26 +166,42 @@
     document.addEventListener("DOMContentLoaded", () => {
         let stuntingChartInstance = null;
         let currentFilter = 'bulan';
-        
+
         async function fetchStats() {
             try {
                 // Fetch Data Anak
-                const resAnak = await fetch('/api-anak', { headers: { 'Accept': 'application/json' }});
+                const resAnak = await fetch('/api-anak', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 const anak = await resAnak.json();
                 document.getElementById('statAnak').innerText = (anak.data || []).length;
 
                 // Fetch Data Ibu
-                const resIbu = await fetch('/api-ibu', { headers: { 'Accept': 'application/json' }});
-                const ibu = await resIbu.json();
-                document.getElementById('statIbu').innerText = (Array.isArray(ibu) ? ibu : []).length;
+                const resIbu = await fetch('/api-ibu', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                const responseIbu = await resIbu.json();
+                document.getElementById('statIbu').innerText = (responseIbu.data || []).length;
 
                 // Fetch Data Makanan (Silahkan disesuaikan jika API berbeda)
-                const resMakanan = await fetch('/api-makanan', { headers: { 'Accept': 'application/json' }});
+                const resMakanan = await fetch('/api-makanan', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 const makanan = await resMakanan.json();
                 document.getElementById('statMakanan').innerText = (makanan.data || []).length;
 
                 // Fetch Data Nutrisi (Silahkan disesuaikan jika API berbeda)
-                const resNutrisi = await fetch('/api-nutrisi', { headers: { 'Accept': 'application/json' }});
+                const resNutrisi = await fetch('/api-nutrisi', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 const nutrisi = await resNutrisi.json();
                 document.getElementById('statNutrisi').innerText = (nutrisi.data || []).length;
 
@@ -191,7 +217,7 @@
                 const res = await fetch(`/api-chart-histori?filter=${filter}`);
                 const chartData = await res.json();
 
-                if(chartData.datasets) {
+                if (chartData.datasets) {
                     chartData.datasets.forEach((ds, index) => {
                         ds.tension = 0.4;
                         ds.borderWidth = 3;
@@ -212,17 +238,31 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: { mode: 'index', intersect: false },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
                         scales: {
-                            x: { 
-                                grid: { display: false },
-                                ticks: { color: textColor }
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: textColor
+                                }
                             },
                             y: {
                                 beginAtZero: true,
-                                border: { display: false },
-                                grid: { color: gridColor },
-                                ticks: { precision: 0, color: textColor }
+                                border: {
+                                    display: false
+                                },
+                                grid: {
+                                    color: gridColor
+                                },
+                                ticks: {
+                                    precision: 0,
+                                    color: textColor
+                                }
                             }
                         },
                         plugins: {
@@ -232,7 +272,10 @@
                                     usePointStyle: true,
                                     padding: 20,
                                     color: isDark ? '#e2e8f0' : '#1e293b',
-                                    font: { family: "'Inter', sans-serif", weight: '600' }
+                                    font: {
+                                        family: "'Inter', sans-serif",
+                                        weight: '600'
+                                    }
                                 }
                             },
                             tooltip: {
@@ -244,7 +287,10 @@
                                 padding: 12,
                                 boxPadding: 6,
                                 usePointStyle: true,
-                                titleFont: { size: 13, family: "'Inter', sans-serif" }
+                                titleFont: {
+                                    size: 13,
+                                    family: "'Inter', sans-serif"
+                                }
                             }
                         }
                     }
