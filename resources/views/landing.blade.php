@@ -3,267 +3,338 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistem Prediksi Stunting - Deteksi Dini Status Gizi Balita</title>
+    <title>StuntCheck - Platform Health-Tech Pencegahan Stunting</title>
     
-    <!-- Google Fonts: Nunito for kids/friendly theme -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        body { font-family: 'Nunito', sans-serif; }
+        body { font-family: 'Outfit', sans-serif; background-color: #fafafa; }
         
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Animations */
         @keyframes float {
-            0% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        
+        @keyframes float-delayed {
+            0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
         }
-        @keyframes float-delay {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .animate-float-delayed { animation: float-delayed 5s ease-in-out infinite 2.5s; }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.7); }
         }
-        
-        .animate-float {
-            animation: float 5s ease-in-out infinite;
-        }
-        .animate-float-delay {
-            animation: float-delay 6s ease-in-out infinite 2s;
-        }
-        
-        .wavy-bg {
-            position: relative;
-            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 50%, #06b6d4 100%);
-            overflow: hidden;
-            z-index: 1;
-        }
-        
-        .card-shadow {
-            box-shadow: 0 10px 40px -10px rgba(59,130,246,0.15);
+        .btn-glow {
+            animation: pulse-glow 3s infinite;
         }
 
-        /* Hilangkan background kotak pada gambar hero */
-        .hero-img {
-            mix-blend-mode: multiply;
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .bg-animated {
+            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e0f2fe, #ecfdf5);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #3B82F6, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bg-primary-gradient {
+            background: linear-gradient(135deg, #3B82F6, #0ea5e9, #10B981);
+            background-size: 200% 200%;
+            animation: gradient-shift 10s ease infinite;
+        }
+
+        /* Hero Image Fix */
+        .hero-img { mix-blend-mode: multiply; }
+
+        /* Card Hover */
+        .hover-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .hover-card:hover { 
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.15);
         }
     </style>
 </head>
-<body class="antialiased bg-slate-50 text-slate-800 overflow-x-hidden">
+<body class="antialiased text-slate-800 overflow-x-hidden bg-animated">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md transition-all duration-300 py-2">
+    <nav class="fixed w-full z-50 glass transition-all duration-300 py-3" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-14">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
-                    <div class="flex items-center">
-                        <div class="relative w-10 h-10 mr-3">
-                            <div class="absolute inset-0 bg-blue-500 rounded-full opacity-20 animate-ping"></div>
-                            <div class="relative w-10 h-10 bg-gradient-to-tr from-blue-600 to-cyan-400 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
-                                <span class="text-white font-black text-xl">S</span>
-                            </div>
-                        </div>
-                        <span class="font-extrabold text-2xl tracking-tight text-blue-900">Stunt<span class="text-cyan-500">Check</span></span>
-                    </div>
+                <div class="flex-shrink-0 flex items-center cursor-pointer" data-aos="fade-down" data-aos-duration="800">
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="w-10 h-10 mr-3 object-contain drop-shadow-sm">
+                    <span class="font-extrabold text-2xl tracking-tight text-slate-800">Stunt<span class="text-blue-500">Check</span></span>
                 </div>
                 
-                <!-- Nav Links (removed "Fitur Aplikasi") -->
-                <div class="hidden md:flex space-x-10 items-center">
-                    <a href="#beranda" class="text-slate-600 hover:text-blue-600 font-bold transition-colors">Home</a>
-                    <a href="#apa-itu-stunting" class="text-slate-600 hover:text-blue-600 font-bold transition-colors">Tentang Stunting</a>
+                <!-- Nav Links -->
+                <div class="hidden md:flex space-x-8 items-center" data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">
+                    <a href="#hero" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Beranda</a>
+                    <a href="#about" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Tentang Kami</a>
+                    <a href="#features" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Fitur</a>
+                    <a href="#impact" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Dampak</a>
                 </div>
+
+
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="beranda" class="relative pt-32 pb-40 lg:pt-40 lg:pb-56 overflow-visible">
+    <!-- 1. HERO SECTION -->
+    <section id="hero" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- Decorative blobs -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[500px] h-[500px] rounded-full bg-blue-400/20 blur-[80px] z-0"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[400px] h-[400px] rounded-full bg-emerald-400/20 blur-[80px] z-0"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <!-- Text Content -->
-                <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
-                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-blue-600 font-bold text-sm mb-6 border border-blue-100 shadow-sm animate-float-delay">
-                        <span class="relative flex h-2.5 w-2.5 mr-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+                <div class="text-center lg:text-left" data-aos="fade-right" data-aos-duration="1000">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full glass text-blue-600 font-bold text-sm mb-6 border border-blue-200">
+                        <span class="flex h-2.5 w-2.5 relative mr-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                         </span>
-                        Aplikasi Pemantauan Kesehatan Anak
+                        Platform Health-Tech Masa Depan
                     </div>
                     
-                    <h1 class="text-5xl tracking-tight font-extrabold text-slate-800 sm:text-6xl md:text-7xl lg:text-5xl xl:text-6xl mb-4 leading-tight">
-                        Cegah <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">Stunting</span><br>
-                        pada <span class="text-blue-900 font-black">Anak</span>
+                    <h1 class="text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-800 leading-[1.1] mb-6">
+                        Cegah <span class="text-gradient">Stunting</span><br>
+                        Pada Anak
                     </h1>
                     
-                    <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 mb-10">
-                        Pantau tumbuh kembang anak Anda secara teratur. Cegah stunting sejak dini untuk masa depan yang lebih cerdas dan membanggakan.
+                    <p class="text-lg text-slate-500 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                        Pantau tumbuh kembang si kecil dengan teknologi cerdas. Deteksi dini potensi stunting dengan analisis berbasis sistem pakar dan standar WHO.
                     </p>
                     
-                    <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
-                        <div class="rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-1 transition-all duration-300">
-                            <a href="{{ route('login') }}" class="w-full flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-bold rounded-full text-white bg-emerald-500 hover:bg-emerald-600 md:py-4 md:text-lg px-10">
-                                Cek Status Anakmu
-                                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </a>
-                        </div>
-                        <div class="mt-3 sm:mt-0">
-                            <a href="#apa-itu-stunting" class="w-full flex items-center justify-center px-8 py-3.5 border-2 border-blue-100 text-base font-bold rounded-full text-blue-600 bg-transparent hover:bg-blue-50 md:py-4 md:text-lg transition-all duration-300">
-                                Pelajari Lebih Lanjut
-                            </a>
-                        </div>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="{{ route('login') }}" class="btn-glow flex items-center justify-center px-8 py-4 rounded-full bg-[#10B981] text-white font-bold text-lg hover:bg-emerald-600 transition-all">
+                            Cek Sekarang
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                        <a href="#about" class="flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-200 text-slate-600 font-bold text-lg hover:border-blue-500 hover:text-blue-600 transition-all bg-white/50">
+                            Pelajari Lebih Lanjut
+                        </a>
                     </div>
                 </div>
                 
-                <!-- Hero Illustration -->
-                <div class="mt-16 lg:mt-0 lg:col-span-6 relative">
-                    <div class="relative mx-auto w-full max-w-lg lg:max-w-none animate-float">
+                <!-- Illustration -->
+                <div class="relative lg:h-[600px] flex items-center justify-center" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="relative w-full max-w-lg animate-float z-10">
+                        <img src="{{ asset('img/stunting_hero.png') }}" alt="Ilustrasi Dokter dan Anak" class="w-full h-auto hero-img drop-shadow-2xl">
+                    </div>
 
-                        <!-- Hero image: mix-blend-mode multiply menghilangkan background putih -->
-                        <img class="hero-img w-full h-auto relative z-10" src="{{ asset('img/stunting_hero.png') }}" alt="Ilustrasi Dokter dan Anak">
-
-                        <!-- Decorative animated elements -->
-                        <div class="absolute top-10 right-10 bg-white p-3 rounded-2xl shadow-xl z-20 animate-float-delay transform rotate-12">
-                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-2xl">🍎</div>
-                        </div>
-                        <div class="absolute bottom-20 left-10 bg-white p-3 rounded-2xl shadow-xl z-20 animate-float transform -rotate-12" style="animation-delay: 1s;">
-                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl">🍼</div>
-                        </div>
-                        <div class="absolute top-1/2 -right-5 bg-white p-3 rounded-2xl shadow-xl z-20 animate-float transform rotate-6" style="animation-delay: 2s;">
-                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-2xl">🥦</div>
-                        </div>
+                    <!-- Floating Elements (Fruits/Veggies) -->
+                    <div class="absolute top-10 right-10 bg-white/80 backdrop-blur-md p-3 rounded-2xl shadow-xl z-20 animate-float-delayed transform rotate-12">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-2xl shadow-inner">🍎</div>
+                    </div>
+                    <div class="absolute bottom-20 left-10 bg-white/80 backdrop-blur-md p-3 rounded-2xl shadow-xl z-20 animate-float transform -rotate-12" style="animation-delay: 1s;">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl shadow-inner">🍼</div>
+                    </div>
+                    <div class="absolute top-1/2 -right-5 bg-white/80 backdrop-blur-md p-3 rounded-2xl shadow-xl z-20 animate-float transform rotate-6" style="animation-delay: 2s;">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-2xl shadow-inner">🥦</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Floating Feature Cards overlapping Hero -->
-    <section class="relative z-20 -mt-32 pb-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="bg-white rounded-[2rem] p-8 card-shadow hover:-translate-y-2 transition-all duration-300 border border-slate-100">
-                    <div class="h-16 w-16 bg-red-50 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">Monitoring Pertumbuhan</h3>
-                    <p class="text-slate-500 font-medium leading-relaxed">
-                        Lacak berat & tinggi anak dengan mudah. Dapatkan grafik pertumbuhan sesuai standar WHO.
-                    </p>
-                </div>
+    <!-- 2. ABOUT SECTION -->
+    <section id="about" class="py-24 relative z-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass rounded-[2rem] p-10 md:p-16 text-center shadow-2xl relative overflow-hidden border border-white/40" data-aos="zoom-in" data-aos-duration="800">
+                <!-- Decorative background pattern inside card -->
+                <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-blue-100 rounded-full opacity-50 blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-emerald-100 rounded-full opacity-50 blur-2xl"></div>
                 
-                <!-- Card 2 -->
-                <div class="bg-white rounded-[2rem] p-8 card-shadow hover:-translate-y-2 transition-all duration-300 border border-slate-100">
-                    <div class="h-16 w-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="h-8 w-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <div class="relative z-10">
+                    <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-emerald-400 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-500/30 transform -rotate-6">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">Tips & Edukasi</h3>
-                    <p class="text-slate-500 font-medium leading-relaxed">
-                        Informasi sehat untuk cegah stunting. Asupan gizi yang tepat pada usia emas pertumbuhan.
-                    </p>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="bg-white rounded-[2rem] p-8 card-shadow hover:-translate-y-2 transition-all duration-300 border border-slate-100">
-                    <div class="h-16 w-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">Analisis Kesehatan</h3>
-                    <p class="text-slate-500 font-medium leading-relaxed">
-                        Laporan detail perkembangan anak Anda berdasarkan sistem pakar dan perhitungan Z-score.
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-6">Apa itu <span class="text-gradient">StuntCheck?</span></h2>
+                    <p class="text-lg text-slate-500 leading-relaxed font-medium max-w-3xl mx-auto">
+                        StuntCheck adalah platform cerdas inovatif yang dirancang khusus untuk memantau status gizi dan tumbuh kembang anak. Kami membantu Anda mendeteksi potensi stunting sejak dini melalui analisis yang akurat, sehingga langkah pencegahan dapat dilakukan secara optimal demi masa depan yang gemilang.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Mengapa Stunting Berbahaya -->
-    <section id="apa-itu-stunting" class="py-20 relative bg-slate-50">
+    <!-- 3. FITUR -->
+    <section id="features" class="py-24 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center md:max-w-3xl md:mx-auto mb-16">
-                <h2 class="text-4xl font-extrabold text-blue-900 sm:text-5xl mb-6">
-                    Mengapa <span class="text-slate-800">Stunting</span> <span class="text-blue-500">Berbahaya?</span>
-                </h2>
-                <p class="text-lg text-slate-500 font-medium">
-                    Bantu si kecil tumbuh sehat dan cerdas dengan memahami risiko stunting sejak dini.
-                </p>
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-sm font-bold text-blue-600 tracking-wider uppercase mb-3">Layanan Kami</h2>
+                <h3 class="text-4xl font-extrabold text-slate-800">Fitur Unggulan StuntCheck</h3>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 sm:px-0">
-                <div class="bg-white rounded-[2.5rem] p-8 text-center shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-32 h-32 mb-6">
-                            <div class="w-full h-full bg-blue-100 rounded-full flex items-center justify-center text-6xl shadow-inner animate-float">🧠</div>
-                        </div>
-                        <h3 class="text-2xl font-bold text-blue-900 mb-4">Gangguan Kognitif</h3>
-                        <p class="text-slate-500 font-medium">Menghambat perkembangan otak anak, menurunkan kecerdasan dan prestasi belajar saat dewasa kelak.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white rounded-[2rem] p-8 hover-card border border-slate-100 shadow-sm relative overflow-hidden group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30 relative z-10">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-3 relative z-10">Monitoring Pertumbuhan</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed relative z-10">Lacak berat dan tinggi anak dengan sistematis. Dapatkan grafik pertumbuhan visual yang disesuaikan dengan standar kurva WHO secara real-time.</p>
                 </div>
 
-                <div class="bg-white rounded-[2.5rem] p-8 text-center shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-32 h-32 mb-6">
-                            <div class="w-full h-full bg-emerald-100 rounded-full flex items-center justify-center text-6xl shadow-inner animate-float-delay">📏</div>
-                        </div>
-                        <h3 class="text-2xl font-bold text-blue-900 mb-4">Pertumbuhan Terhambat</h3>
-                        <p class="text-slate-500 font-medium">Anak tampak lebih pendek dari anak seusianya dan rentan memiliki postur tubuh tidak maksimal.</p>
+                <!-- Feature 2 -->
+                <div class="bg-white rounded-[2rem] p-8 hover-card border border-slate-100 shadow-sm relative overflow-hidden group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/30 relative z-10">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-3 relative z-10">Edukasi Nutrisi</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed relative z-10">Akses ribuan informasi sehat untuk mencegah stunting. Panduan asupan gizi yang tepat pada usia emas untuk menunjang tumbuh kembang optimal.</p>
                 </div>
 
-                <div class="bg-white rounded-[2.5rem] p-8 text-center shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-32 h-32 mb-6">
-                            <div class="w-full h-full bg-cyan-100 rounded-full flex items-center justify-center text-6xl shadow-inner animate-float">🛡️</div>
-                        </div>
-                        <h3 class="text-2xl font-bold text-blue-900 mb-4">Risiko Penyakit</h3>
-                        <p class="text-slate-500 font-medium">Sistem imun tubuh lebih rendah, menjadikan anak lebih rentan terhadap berbagai penyakit kronis pada usia dewasa.</p>
+                <!-- Feature 3 -->
+                <div class="bg-white rounded-[2rem] p-8 hover-card border border-slate-100 shadow-sm relative overflow-hidden group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center mb-6 shadow-lg shadow-indigo-500/30 relative z-10">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-3 relative z-10">Analisis Cerdas</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed relative z-10">Laporan detail dan prediksi perkembangan anak menggunakan perhitungan Z-score serta rekomendasi langsung dari sistem berbasis kecerdasan buatan.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Wave Bottom Section -->
-    <section class="wavy-bg pt-32 pb-20 lg:pt-48 lg:pb-32 mt-10 relative">
-        <svg class="absolute top-0 w-full text-slate-50 fill-current -mt-1" viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,64L80,74.7C160,85,320,107,480,101.3C640,96,800,64,960,48C1120,32,1280,32,1360,32L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path>
-        </svg>
-        
-        <div class="absolute top-20 left-10 w-24 h-24 bg-white rounded-full opacity-10 animate-float"></div>
-        <div class="absolute bottom-20 right-20 w-40 h-40 bg-white rounded-full opacity-10 animate-float-delay"></div>
-        <div class="absolute top-1/2 left-1/4 w-12 h-12 bg-white rounded-full opacity-20 animate-ping"></div>
+    <!-- 4. DAMPAK STUNTING -->
+    <section id="impact" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-extrabold text-slate-800 mb-4">Mengapa Stunting <span class="text-red-500">Berbahaya?</span></h2>
+                <p class="text-lg text-slate-500 font-medium max-w-2xl mx-auto">Kenali ancaman tersembunyi dari stunting yang dapat memengaruhi masa depan anak secara permanen jika tidak ditangani sedini mungkin.</p>
+            </div>
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-tight drop-shadow-md">
-                Mulai Pantau Kesehatan Anakmu!
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Impact 1: Merah -->
+                <div class="glass p-8 rounded-[2rem] hover-card border-t-4 border-red-500 bg-red-50/30" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-sm shadow-red-100">🧠</div>
+                    <h4 class="text-2xl font-bold text-slate-800 mb-3">Gangguan Kognitif</h4>
+                    <p class="text-slate-600 font-medium leading-relaxed">Menghambat perkembangan otak secara drastis, menurunkan tingkat kecerdasan dan fokus belajar saat anak tumbuh dewasa.</p>
+                </div>
+
+                <!-- Impact 2: Kuning -->
+                <div class="glass p-8 rounded-[2rem] hover-card border-t-4 border-yellow-400 bg-yellow-50/30" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-sm shadow-yellow-100">📏</div>
+                    <h4 class="text-2xl font-bold text-slate-800 mb-3">Pertumbuhan Terhambat</h4>
+                    <p class="text-slate-600 font-medium leading-relaxed">Fisik anak tampak jauh lebih pendek dibanding anak seusianya, serta rentan memiliki postur tubuh yang tidak proporsional.</p>
+                </div>
+
+                <!-- Impact 3: Biru -->
+                <div class="glass p-8 rounded-[2rem] hover-card border-t-4 border-blue-500 bg-blue-50/30" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-sm shadow-blue-100">🛡️</div>
+                    <h4 class="text-2xl font-bold text-slate-800 mb-3">Risiko Penyakit</h4>
+                    <p class="text-slate-600 font-medium leading-relaxed">Menurunkan sistem kekebalan tubuh, menjadikan anak lebih rentan terhadap berbagai penyakit kronis dan infeksi berkelanjutan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CALL TO ACTION (CTA) -->
+    <section class="relative pt-32 pb-32 overflow-hidden bg-primary-gradient">
+        <!-- Wave Separator top -->
+        <div class="absolute top-0 w-full overflow-hidden leading-[0] transform rotate-180">
+            <svg class="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-white"></path>
+            </svg>
+        </div>
+
+        <!-- Decorative background elements -->
+        <div class="absolute top-20 right-20 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-50 animate-float"></div>
+        <div class="absolute bottom-10 left-20 w-48 h-48 bg-white rounded-full mix-blend-overlay filter blur-2xl opacity-40 animate-float-delayed"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" data-aos="zoom-in" data-aos-duration="1000">
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-8 leading-tight tracking-tight drop-shadow-lg">
+                Mulai Pantau Kesehatan<br>Anak Anda Sekarang!
             </h2>
-            <p class="text-xl text-blue-50 font-medium mb-12 max-w-2xl mx-auto">
-                Bergabung sekarang dan pantau grafik pertumbuhan si kecil setiap detiknya secara gratis dan mudah digunakan.
+            <p class="text-xl text-blue-50 font-medium mb-12 max-w-2xl mx-auto opacity-90">
+                Dampingi setiap tahap pertumbuhan si kecil. Kami bantu deteksi potensi stunting lebih awal melalui sistem pakar yang akurat dan tepercaya dengan standar WHO.
             </p>
             
-            <div class="flex flex-col sm:flex-row justify-center gap-6">
-                <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-10 py-4 border border-transparent text-lg font-bold rounded-full text-white bg-emerald-500 hover:bg-emerald-400 shadow-xl shadow-emerald-600/30 hover:-translate-y-1 transition-all duration-300">
-                    Cek Sekarang
-                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </a>
-            </div>
+            <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-10 py-5 rounded-full bg-white text-blue-600 font-extrabold text-xl hover:bg-slate-50 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-white/20 glow-button">
+                Daftar & Cek Gratis
+                <svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
         </div>
-        
-        <svg class="absolute bottom-0 w-full text-white fill-current -mb-1 opacity-20 transform rotate-180" viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,64L80,74.7C160,85,320,107,480,101.3C640,96,800,64,960,48C1120,32,1280,32,1360,32L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path>
-        </svg>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-white pt-10 pb-8 text-center text-slate-500 text-sm font-medium">
-        <p>&copy; {{ date('Y') }} Sistem Prediksi Stunting - StuntCheck. All rights reserved.</p>
+    <!-- 6. FOOTER -->
+    <footer class="bg-white py-12 border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="w-8 h-8 mr-2 opacity-80 grayscale">
+                    <span class="font-extrabold text-xl tracking-tight text-slate-400">Stunt<span class="text-slate-300">Check</span></span>
+                </div>
+                
+
+            </div>
+            <div class="mt-8 border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                <p class="text-slate-400 font-medium text-center md:text-left mb-4 md:mb-0">
+                    &copy; {{ date('Y') }} StuntCheck - Platform Health-Tech. All rights reserved.
+                </p>
+                <div class="flex space-x-6 text-slate-400 font-medium">
+                    <a href="#" class="hover:text-blue-500 transition-colors">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-blue-500 transition-colors">Syarat & Ketentuan</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            once: true,
+            offset: 50,
+            easing: 'ease-out-cubic',
+        });
+
+        // Navbar blur effect on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md');
+                nav.classList.add('bg-white/80');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.remove('bg-white/80');
+            }
+        });
+    </script>
 </body>
 </html>
