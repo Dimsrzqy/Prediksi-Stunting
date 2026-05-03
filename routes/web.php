@@ -26,7 +26,7 @@ Route::post('reset-password', [\App\Http\Controllers\Auth\ResetPasswordControlle
 
 // Rute yang butuh Login
 Route::middleware('auth')->group(function () {
-    
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -40,6 +40,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/ibu', function () {
         return view('admin.menus.ibu');
     })->name('ibu.index');
+
+    Route::get('/makanan', function () {
+        return view('admin.menus.makanan');
+    })->name('makanan.index');
 
     Route::get('/users', function () {
         return view('admin.menus.user');
@@ -56,8 +60,9 @@ Route::middleware('auth')->group(function () {
     })->name('pengaturan.index');
 
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
+    Route::get('/api-anak/export', [\App\Http\Controllers\Api\AnakController::class, 'export'])->name('anak.export');
     Route::apiResource('api-anak', \App\Http\Controllers\Api\AnakController::class);
-
+    Route::get('/api-ibu/export', [\App\Http\Controllers\Api\ProfilIbuController::class, 'export'])->name('ibu.export');
     Route::apiResource('api-ibu', \App\Http\Controllers\Api\ProfilIbuController::class);
     Route::apiResource('api-users', \App\Http\Controllers\Api\AdminUserController::class);
     Route::get('/api-chart-histori', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'chartData']);
@@ -65,7 +70,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/histori-prediksi/export', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'export'])->name('histori.export');
 
     Route::resource('histori-prediksi', \App\Http\Controllers\Api\HistoriPrediksiController::class)->only([
-        'index', 'destroy'
+        'index',
+        'destroy'
     ])->names([
         'index' => 'histori.index',
         'destroy' => 'histori.destroy',

@@ -10,7 +10,7 @@
             </h2>
         </div>
     </div>
-    
+
     <!-- Navigation Links -->
     <nav class="flex-1 overflow-y-auto mt-6 px-4 pb-4 no-scrollbar">
         <ul class="space-y-1.5">
@@ -53,7 +53,20 @@
                     <span class="ml-3 font-semibold text-[15px]">Data Anak</span>
                 </a>
             </li>
-            
+
+            <li class="pt-6 pb-1">
+                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">Data & Gizi</span>
+            </li>
+            <!-- Menu Data Gizi & Menu (Baru) -->
+            <li>
+                <a href="{{ route('makanan.index') }}" class="group flex items-center rounded-2xl px-4 py-3.5 {{ request()->routeIs('makanan.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 shadow-md shadow-emerald-500/30 text-white translate-x-1' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200' }} transition-all duration-300 active:scale-95">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('makanan.*') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400' }} transition-colors duration-300">
+                        <i class="fa-solid fa-utensils text-sm"></i>
+                    </div>
+                    <span class="ml-3 font-semibold text-[15px]">Data Gizi & Menu</span>
+                </a>
+            </li>
+
             <li class="pt-6 pb-1">
                 <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">Sistem</span>
             </li>
@@ -75,7 +88,7 @@
             </li>
         </ul>
     </nav>
-    
+
     <!-- Logout Button -->
     <div class="px-5 py-6 border-t border-white/50 dark:border-slate-800/50 transition-colors">
         <form method="POST" action="{{ route('logout') }}">
