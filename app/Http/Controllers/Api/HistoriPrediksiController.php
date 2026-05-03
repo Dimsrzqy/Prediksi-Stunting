@@ -90,26 +90,37 @@ class HistoriPrediksiController extends Controller
     /**
      * Data json untuk keperluan Chart di Dashboard.
      */
-    public function chartData()
+    public function chartData(Request $request)
     {
         // Jika admin, ambil semua. Jika user, ambil miliknya saja.
         if (Auth::user()->role === 'admin') {
             $histori = Prediksi::all();
         } else {
-            // Karena relasi belum disertakan di model (histori_prediksi tidak punya user_id), 
-            // Sebagai pengaman kita kembalikan all() atau filter by id_anak yang dimiliki user. 
-            // Berhubung dashboard admin yang diminta (role=admin), all() sudah cukup.
             $histori = Prediksi::all();
         }
 
-        // Siapkan array bulan untuk 12 bulan terakhir
-        $months = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $months[\Carbon\Carbon::now()->subMonths($i)->format('Y-m')] = [
-                'Normal' => 0,
-                'Berisiko' => 0,
-                'Stunting' => 0,
-            ];
+        $filter = $request->query('filter', 'bulan'); // default 'bulan'
+        
+        $periods = [];
+        
+        if ($filter === 'minggu') {
+            // Siapkan array untuk 7 hari terakhir
+            for ($i = 6; $i >= 0; $i--) {
+                $periods[\Carbon\Carbon::now()->subDays($i)->format('Y-m-d')] = [
+                    'Normal' => 0,
+                    'Berisiko' => 0,
+                    'Stunting' => 0,
+                ];
+            }
+        } else {
+            // Siapkan array bulan untuk 12 bulan terakhir
+            for ($i = 11; $i >= 0; $i--) {
+                $periods[\Carbon\Carbon::now()->subMonths($i)->format('Y-m')] = [
+                    'Normal' => 0,
+                    'Berisiko' => 0,
+                    'Stunting' => 0,
+                ];
+            }
         }
 
         foreach ($histori as $item) {
@@ -123,9 +134,10 @@ class HistoriPrediksiController extends Controller
                 }
 
                 $date = \Carbon\Carbon::parse($tanggal);
-                $key = $date->format('Y-m');
+                
+                $key = $filter === 'minggu' ? $date->format('Y-m-d') : $date->format('Y-m');
 
-                if (isset($months[$key])) {
+                if (isset($periods[$key])) {
                     $res = ucfirst(strtolower($item->hasil_prediksi));
                     
                     // Map "Resiko stunting" and "Resiko" to "Berisiko"
@@ -133,8 +145,8 @@ class HistoriPrediksiController extends Controller
                         $res = 'Berisiko';
                     }
 
-                    if (isset($months[$key][$res])) {
-                        $months[$key][$res]++;
+                    if (isset($periods[$key][$res])) {
+                        $periods[$key][$res]++;
                     }
                 }
             } catch (\Exception $e) {
@@ -148,8 +160,12 @@ class HistoriPrediksiController extends Controller
         $dataBerisiko = [];
         $dataStunting = [];
 
-        foreach ($months as $k => $v) {
-            $labels[] = \Carbon\Carbon::createFromFormat('Y-m', $k)->translatedFormat('M Y');
+        foreach ($periods as $k => $v) {
+            if ($filter === 'minggu') {
+                $labels[] = \Carbon\Carbon::createFromFormat('Y-m-d', $k)->translatedFormat('d M');
+            } else {
+                $labels[] = \Carbon\Carbon::createFromFormat('Y-m', $k)->translatedFormat('M Y');
+            }
             $dataNormal[] = $v['Normal'];
             $dataBerisiko[] = $v['Berisiko'];
             $dataStunting[] = $v['Stunting'];
