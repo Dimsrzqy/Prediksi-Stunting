@@ -20,9 +20,14 @@ class Prediksi extends Model
     protected $fillable = [
         'id_anak',
         'hasil_prediksi',
+        'hasil_wa',
+        'hasil_wh',
+        'hasil_hfa',
         'probabilitas',
+        'z_scores',
         'tanggal_prediksi',
         'rekomendasi_ai',
+        'rekomendasi_data',
     ];
 
     /**
