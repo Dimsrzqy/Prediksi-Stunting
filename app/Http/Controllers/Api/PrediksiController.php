@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Prediksi;
 use App\Models\Anak;
+use App\Models\Nutrisi;
+use App\Models\Makanan;
+use App\Models\RekomendasiNutrisi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -145,28 +148,66 @@ class PrediksiController extends Controller
             }
 
             $result = $response->json();
-            $hasilPrediksi = $result['prediksi']['keterangan']; // "Normal", "Resiko Stunting", "Stunting"
-            
-            // 7. Generate Rekomendasi AI Gemini
-            $rekomendasi = $this->generateGeminiRecommendation($hasilPrediksi, $request->umur_bulan, $anak->jenis_kelamin, $request->berat_badan, $request->tinggi_badan);
+            $prediksiML = $result['prediksi'];
+            $zScores = $result['z_score_who'] ?? null;
 
-            // 8. Simpan Hasil Prediksi ke Database
+            // Ambil keempat indikator
+            $hasilHA = $prediksiML['stunting_ha']['keterangan'] ?? 'Unknown';
+            $hasilWA = $prediksiML['berat_badan_wa']['keterangan'] ?? 'Unknown';
+            $hasilWH = $prediksiML['gizi_wh']['keterangan'] ?? 'Unknown';
+            $hasilHFA = $prediksiML['height_for_age']['keterangan'] ?? 'Unknown';
+            
+            // Probabilitas HA (untuk status utama)
+            $probabilitasHA = $prediksiML['stunting_ha']['probabilitas'] ?? 1.0;
+
+            // 7. Penentuan 3 Kategori Status berdasarkan Z-Score (Logika Python User)
+            $statusHA = $this->mapStatusHA($z_ha);
+            $statusWA = $this->mapStatusWA($z_wa);
+            $statusWH = $this->mapStatusWH($z_wh);
+
+            // 8. Dapatkan Rekomendasi Terstruktur (Cek DB dulu, baru Gemini)
+            $rekomendasiData = $this->getStructuredRecommendation($statusHA, [
+                'status_ha' => $statusHA,
+                'status_wa' => $statusWA,
+                'status_wh' => $statusWH,
+                'umur' => $request->umur_bulan,
+                'jk' => $anak->jenis_kelamin,
+                'bb' => $request->berat_badan,
+                'tb' => $request->tinggi_badan,
+                'z_ha' => $z_ha,
+                'z_wa' => $z_wa,
+                'z_wh' => $z_wh
+            ]);
+
+            // 9. Simpan Hasil Prediksi ke Database
             $prediksi = Prediksi::create([
                 'id_anak' => $request->id_anak,
-                'hasil_prediksi' => $hasilPrediksi,
-                'probabilitas' => 1.0, 
+                'hasil_prediksi' => $statusHA, // HA tetap sebagai hasil utama (Stunting)
+                'hasil_wa' => $statusWA,
+                'hasil_wh' => $statusWH,
+                'hasil_hfa' => $hasilHFA,
+                'probabilitas' => $probabilitasHA, 
+                'z_scores' => $zScores,
                 'tanggal_prediksi' => now()->toDateString(),
-                'rekomendasi_ai' => $rekomendasi
+                'rekomendasi_ai' => $rekomendasiData['teks_rekomendasi'] ?? '',
+                'rekomendasi_data' => $rekomendasiData['data_terstruktur'] ?? []
             ]);
 
             return response()->json([
                 'pesan' => 'Prediksi berhasil dihitung!',
                 'data' => [
+                    'id_prediksi' => $prediksi->_id,
                     'anak' => $anak->nama_anak,
-                    'hasil' => $hasilPrediksi,
-                    'detail_ai' => $result['prediksi'],
-                    'rekomendasi' => $rekomendasi,
-                    'id_prediksi' => $prediksi->_id
+                    'status' => [
+                        'ha' => $statusHA,
+                        'wa' => $statusWA,
+                        'wh' => $statusWH,
+                        'hfa' => $hasilHFA
+                    ],
+                    'prediksi' => $prediksiML,
+                    'z_score_who' => $zScores,
+                    'rekomendasi_teks' => $prediksi->rekomendasi_ai,
+                    'rekomendasi_terstruktur' => $prediksi->rekomendasi_data,
                 ]
             ], 201);
 
@@ -178,44 +219,138 @@ class PrediksiController extends Controller
         }
     }
 
-    private function generateGeminiRecommendation($hasil, $umur, $jk, $bb, $tb)
+    private function mapStatusHA($z)
     {
-        $apiKey = env('GEMINI_API_KEY');
-        if (!$apiKey) {
-            return "Rekomendasi tidak tersedia (API Key missing).";
+        if ($z >= -1.5) return 'Normal';
+        if ($z > -2.0) return 'Berisiko';
+        return 'Stunting';
+    }
+
+    private function mapStatusWA($z)
+    {
+        if ($z >= -2.0 && $z <= 1.0) return 'Normal';
+        if ($z > 1.0) return 'Lebih';
+        if ($z > -3.0) return 'Kurang';
+        return 'Sangat Kurang';
+    }
+
+    private function mapStatusWH($z)
+    {
+        if ($z >= -2.0 && $z <= 1.0) return 'Normal';
+        if ($z > 1.0 && $z <= 2.0) return 'Beresiko';
+        if ($z > 2.0) return 'Obesitas';
+        if ($z > -3.0) return 'Kurang';
+        return 'Buruk';
+    }
+
+    private function getStructuredRecommendation($kategoriUtama, $dataLengkap)
+    {
+        // 1. Cek di Database dulu (berdasarkan status utama HA)
+        $existingRecs = RekomendasiNutrisi::where('kategori_risiko', $kategoriUtama)
+            ->with('nutrisi.makanan')
+            ->get();
+
+        if ($existingRecs->isNotEmpty()) {
+            $dataTerstruktur = [];
+            $teksArr = ["Berdasarkan database gizi kami, untuk kondisi anak Anda (Status H/A: $kategoriUtama), berikut saran nutrisinya:"];
+
+            foreach ($existingRecs as $rec) {
+                if ($rec->nutrisi) {
+                    $makanans = $rec->nutrisi->makanan->pluck('nama_makanan')->toArray();
+                    $dataTerstruktur[] = [
+                        'nutrisi' => $rec->nutrisi->nama_nutrisi,
+                        'makanan' => $rec->nutrisi->makanan
+                    ];
+                    $teksArr[] = "- " . ucwords($rec->nutrisi->nama_nutrisi) . ": " . implode(', ', $makanans);
+                }
+            }
+
+            return [
+                'data_terstruktur' => $dataTerstruktur,
+                'teks_rekomendasi' => implode("\n", $teksArr)
+            ];
         }
 
-        $prompt = "Persona: Bertindak sebagai Ahli Gizi Anak dan Konsultan Kesehatan Bunda (KILA). Berikan saran gizi holistik.\n"
-            . "Input Anak: Status Prediksi: $hasil, Umur: $umur bulan, Jenis Kelamin: $jk, BB: $bb kg, TB: $tb cm.\n\n"
-            . "Instruksi Khusus:\n"
-            . "- Jika Status Normal: Berikan saran agar gizi tetap stabil dan mencegah stunting di masa depan.\n"
-            . "- Jika Status Resiko/Stunting: Berikan saran pemulihan gizi intensif.\n"
-            . "- Fokus pada gizi seimbang (karbohidrat, protein hewani seperti ayam/ikan, lemak, vitamin).\n"
-            . "- Berikan saran 3-5 jenis bahan makanan penunjang.\n"
-            . "- Berikan contoh menu harian yang praktis.\n\n"
-            . "Format Jawaban: Hanya gunakan poin-poin (bullet points), jangan ada kalimat pembuka/penutup yang panjang. Langsung ke intinya.";
+        // 2. Jika belum ada, Panggil Gemini untuk membuat data baru (JSON)
+        return $this->generateGeminiStructured($kategoriUtama, $dataLengkap);
+    }
+
+    private function generateGeminiStructured($kategoriUtama, $data)
+    {
+        $apiKey = env('GEMINI_API_KEY');
+        if (!$apiKey) return ['teks_rekomendasi' => 'API Key missing.', 'data_terstruktur' => []];
+
+        $prompt = "Persona: Ahli Gizi Anak.\n"
+            . "Input Kondisi Anak:\n"
+            . "- Status H/A (Stunting): {$data['status_ha']} (Z: {$data['z_ha']})\n"
+            . "- Status W/A (Berat/Umur): {$data['status_wa']} (Z: {$data['z_wa']})\n"
+            . "- Status W/H (Gizi/Proporsi): {$data['status_wh']} (Z: {$data['z_wh']})\n"
+            . "- Detail: Umur {$data['umur']} bln, JK: {$data['jk']}, BB: {$data['bb']}kg, TB: {$data['tb']}cm.\n\n"
+            . "Tugas: Berikan 2-3 jenis Nutrisi utama yang paling dibutuhkan dan 3-5 contoh Makanan spesifik untuk memperbaiki kondisi tersebut.\n"
+            . "Format WAJIB JSON: \n"
+            . "{\n"
+            . "  \"nutrisi_list\": [\n"
+            . "    {\n"
+            . "      \"nama_nutrisi\": \"Nama Nutrisi\",\n"
+            . "      \"makanan_list\": [\n"
+            . "        {\"nama\": \"Nama Makanan\", \"deskripsi\": \"Mengapa makanan ini baik untuk kondisi di atas?\"}\n"
+            . "      ]\n"
+            . "    }\n"
+            . "  ],\n"
+            . "  \"saran_teks\": \"Tulis 2-3 kalimat saran gizi holistik berdasarkan ketiga status di atas.\"\n"
+            . "}\n"
+            . "Hanya kirimkan JSON saja.";
 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
         
-        $payload = [
-            'contents' => [
-                ['parts' => [['text' => $prompt]]]
-            ]
-        ];
-
         try {
-            $response = Http::withoutVerifying()
-                ->withHeaders(['Content-Type' => 'application/json'])
-                ->post($url, $payload);
+            $response = Http::withoutVerifying()->post($url, [
+                'contents' => [['parts' => [['text' => $prompt]]]]
+            ]);
             
             if ($response->successful()) {
-                $data = $response->json();
-                return $data['candidates'][0]['content']['parts'][0]['text'] ?? "Gagal mendapatkan rekomendasi.";
+                $rawText = $response->json()['candidates'][0]['content']['parts'][0]['text'] ?? '';
+                $jsonText = preg_replace('/```json|```/', '', $rawText);
+                $aiData = json_decode($jsonText, true);
+
+                if ($aiData && isset($aiData['nutrisi_list'])) {
+                    $savedData = [];
+                    foreach ($aiData['nutrisi_list'] as $n) {
+                        // Simpan Nutrisi
+                        $nutrisi = Nutrisi::firstOrCreate(['nama_nutrisi' => strtolower($n['nama_nutrisi'])]);
+                        
+                        // Link kategori utama ke nutrisi
+                        RekomendasiNutrisi::firstOrCreate([
+                            'kategori_risiko' => $kategoriUtama,
+                            'id_nutrisi' => $nutrisi->id
+                        ]);
+
+                        $makananList = [];
+                        foreach ($n['makanan_list'] as $m) {
+                            // Simpan Makanan
+                            $makanan = Makanan::firstOrCreate(
+                                ['nama_makanan' => $m['nama']],
+                                ['id_nutrisi' => $nutrisi->id, 'deskripsi' => $m['deskripsi']]
+                            );
+                            $makananList[] = $makanan;
+                        }
+
+                        $savedData[] = [
+                            'nutrisi' => $nutrisi->nama_nutrisi,
+                            'makanan' => $makananList
+                        ];
+                    }
+
+                    return [
+                        'data_terstruktur' => $savedData,
+                        'teks_rekomendasi' => $aiData['saran_teks'] ?? 'Saran gizi telah diperbarui.'
+                    ];
+                }
             }
-            return "Maaf, sistem rekomendasi sedang sibuk.";
         } catch (\Exception $e) {
-            Log::error('Gemini Recommendation Error: ' . $e->getMessage());
-            return "Koneksi ke AI terputys.";
+            Log::error('Gemini Structured Error: ' . $e->getMessage());
         }
+
+        return ['teks_rekomendasi' => 'Sistem sedang menyiapkan saran gizi.', 'data_terstruktur' => []];
     }
 }
