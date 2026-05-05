@@ -160,10 +160,15 @@ class PrediksiController extends Controller
             // Probabilitas HA (untuk status utama)
             $probabilitasHA = $prediksiML['stunting_ha']['probabilitas'] ?? 1.0;
 
-            // 7. Penentuan 3 Kategori Status berdasarkan Z-Score (Logika Python User)
-            $statusHA = $this->mapStatusHA($z_ha);
-            $statusWA = $this->mapStatusWA($z_wa);
-            $statusWH = $this->mapStatusWH($z_wh);
+            // 6. Ekstrak Z-Score untuk kebutuhan mapping atau penyimpanan
+            $z_ha = $zScores['z_ha'] ?? 0;
+            $z_wa = $zScores['z_wa'] ?? 0;
+            $z_wh = $zScores['z_wh'] ?? 0;
+
+            // 7. Gunakan Keterangan Hasil dari ML API (Sudah Hybrid Logic ML + WHO)
+            $statusHA = $hasilHA;
+            $statusWA = $hasilWA;
+            $statusWH = $hasilWH;
 
             // 8. Dapatkan Rekomendasi Terstruktur (Cek DB dulu, baru Gemini)
             $rekomendasiData = $this->getStructuredRecommendation($statusHA, [

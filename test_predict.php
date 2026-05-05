@@ -16,17 +16,29 @@ try {
         echo 'Success: ' . $response->body() . PHP_EOL;
     }
 
-    $prediksiData = $response->json()['prediksi'];
-    $hasilPrediksi = $prediksiData['keterangan'];
-    $probabilitas = $prediksiData['probabilitas'];
+    $result = $response->json();
+    $prediksiData = $result['prediksi'];
+    $zScores = $result['z_score_who'];
+
+    $hasilPrediksi = $prediksiData['stunting_ha']['keterangan'];
+    $probabilitas = $prediksiData['stunting_ha']['probabilitas'];
+
+    echo "Status H/A: " . $hasilPrediksi . " (Z: " . $zScores['z_ha'] . ")" . PHP_EOL;
+    echo "Status W/A: " . $prediksiData['berat_badan_wa']['keterangan'] . " (Z: " . $zScores['z_wa'] . ")" . PHP_EOL;
+    echo "Status W/H: " . $prediksiData['gizi_wh']['keterangan'] . " (Z: " . $zScores['z_wh'] . ")" . PHP_EOL;
+    echo "Status HFA: " . $prediksiData['height_for_age']['keterangan'] . PHP_EOL;
 
     $prediksi = App\Models\Prediksi::create([
-        'id_anak'          => '69ee53c6476800d46e044504',
+        'id_anak'          => '663673756c6c61685f313233', // Use a valid-looking ID or existing one
         'hasil_prediksi'   => $hasilPrediksi,
+        'hasil_wa'         => $prediksiData['berat_badan_wa']['keterangan'],
+        'hasil_wh'         => $prediksiData['gizi_wh']['keterangan'],
+        'hasil_hfa'        => $prediksiData['height_for_age']['keterangan'],
         'probabilitas'     => $probabilitas,
+        'z_scores'         => $zScores,
         'tanggal_prediksi' => now()->toDateString(),
     ]);
-    echo "Created: " . $prediksi->id . PHP_EOL;
+    echo "Created Prediction ID: " . $prediksi->id . PHP_EOL;
 
 } catch (\Exception $e) {
     echo 'Exception: ' . $e->getMessage() . PHP_EOL;

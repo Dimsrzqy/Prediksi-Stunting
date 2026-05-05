@@ -73,8 +73,8 @@
                 <span class="text-xs font-bold uppercase">{{ App::getLocale() }}</span>
             </button>
             <div class="absolute top-full right-0 mt-2 w-32 glass-panel rounded-2xl overflow-hidden opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all">
-                <a href="{{ route('set-locale', 'id') }}" class="block px-4 py-3 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800 transition-colors">🇮🇩 Indonesia</a>
-                <a href="{{ route('set-locale', 'en') }}" class="block px-4 py-3 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800 transition-colors">🇺🇸 English</a>
+                <a href="{{ route('set-language', 'id') }}" class="block px-4 py-3 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800 transition-colors">🇮🇩 Indonesia</a>
+                <a href="{{ route('set-language', 'en') }}" class="block px-4 py-3 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800 transition-colors">🇺🇸 English</a>
             </div>
         </div>
 
