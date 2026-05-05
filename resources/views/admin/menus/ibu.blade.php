@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Data Profil Ibu - Prediksi Stunting')
+@section('title', __('Data Ibu') . ' - Prediksi Stunting')
 
 @section('content')
 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/50 dark:bg-slate-950/50 p-6 md:p-8 transition-colors duration-300">
@@ -8,17 +8,17 @@
         <!-- HEADER HALAMAN -->
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Manajemen Data Ibu</h1>
-                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">Kelola master data Profil Ibu. Buat profil di sini sebelum mendaftarkan data anak.</p>
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ __('Manajemen Data Ibu') }}</h1>
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">{{ __('Kelola master data Profil Ibu. Buat profil di sini sebelum mendaftarkan data anak.') }}</p>
             </div>
             <!-- Tombol Ekspor Excel -->
             <a href="{{ route('ibu.export') }}" class="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
                 <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-500"></i>
-                Ekspor Excel
+                {{ __('Ekspor Excel') }}
             </a>
             <button onclick="openModal('tambah')" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 active:scale-95">
                 <i class="fa-solid fa-plus"></i>
-                Tambah Profil Ibu
+                {{ __('Tambah Profil Ibu') }}
             </button>
         </div>
 
@@ -43,9 +43,9 @@
         <div class="flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden transition-colors">
             <!-- Table Header -->
             <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-                <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 tracking-tight">Daftar Profil Ibu</h2>
+                <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 tracking-tight">{{ __('Daftar Profil Ibu') }}</h2>
                 <button onclick="fetchDataIbu()" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-400 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95">
-                    <i class="fa-solid fa-rotate-right text-slate-400 dark:text-slate-500"></i> Refresh
+                    <i class="fa-solid fa-rotate-right text-slate-400 dark:text-slate-500"></i> {{ __('Refresh') }}
                 </button>
             </div>
 
@@ -55,19 +55,19 @@
                 <div id="tableLoading" class="absolute inset-0 bg-white/80 dark:bg-slate-900/80 z-20 flex items-center justify-center backdrop-blur-sm hidden transition-all">
                     <div class="flex flex-col items-center">
                         <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600 mb-3"></i>
-                        <span class="text-sm font-bold text-slate-600 dark:text-slate-400">Memuat data...</span>
+                        <span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ __('Memuat data...') }}</span>
                     </div>
                 </div>
 
                 <table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
                     <thead class="bg-slate-50 dark:bg-slate-900/80 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-500 border-b border-slate-200 dark:border-slate-800">
                         <tr>
-                            <th scope="col" class="px-6 py-4">Nama Ibu</th>
-                            <th scope="col" class="px-6 py-4">Usia</th>
-                            <th scope="col" class="px-6 py-4">Tinggi (cm)</th>
-                            <th scope="col" class="px-6 py-4">Pendidikan</th>
-                            <th scope="col" class="px-6 py-4">Pekerjaan</th>
-                            <th scope="col" class="px-6 py-4 text-center">Aksi</th>
+                            <th scope="col" class="px-6 py-4">{{ __('Nama Ibu') }}</th>
+                            <th scope="col" class="px-6 py-4">{{ __('Usia') }}</th>
+                            <th scope="col" class="px-6 py-4">{{ __('Tinggi (cm)') }}</th>
+                            <th scope="col" class="px-6 py-4">{{ __('Pendidikan') }}</th>
+                            <th scope="col" class="px-6 py-4">{{ __('Pekerjaan') }}</th>
+                            <th scope="col" class="px-6 py-4 text-center">{{ __('Aksi') }}</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900 transition-colors">
@@ -82,8 +82,8 @@
                     <div class="bg-slate-100 dark:bg-slate-800 h-20 w-20 rounded-3xl flex items-center justify-center mb-5 shadow-inner">
                         <i class="fa-solid fa-person-dress text-3xl text-slate-300 dark:text-slate-600"></i>
                     </div>
-                    <p class="font-bold text-xl text-slate-800 dark:text-slate-200 tracking-tight">Belum Ada Profil Ibu</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-500 mt-2 max-w-xs mx-auto">Silakan buat profil ibu kandung terlebih dahulu sebelum mendaftarkan data anak.</p>
+                    <p class="font-bold text-xl text-slate-800 dark:text-slate-200 tracking-tight">{{ __('Belum Ada Profil Ibu') }}</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-500 mt-2 max-w-xs mx-auto">{{ __('Silakan buat profil ibu kandung terlebih dahulu sebelum mendaftarkan data anak.') }}</p>
                 </div>
             </div>
 
@@ -103,7 +103,7 @@
                         <div class="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-sm">
                             <i id="modalIcon" class="fa-solid fa-person-dress"></i>
                         </div>
-                        <h3 id="modalTitle" class="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Tambah Profil Ibu</h3>
+                        <h3 id="modalTitle" class="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ __('Tambah Profil Ibu') }}</h3>
                     </div>
                     <button type="button" onclick="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                         <i class="fa-solid fa-xmark"></i>
@@ -116,42 +116,42 @@
                         <input type="hidden" id="profilId" name="id">
 
                         <div>
-                            <label for="nama_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">Nama Lengkap Ibu <span class="text-rose-500">*</span></label>
-                            <input type="text" id="nama_ibu" name="nama_ibu" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="Nama Ibu">
+                            <label for="nama_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Nama Lengkap Ibu') }} <span class="text-rose-500">*</span></label>
+                            <input type="text" id="nama_ibu" name="nama_ibu" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="{{ __('Nama Ibu') }}">
                         </div>
 
                         <div class="grid grid-cols-2 gap-5">
                             <div>
-                                <label for="usia_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">Usia (Tahun) <span class="text-rose-500">*</span></label>
+                                 <label for="usia_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Usia (Tahun)') }} <span class="text-rose-500">*</span></label>
                                 <input type="number" id="usia_ibu" name="usia_ibu" min="15" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="25">
                             </div>
                             <div>
-                                <label for="tinggi_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">Tinggi (cm) <span class="text-rose-500">*</span></label>
+                                <label for="tinggi_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Tinggi (cm)') }} <span class="text-rose-500">*</span></label>
                                 <input type="number" step="0.1" id="tinggi_ibu" name="tinggi_ibu" min="100" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="155.5">
                             </div>
                         </div>
 
                         <div>
-                            <label for="pendidikan_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">Pendidikan Terakhir <span class="text-rose-500">*</span></label>
+                             <label for="pendidikan_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Pendidikan Terakhir') }} <span class="text-rose-500">*</span></label>
                             <select id="pendidikan_ibu" name="pendidikan_ibu" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all appearance-none">
-                                <option value="" disabled selected>Pilih Pendidikan...</option>
-                                <option value="Tidak Sekolah/Belum Lulus SD">Tidak Sekolah/Belum Lulus SD</option>
-                                <option value="SD/Sederajat">SD/Sederajat</option>
-                                <option value="SMP/Sederajat">SMP/Sederajat</option>
-                                <option value="SMA/SMK/Sederajat">SMA/SMK/Sederajat</option>
-                                <option value="Diploma/Sarjana">Diploma/Sarjana/Pascasarjana</option>
+                                <option value="" disabled selected>{{ __('Pilih Pendidikan...') }}</option>
+                                <option value="Tidak Sekolah/Belum Lulus SD">{{ __('Tidak Sekolah/Belum Lulus SD') }}</option>
+                                <option value="SD/Sederajat">{{ __('SD/Sederajat') }}</option>
+                                <option value="SMP/Sederajat">{{ __('SMP/Sederajat') }}</option>
+                                <option value="SMA/SMK/Sederajat">{{ __('SMA/SMK/Sederajat') }}</option>
+                                <option value="Diploma/Sarjana">{{ __('Diploma/Sarjana') }}</option>
                             </select>
                         </div>
 
                         <div>
-                            <label for="pekerjaan_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">Pekerjaan <span class="text-rose-500">*</span></label>
+                             <label for="pekerjaan_ibu" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Pekerjaan') }} <span class="text-rose-500">*</span></label>
                             <select id="pekerjaan_ibu" name="pekerjaan_ibu" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all appearance-none">
-                                <option value="" disabled selected>Pilih Pekerjaan...</option>
-                                <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
-                                <option value="Wiraswasta/Pekerja Lepas">Wiraswasta/Pekerja Lepas</option>
-                                <option value="Karyawan Swasta">Karyawan Swasta</option>
-                                <option value="PNS/TNI/Polri">PNS/TNI/Polri</option>
-                                <option value="Lainnya">Lainnya</option>
+                                <option value="" disabled selected>{{ __('Pilih Pekerjaan...') }}</option>
+                                <option value="Ibu Rumah Tangga">{{ __('Ibu Rumah Tangga') }}</option>
+                                <option value="Wiraswasta/Pekerja Lepas">{{ __('Wiraswasta/Pekerja Lepas') }}</option>
+                                <option value="Karyawan Swasta">{{ __('Karyawan Swasta') }}</option>
+                                <option value="PNS/TNI/Polri">{{ __('PNS/TNI/Polri') }}</option>
+                                <option value="Lainnya">{{ __('Lainnya') }}</option>
                             </select>
                         </div>
 
@@ -162,8 +162,8 @@
                 </div>
 
                 <div class="px-6 py-5 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row-reverse gap-3">
-                    <button type="button" onclick="submitForm()" id="btnSubmit" class="inline-flex w-full justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-700 sm:w-auto transition-all active:scale-95">Simpan Data</button>
-                    <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-2xl bg-white dark:bg-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 sm:w-auto transition-all active:scale-95">Batal</button>
+                    <button type="button" onclick="submitForm()" id="btnSubmit" class="inline-flex w-full justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-700 sm:w-auto transition-all active:scale-95">{{ __('Simpan Data') }}</button>
+                    <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-2xl bg-white dark:bg-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 sm:w-auto transition-all active:scale-95">{{ __('Batal') }}</button>
                 </div>
             </div>
         </div>
@@ -352,27 +352,48 @@
     }
 
     async function deleteData(id) {
-        if (!confirm('Hapus profil ibu ini?')) return;
-
-        try {
-            const res = await fetch(`${API_IBU}/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': CSRF_TOKEN
-                }
-            });
-
-            if (res.ok) {
-                showNotification("Data berhasil dihapus!");
-                fetchDataIbu();
-            } else {
-                const result = await res.json();
-                showNotification(result.message || "Gagal menghapus data", true);
+        const isDark = document.documentElement.classList.contains('dark');
+        
+        Swal.fire({
+            title: '{{ __('Hapus Data?') }}',
+            text: '{{ __('Profil ibu ini akan dihapus secara permanen.') }}',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e11d48',
+            cancelButtonColor: isDark ? '#334155' : '#94a3b8',
+            confirmButtonText: '{{ __('Ya, Hapus!') }}',
+            cancelButtonText: '{{ __('Batal') }}',
+            background: isDark ? '#1e293b' : '#ffffff',
+            color: isDark ? '#f1f5f9' : '#1e293b',
+            customClass: {
+                popup: 'rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-2xl',
+                title: 'text-xl font-bold tracking-tight',
+                confirmButton: 'rounded-2xl px-6 py-3 font-bold transition-all active:scale-95',
+                cancelButton: 'rounded-2xl px-6 py-3 font-bold transition-all active:scale-95'
             }
-        } catch (error) {
-            showNotification("Kesalahan sistem", true);
-        }
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await fetch(`${API_IBU}/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': CSRF_TOKEN
+                        }
+                    });
+
+                    if (res.ok) {
+                        showNotification('{{ __('Data berhasil dihapus') }}');
+                        fetchDataIbu();
+                    } else {
+                        const result = await res.json();
+                        showNotification(result.message || '{{ __('Gagal menghapus data') }}', true);
+                    }
+                } catch (error) {
+                    showNotification('{{ __('Kesalahan sistem') }}', true);
+                }
+            }
+        });
     }
 
     function showNotification(message, isError = false) {

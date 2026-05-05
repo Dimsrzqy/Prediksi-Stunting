@@ -95,4 +95,24 @@ class AdminUserController extends Controller
 
         return response()->json(['message' => 'Gagal mengunggah foto.'], 400);
     }
+
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['message' => 'Kata sandi saat ini tidak cocok.'], 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return response()->json(['message' => 'Kata sandi berhasil diperbarui!']);
+    }
 }
