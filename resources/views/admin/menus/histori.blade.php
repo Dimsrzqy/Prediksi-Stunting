@@ -1,19 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', 'Histori Prediksi - StuntCheck')
+@section('title', __('Histori Prediksi') . ' - StuntCheck')
 
 @section('content')
 <div class="flex-1 overflow-y-auto bg-slate-50/50 dark:bg-slate-950/50 p-4 md:p-8 transition-colors duration-300">
     <!-- Header Section -->
     <div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
-            <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 md:text-3xl tracking-tight">Histori Prediksi</h1>
-            <p class="mt-1 text-slate-500 dark:text-slate-400 font-medium">Daftar riwayat deteksi dini status gizi balita</p>
+            <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 md:text-3xl tracking-tight">{{ __('Histori Prediksi') }}</h1>
+            <p class="mt-1 text-slate-500 dark:text-slate-400 font-medium">{{ __('Daftar riwayat deteksi dini status gizi balita') }}</p>
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ route('histori.export') }}" class="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
                 <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-500"></i>
-                Ekspor Excel
+                {{ __('Ekspor Excel') }}
             </a>
             <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 shadow-sm transition-colors">
                 <i class="fa-solid fa-clock-rotate-left text-xl"></i>
@@ -34,13 +34,13 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">Nama Anak</th>
-                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">Hasil Prediksi</th>
-                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500 text-center">Probabilitas</th>
-                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">Tanggal Prediksi</th>
-                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">Rekomendasi AI</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">{{ __('Nama Anak') }}</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">{{ __('Hasil Prediksi') }}</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500 text-center">{{ __('Probabilitas') }}</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">{{ __('Tanggal Prediksi') }}</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500">{{ __('Rekomendasi AI') }}</th>
                         @if(Auth::user()->role === 'admin')
-                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500 text-right">Aksi</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-500 text-right">{{ __('Aksi') }}</th>
                         @endif
                     </tr>
                 </thead>
@@ -52,7 +52,7 @@
                                 <div class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                     <i class="fa-solid fa-child text-sm"></i>
                                 </div>
-                                <span class="font-bold text-slate-800 dark:text-slate-200 tracking-tight">{{ $item->anak->nama_anak ?? 'Data Terhapus' }}</span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200 tracking-tight">{{ $item->anak->nama_anak ?? __('Data Terhapus') }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-5">
@@ -93,7 +93,7 @@
                         </td>
                         @if(Auth::user()->role === 'admin')
                         <td class="px-6 py-5 text-right">
-                            <form action="{{ route('histori.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                            <form action="{{ route('histori.destroy', $item->id) }}" method="POST" class="inline delete-histori-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 dark:text-slate-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 dark:hover:text-rose-400 transition-all">
@@ -110,8 +110,8 @@
                                 <div class="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-50 dark:bg-slate-800 text-slate-300 dark:text-slate-600">
                                     <i class="fa-solid fa-folder-open text-4xl"></i>
                                 </div>
-                                <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 tracking-tight">Data Tidak Ditemukan</h3>
-                                <p class="text-slate-500 dark:text-slate-500 font-medium mt-1">Belum ada riwayat prediksi yang tersedia saat ini.</p>
+                                <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 tracking-tight">{{ __('Data Tidak Ditemukan') }}</h3>
+                                <p class="text-slate-500 dark:text-slate-500 font-medium mt-1">{{ __('Belum ada riwayat prediksi yang tersedia saat ini.') }}</p>
                             </div>
                         </td>
                     </tr>
@@ -126,6 +126,38 @@
         @endif
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.delete-histori-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            Swal.fire({
+                title: '{{ __('Hapus Data?') }}',
+                text: '{{ __('Data histori ini akan dihapus secara permanen.') }}',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: isDark ? '#334155' : '#94a3b8',
+                confirmButtonText: '{{ __('Ya, Hapus!') }}',
+                cancelButtonText: '{{ __('Batal') }}',
+                background: isDark ? '#1e293b' : '#ffffff',
+                color: isDark ? '#f1f5f9' : '#1e293b',
+                customClass: {
+                    popup: 'rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-2xl',
+                    title: 'text-xl font-bold tracking-tight',
+                    confirmButton: 'rounded-2xl px-6 py-3 font-bold transition-all active:scale-95',
+                    cancelButton: 'rounded-2xl px-6 py-3 font-bold transition-all active:scale-95'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    });
+</script>
 
 <style>
     @keyframes fade-in {

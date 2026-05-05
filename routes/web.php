@@ -54,10 +54,8 @@ Route::middleware('auth')->group(function () {
     })->name('profil.index');
     Route::post('/profil', [\App\Http\Controllers\Api\AdminUserController::class, 'updateProfile'])->name('profil.update');
     Route::post('/profil/avatar', [\App\Http\Controllers\Api\AdminUserController::class, 'updateAvatar'])->name('profil.avatar');
+    Route::post('/profil/password', [\App\Http\Controllers\Api\AdminUserController::class, 'updatePassword'])->name('profil.password');
 
-    Route::get('/pengaturan', function () {
-        return view('admin.menus.pengaturan');
-    })->name('pengaturan.index');
 
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
     Route::get('/api-anak/export', [\App\Http\Controllers\Api\AnakController::class, 'export'])->name('anak.export');

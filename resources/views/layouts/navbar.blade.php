@@ -10,83 +10,84 @@
         <!-- Breadcrumbs -->
         <nav class="hidden md:flex items-center text-[13px] font-bold text-slate-400 dark:text-slate-500 tracking-wide">
             @if(request()->routeIs('dashboard'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">UTAMA</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Utama')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">DASHBOARD</span>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Dashboard')) }}</span>
             @elseif(request()->routeIs('anak.index'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">DATA ANAK</span>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Anak')) }}</span>
             @elseif(request()->routeIs('ibu.index'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">DATA IBU</span>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Ibu')) }}</span>
             @elseif(request()->routeIs('makanan.index') || request()->routeIs('makanan.*'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">MASTER DATA</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">DATA GIZI & MENU</span>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Gizi & Menu')) }}</span>
             @elseif(request()->routeIs('user.index'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Sistem')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">MANAJEMEN USER</span>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Manajemen User')) }}</span>
             @elseif(request()->routeIs('profil.index'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Sistem')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">PROFIL SAYA</span>
-            @elseif(request()->routeIs('pengaturan.index'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
-            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">PENGATURAN</span>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Profil Saya')) }}</span>
             @else
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">SISTEM</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Sistem')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
-            <span class="text-slate-800 dark:text-slate-200">LAINNYA</span>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Lainnya')) }}</span>
             @endif
         </nav>
     </div>
 
-    <!-- Right Section (Search, Notifications, Profile) -->
-    <div class="flex items-center gap-4 md:gap-6 relative">
+    <!-- Right Section (Search, Language, Theme, Profile) -->
+    <div class="flex items-center gap-3 md:gap-4 relative">
         <!-- Search Bar -->
         <div class="relative hidden sm:block">
             <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                 <i class="fa-solid fa-magnifying-glass text-slate-400 dark:text-slate-500"></i>
             </div>
-            <input type="text" id="searchInput" class="w-48 lg:w-64 rounded-2xl border-0 bg-slate-100/80 dark:bg-slate-800/80 py-2.5 pl-11 pr-4 text-sm text-slate-700 dark:text-slate-200 transition-all focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-inner placeholder-slate-400 dark:placeholder-slate-500" placeholder="Cari menu...">
-        </div>
-
-
-
-        <!-- Notification -->
-        <div class="relative">
-            <button id="notifBtn" class="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all active:scale-95">
-                <i class="fa-regular fa-bell text-lg"></i>
-                <span class="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900 shadow-sm"></span>
-            </button>
-
-            <!-- Dropdown Notifikasi -->
-            <div id="notifDropdown" class="absolute right-0 mt-3 w-80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] ring-1 ring-slate-200/50 dark:ring-slate-800 overflow-hidden origin-top-right transition-all duration-300 ease-out opacity-0 invisible scale-95 translate-y-2 z-50">
-                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 flex justify-between items-center">
-                    <h3 class="text-[15px] font-bold text-slate-800 dark:text-slate-200">Notifikasi</h3>
-                    <span class="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full shadow-sm">2 Baru</span>
+            <input type="text" id="searchInput" class="w-48 lg:w-64 rounded-2xl border-0 bg-slate-100/80 dark:bg-slate-800/80 py-2.5 pl-11 pr-4 text-sm text-slate-700 dark:text-slate-200 transition-all focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-inner placeholder-slate-400 dark:placeholder-slate-500" placeholder="{{ __('Cari menu...') }}">
+            <!-- Search Results Dropdown -->
+            <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] ring-1 ring-slate-200/50 dark:ring-slate-800 overflow-hidden origin-top transition-all duration-300 opacity-0 invisible scale-95 translate-y-1 z-50">
+                <div id="searchResultsList" class="max-h-64 overflow-y-auto no-scrollbar py-2">
+                    <!-- Results injected by JS -->
                 </div>
-                <div class="max-h-64 overflow-y-auto no-scrollbar bg-white/50 dark:bg-slate-900/50">
-                    <a href="#" class="block px-5 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border-b border-slate-50 dark:border-slate-800">
-                        <div class="flex items-start gap-3">
-                            <div class="w-9 h-9 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fa-solid fa-triangle-exclamation text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="text-[13px] font-bold text-slate-700 dark:text-slate-300">Risiko Stunting Tinggi</p>
-                                <p class="text-[12px] text-slate-500 dark:text-slate-500 mt-0.5 leading-snug">Sistem mendeteksi 3 anak dengan potensi stunting minggu ini.</p>
-                                <p class="text-[10px] text-slate-400 dark:text-slate-600 mt-1.5 font-semibold">10 menit yang lalu</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <a href="#" class="block px-4 py-3 text-center text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800 border-t border-slate-100 dark:border-slate-800 transition-colors bg-white/50 dark:bg-slate-900/50">Lihat Semua Notifikasi</a>
             </div>
         </div>
+
+        <!-- Language Toggle -->
+        <div class="relative">
+            <button id="langToggleBtn" class="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 transition-all active:scale-95" title="{{ __('Bahasa') }}">
+                <i class="fa-solid fa-language text-lg"></i>
+            </button>
+            <!-- Language Dropdown -->
+            <div id="langDropdown" class="absolute right-0 mt-3 w-56 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] ring-1 ring-slate-200/50 dark:ring-slate-800 overflow-hidden origin-top-right transition-all duration-300 opacity-0 invisible scale-95 translate-y-2 z-50">
+                <div class="p-2 space-y-1">
+                    <a href="{{ route('set-language', 'id') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ app()->getLocale() == 'id' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                        <span class="text-lg">🇮🇩</span>
+                        <span>Bahasa Indonesia</span>
+                        @if(app()->getLocale() == 'id')
+                        <i class="fa-solid fa-circle-check text-emerald-500 ml-auto"></i>
+                        @endif
+                    </a>
+                    <a href="{{ route('set-language', 'en') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ app()->getLocale() == 'en' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                        <span class="text-lg">🇺🇸</span>
+                        <span>English (US)</span>
+                        @if(app()->getLocale() == 'en')
+                        <i class="fa-solid fa-circle-check text-emerald-500 ml-auto"></i>
+                        @endif
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <button id="themeToggle" class="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-700 transition-all active:scale-95" title="{{ __('Tampilan') }}">
+            <i class="fa-solid fa-sun text-lg dark:hidden"></i>
+            <i class="fa-solid fa-moon text-lg hidden dark:block"></i>
+        </button>
 
         <!-- Profile Dropdown Trigger -->
         <div class="relative">
@@ -120,7 +121,7 @@
                             <div class="w-9 h-9 rounded-[14px] bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-blue-500/30">
                                 <i class="fa-regular fa-user text-[15px]"></i>
                             </div>
-                            <span class="tracking-wide">Profil Saya</span>
+                            <span class="tracking-wide">{{ __('Profil Saya') }}</span>
                         </div>
                         <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 dark:text-slate-700 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300"></i>
                     </a>
@@ -128,14 +129,14 @@
 
                 <div class="p-2 pt-0">
                     <div class="h-px w-[calc(100%-16px)] mx-auto bg-slate-200/60 dark:bg-slate-800/60 mb-2"></div>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" id="logoutForm">
                         @csrf
-                        <button type="submit" class="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-[14px] text-rose-600 dark:text-rose-400 hover:bg-rose-50/80 dark:hover:bg-rose-900/20 hover:shadow-[0_2px_10px_-4px_rgba(225,29,72,0.1)] active:bg-rose-100 active:scale-[0.98] transition-all duration-200 font-semibold group">
+                        <button type="button" onclick="confirmLogout()" class="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-[14px] text-rose-600 dark:text-rose-400 hover:bg-rose-50/80 dark:hover:bg-rose-900/20 hover:shadow-[0_2px_10px_-4px_rgba(225,29,72,0.1)] active:bg-rose-100 active:scale-[0.98] transition-all duration-200 font-semibold group">
                             <div class="flex items-center gap-3.5">
                                 <div class="w-9 h-9 rounded-[14px] bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 flex items-center justify-center group-hover:bg-rose-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-rose-500/30">
                                     <i class="fa-solid fa-right-from-bracket text-[15px] translate-x-[1px]"></i>
                                 </div>
-                                <span class="tracking-wide">Keluar</span>
+                                <span class="tracking-wide">{{ __('Keluar') }}</span>
                             </div>
                         </button>
                     </form>
@@ -148,13 +149,14 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-
         // Dropdown Logic
-        const notifBtn = document.getElementById('notifBtn');
-        const notifDropdown = document.getElementById('notifDropdown');
         const profileBtn = document.getElementById('profileBtn');
         const profileDropdown = document.getElementById('profileDropdown');
+        const langToggleBtn = document.getElementById('langToggleBtn');
+        const langDropdown = document.getElementById('langDropdown');
         const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const searchResultsList = document.getElementById('searchResultsList');
 
         const showClasses = ['opacity-100', 'scale-100', 'translate-y-0'];
         const hideClasses = ['opacity-0', 'invisible', 'scale-95', 'translate-y-2'];
@@ -169,37 +171,143 @@
             dropdown.classList.add(...hideClasses);
         }
 
-        if (notifBtn) {
-            notifBtn.addEventListener('click', (e) => {
+        function closeAllDropdowns() {
+            closeDropdown(profileDropdown);
+            closeDropdown(langDropdown);
+            closeDropdown(searchResults);
+        }
+
+        // Language Toggle
+        if (langToggleBtn) {
+            langToggleBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (notifDropdown.classList.contains('invisible')) {
-                    openDropdown(notifDropdown);
-                    closeDropdown(profileDropdown);
+                if (langDropdown.classList.contains('invisible')) {
+                    closeAllDropdowns();
+                    openDropdown(langDropdown);
                 } else {
-                    closeDropdown(notifDropdown);
+                    closeDropdown(langDropdown);
                 }
             });
         }
 
+        // Profile Dropdown
         if (profileBtn) {
             profileBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (profileDropdown.classList.contains('invisible')) {
+                    closeAllDropdowns();
                     openDropdown(profileDropdown);
-                    closeDropdown(notifDropdown);
                 } else {
                     closeDropdown(profileDropdown);
                 }
             });
         }
 
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('themeToggle');
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            });
+        }
+
+        // Search Functionality
+        const menuItems = [
+            { name: '{{ __("Dashboard") }}', url: '{{ route("dashboard") }}', icon: 'fa-solid fa-chart-pie', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
+            { name: '{{ __("Histori Prediksi") }}', url: '{{ route("histori.index") }}', icon: 'fa-solid fa-clock-rotate-left', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
+            { name: '{{ __("Data Ibu") }}', url: '{{ route("ibu.index") }}', icon: 'fa-solid fa-person-dress', color: 'text-pink-600 bg-pink-50 dark:bg-pink-900/30 dark:text-pink-400' },
+            { name: '{{ __("Data Anak") }}', url: '{{ route("anak.index") }}', icon: 'fa-solid fa-child-reaching', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
+            { name: '{{ __("Data Gizi & Menu") }}', url: '{{ route("makanan.index") }}', icon: 'fa-solid fa-utensils', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400' },
+            { name: '{{ __("Manajemen User") }}', url: '{{ route("user.index") }}', icon: 'fa-solid fa-users', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400' },
+            { name: '{{ __("Profil Saya") }}', url: '{{ route("profil.index") }}', icon: 'fa-regular fa-user', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
+        ];
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if (query.length === 0) {
+                    closeDropdown(searchResults);
+                    return;
+                }
+
+                const filtered = menuItems.filter(item => item.name.toLowerCase().includes(query));
+
+                if (filtered.length === 0) {
+                    searchResultsList.innerHTML = `
+                        <div class="px-4 py-6 text-center">
+                            <i class="fa-solid fa-magnifying-glass text-slate-300 dark:text-slate-600 text-2xl mb-2"></i>
+                            <p class="text-sm text-slate-400 dark:text-slate-500 font-medium">{{ __('Tidak ditemukan') }}</p>
+                        </div>
+                    `;
+                } else {
+                    searchResultsList.innerHTML = filtered.map(item => `
+                        <a href="${item.url}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                            <div class="w-8 h-8 rounded-xl ${item.color} flex items-center justify-center flex-shrink-0">
+                                <i class="${item.icon} text-xs"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">${item.name}</span>
+                        </a>
+                    `).join('');
+                }
+
+                closeDropdown(profileDropdown);
+                closeDropdown(langDropdown);
+                openDropdown(searchResults);
+            });
+
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim().length > 0) {
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            });
+        }
+
+        // Close all dropdowns on outside click
         document.addEventListener('click', (e) => {
-            if (notifBtn && !notifBtn.contains(e.target) && notifDropdown && !notifDropdown.contains(e.target)) {
-                closeDropdown(notifDropdown);
-            }
             if (profileBtn && !profileBtn.contains(e.target) && profileDropdown && !profileDropdown.contains(e.target)) {
                 closeDropdown(profileDropdown);
             }
+            if (langToggleBtn && !langToggleBtn.contains(e.target) && langDropdown && !langDropdown.contains(e.target)) {
+                closeDropdown(langDropdown);
+            }
+            if (searchInput && !searchInput.contains(e.target) && searchResults && !searchResults.contains(e.target)) {
+                closeDropdown(searchResults);
+            }
         });
     });
+
+    function confirmLogout() {
+        const isDark = document.documentElement.classList.contains('dark');
+        
+        Swal.fire({
+            title: '{{ __('Konfirmasi Keluar') }}',
+            text: '{{ __('Apakah Anda yakin ingin keluar?') }}',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e11d48',
+            cancelButtonColor: isDark ? '#334155' : '#94a3b8',
+            confirmButtonText: '{{ __('Ya, Keluar!') }}',
+            cancelButtonText: '{{ __('Batal') }}',
+            background: isDark ? '#1e293b' : '#ffffff',
+            color: isDark ? '#f1f5f9' : '#1e293b',
+            borderRadius: '24px',
+            customClass: {
+                popup: 'rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-2xl',
+                title: 'text-xl font-bold tracking-tight',
+                htmlContainer: 'text-sm font-medium',
+                confirmButton: 'rounded-2xl px-6 py-3 font-bold transition-all active:scale-95',
+                cancelButton: 'rounded-2xl px-6 py-3 font-bold transition-all active:scale-95'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logoutForm').submit();
+            }
+        });
+    }
 </script>

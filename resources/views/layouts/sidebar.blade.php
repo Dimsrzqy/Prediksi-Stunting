@@ -15,14 +15,14 @@
     <nav class="flex-1 overflow-y-auto mt-6 px-4 pb-4 no-scrollbar">
         <ul class="space-y-1.5">
             <li class="pt-2 pb-1">
-                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">Utama</span>
+                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">{{ __('Utama') }}</span>
             </li>
             <li>
                 <a href="{{ route('dashboard') }}" class="group flex items-center rounded-2xl px-4 py-3.5 {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-blue-600 to-blue-500 shadow-md shadow-blue-500/30 text-white translate-x-1' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200' }} transition-all duration-300 active:scale-95">
                     <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('dashboard') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400' }} transition-colors duration-300">
                         <i class="fa-solid fa-chart-pie text-sm"></i>
                     </div>
-                    <span class="ml-3 font-semibold text-[15px]">Dashboard</span>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Dashboard') }}</span>
                 </a>
             </li>
             <li>
@@ -30,19 +30,19 @@
                     <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('histori.index') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400' }} transition-colors duration-300">
                         <i class="fa-solid fa-clock-rotate-left text-sm"></i>
                     </div>
-                    <span class="ml-3 font-semibold text-[15px]">Histori Prediksi</span>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Histori Prediksi') }}</span>
                 </a>
             </li>
 
             <li class="pt-6 pb-1">
-                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">Master Data</span>
+                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">{{ __('Master Data') }}</span>
             </li>
             <li>
                 <a href="{{ route('ibu.index') }}" class="group flex items-center rounded-2xl px-4 py-3.5 {{ request()->routeIs('ibu.index') ? 'bg-gradient-to-r from-pink-600 to-pink-500 shadow-md shadow-pink-500/30 text-white translate-x-1' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200' }} transition-all duration-300 active:scale-95">
                     <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('ibu.index') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-pink-600 dark:group-hover:text-pink-400' }} transition-colors duration-300">
                         <i class="fa-solid fa-person-dress text-sm"></i>
                     </div>
-                    <span class="ml-3 font-semibold text-[15px]">Data Ibu</span>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Data Ibu') }}</span>
                 </a>
             </li>
             <li>
@@ -50,12 +50,12 @@
                     <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('anak.index') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400' }} transition-colors duration-300">
                         <i class="fa-solid fa-child-reaching text-sm"></i>
                     </div>
-                    <span class="ml-3 font-semibold text-[15px]">Data Anak</span>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Data Anak') }}</span>
                 </a>
             </li>
 
             <li class="pt-6 pb-1">
-                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">Data & Gizi</span>
+                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">{{ __('Data & Gizi') }}</span>
             </li>
             <!-- Menu Data Gizi & Menu (Baru) -->
             <li>
@@ -63,40 +63,22 @@
                     <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('makanan.*') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400' }} transition-colors duration-300">
                         <i class="fa-solid fa-utensils text-sm"></i>
                     </div>
-                    <span class="ml-3 font-semibold text-[15px]">Data Gizi & Menu</span>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Data Gizi & Menu') }}</span>
                 </a>
             </li>
 
             <li class="pt-6 pb-1">
-                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">Sistem</span>
+                <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">{{ __('Sistem') }}</span>
             </li>
             <li>
                 <a href="{{ route('user.index') }}" class="group flex items-center rounded-2xl px-4 py-3.5 {{ request()->routeIs('user.index') ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 shadow-md shadow-indigo-500/30 text-white translate-x-1' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200' }} transition-all duration-300 active:scale-95">
                     <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('user.index') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400' }} transition-colors duration-300">
                         <i class="fa-solid fa-users text-sm"></i>
                     </div>
-                    <span class="ml-3 font-semibold text-[15px]">Manajemen User</span>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Manajemen User') }}</span>
                 </a>
             </li>
-            <li>
-                <a href="{{ route('pengaturan.index') }}" class="group flex items-center rounded-2xl px-4 py-3.5 {{ request()->routeIs('pengaturan.index') ? 'bg-gradient-to-r from-slate-600 to-slate-500 shadow-md shadow-slate-500/30 text-white translate-x-1' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200' }} transition-all duration-300 active:scale-95">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('pengaturan.index') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-200' }} transition-colors duration-300">
-                        <i class="fa-solid fa-gear text-sm"></i>
-                    </div>
-                    <span class="ml-3 font-semibold text-[15px]">Pengaturan</span>
-                </a>
-            </li>
+
         </ul>
     </nav>
-
-    <!-- Logout Button -->
-    <div class="px-5 py-6 border-t border-white/50 dark:border-slate-800/50 transition-colors">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="w-full flex items-center justify-center gap-3 rounded-[14px] bg-slate-100/80 dark:bg-slate-800 px-4 py-3.5 text-slate-600 dark:text-slate-400 font-bold transition-all hover:bg-rose-100 dark:hover:bg-rose-900/30 hover:text-rose-600 dark:hover:text-rose-400 active:scale-95 shadow-sm ring-1 ring-white dark:ring-slate-700">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Keluar</span>
-            </button>
-        </form>
-    </div>
 </aside>

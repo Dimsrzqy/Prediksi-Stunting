@@ -64,11 +64,29 @@
 </head>
 <body class="mesh-bg min-h-screen flex items-center justify-center p-6 relative overflow-hidden transition-colors duration-500">
     
-    <!-- Theme Toggle -->
-    <button onclick="toggleTheme()" class="absolute top-6 right-6 p-3 rounded-full glass-panel text-gray-800 dark:text-gray-200 hover:scale-105 transition-transform duration-300 z-50">
-        <svg id="theme-icon-dark" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-        <svg id="theme-icon-light" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-    </button>
+    <!-- Top Controls -->
+    <div class="absolute top-6 right-6 flex items-center gap-3 z-50">
+        <!-- Language Switcher -->
+        <div class="relative group/lang">
+            <button class="p-3 rounded-full glass-panel text-gray-800 dark:text-gray-200 hover:scale-105 transition-all flex items-center gap-2">
+                <i class="fa-solid fa-language text-lg"></i>
+                <span class="text-xs font-bold uppercase">{{ App::getLocale() }}</span>
+            </button>
+            <div class="absolute top-full right-0 mt-2 w-32 glass-panel rounded-2xl overflow-hidden opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all">
+                <a href="{{ route('set-locale', 'id') }}" class="block px-4 py-3 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800 transition-colors">🇮🇩 Indonesia</a>
+                <a href="{{ route('set-locale', 'en') }}" class="block px-4 py-3 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800 transition-colors">🇺🇸 English</a>
+            </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" class="p-3 rounded-full glass-panel text-gray-800 dark:text-gray-200 hover:scale-105 transition-all">
+            <svg id="theme-icon-dark" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            <svg id="theme-icon-light" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        </button>
+    </div>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Background Orbs (Optional for extra flair) -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
@@ -91,9 +109,21 @@
                         <span class="text-white font-bold text-3xl tracking-tighter">S<span class="text-cyan-100">C</span></span>
                     </div>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Welcome Back</h1>
-                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2 text-center">Sign in to your StuntCheck account to continue.</p>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{{ __('Welcome Back') }}</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2 text-center">{{ __('Sign in to your StuntCheck account to continue.') }}</p>
             </div>
+
+            @if (session('logout_success'))
+                <div id="logoutNotif" class="mb-6 p-4 rounded-xl bg-emerald-50/80 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-sm font-medium backdrop-blur-sm flex items-center gap-3 animate-slide-down">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>{{ __('Anda berhasil keluar dari sistem.') }}</span>
+                </div>
+                <style>
+                    @keyframes slide-down { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+                    .animate-slide-down { animation: slide-down 0.5s ease-out forwards; }
+                </style>
+                <script>setTimeout(() => { const el = document.getElementById('logoutNotif'); if(el) { el.style.transition = 'opacity 0.5s, transform 0.5s'; el.style.opacity = '0'; el.style.transform = 'translateY(-12px)'; setTimeout(() => el.remove(), 500); } }, 4000);</script>
+            @endif
 
             @if (session('success'))
                 <div class="mb-6 p-4 rounded-xl bg-green-50/80 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-sm font-medium backdrop-blur-sm">
@@ -105,7 +135,7 @@
                 @csrf
                 
                 <div class="space-y-1.5">
-                    <label for="email" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Email Address</label>
+                    <label for="email" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">{{ __('Email Address') }}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,7 +152,7 @@
                 </div>
 
                 <div class="space-y-1.5">
-                    <label for="password" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Password</label>
+                    <label for="password" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">{{ __('Password') }}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -144,17 +174,17 @@
                 <div class="flex items-center justify-between pt-2">
                     <div class="flex items-center">
                         <input id="remember" name="remember" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded bg-white dark:bg-gray-900 dark:border-gray-700">
-                        <label for="remember" class="ml-2 block text-sm text-gray-600 dark:text-gray-400">Remember me</label>
+                        <label for="remember" class="ml-2 block text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</label>
                     </div>
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors">Forgot password?</a>
+                        <a href="{{ route('password.request') }}" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors">{{ __('Forgot password?') }}</a>
                     @endif
                 </div>
 
                 <div class="pt-5">
                     <button type="submit"
                         class="w-full flex justify-center items-center gap-2 py-3.5 px-4 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 dark:focus:ring-offset-gray-900 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-indigo-500/30">
-                        Sign In
+                        {{ __('Sign In') }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
                 </div>
@@ -163,7 +193,7 @@
         
         <!-- Footer text -->
         <div class="mt-8 text-center relative z-10">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Don't have an account? <a href="#" class="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors hover:underline">Contact Administrator</a></p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __("Don't have an account?") }} <a href="#" class="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors hover:underline">{{ __('Contact Administrator') }}</a></p>
         </div>
     </div>
 

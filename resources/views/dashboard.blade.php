@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Utama - Prediksi Stunting')
+@section('title', __('Dashboard') . ' - Prediksi Stunting')
 
 @section('content')
 <style>
@@ -53,10 +53,10 @@
         <!-- HEADER -->
         <div class="mb-10 px-2 mt-4">
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 transition-colors">
-                Halo, <span class="bg-gradient-to-r from-blue-600 to-indigo-500 text-gradient">{{ Auth::user()->name }}</span> ✨
+                {{ __('Halo,') }} <span class="bg-gradient-to-r from-blue-600 to-indigo-500 text-gradient">{{ Auth::user()->name }}</span> ✨
             </h1>
             <p class="mt-2 text-base text-slate-500 dark:text-slate-400 max-w-2xl font-medium transition-colors">
-                Ringkasan pemantauan stunting dan metrik kesehatan hari ini.
+                {{ __('Ringkasan pemantauan stunting dan metrik kesehatan hari ini.') }}
             </p>
         </div>
 
@@ -74,10 +74,10 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">Total Anak</h3>
+                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">{{ __('Total Anak') }}</h3>
                     <div class="flex items-end gap-2">
                         <span id="statAnak" class="text-4xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight transition-colors">...</span>
-                        <span class="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">Data Aktif</span>
+                        <span class="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">{{ __('Data Aktif') }}</span>
                     </div>
                 </div>
             </div>
@@ -93,10 +93,10 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">Data Ibu</h3>
+                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">{{ __('Data Ibu') }}</h3>
                     <div class="flex items-end gap-2">
                         <span id="statIbu" class="text-4xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight transition-colors">...</span>
-                        <span class="text-xs font-bold text-pink-600 dark:text-pink-400 bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">Terdaftar</span>
+                        <span class="text-xs font-bold text-pink-600 dark:text-pink-400 bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">{{ __('Terdaftar') }}</span>
                     </div>
                 </div>
             </div>
@@ -112,10 +112,10 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">Menu Makanan</h3>
+                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">{{ __('Menu Makanan') }}</h3>
                     <div class="flex items-end gap-2">
                         <span id="statMakanan" class="text-4xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight transition-colors">...</span>
-                        <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">Variasi</span>
+                        <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">{{ __('Variasi') }}</span>
                     </div>
                 </div>
             </div>
@@ -131,10 +131,10 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">Master Nutrisi</h3>
+                    <h3 class="font-semibold text-slate-500 dark:text-slate-500 mb-1 text-sm uppercase tracking-wider">{{ __('Master Nutrisi') }}</h3>
                     <div class="flex items-end gap-2">
                         <span id="statNutrisi" class="text-4xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight transition-colors">...</span>
-                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">Kategori</span>
+                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-1 rounded-lg mb-1.5 transition-colors">{{ __('Kategori') }}</span>
                     </div>
                 </div>
             </div>
@@ -145,12 +145,12 @@
         <div class="ios-card p-6 md:p-8 mb-8 transition-all">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
                 <div>
-                    <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight transition-colors">Tren Prediksi</h3>
-                    <p id="subtitleChart" class="text-slate-500 dark:text-slate-400 font-medium mt-1 transition-colors">Status gizi anak dalam 12 bulan terakhir</p>
+                    <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight transition-colors">{{ __('Tren Prediksi') }}</h3>
+                    <p id="subtitleChart" class="text-slate-500 dark:text-slate-400 font-medium mt-1 transition-colors">{{ __('Status gizi anak dalam 12 bulan terakhir') }}</p>
                 </div>
                 <div class="mt-4 sm:mt-0 flex p-1 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur rounded-full transition-colors">
-                    <button id="btnMinggu" class="px-5 py-2 hover:text-slate-800 dark:hover:text-slate-100 text-slate-500 dark:text-slate-400 rounded-full text-sm font-bold transition-all">Minggu</button>
-                    <button id="btnBulan" class="px-5 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-full text-sm font-bold shadow-sm transition-all">Bulan</button>
+                    <button id="btnMinggu" class="px-5 py-2 hover:text-slate-800 dark:hover:text-slate-100 text-slate-500 dark:text-slate-400 rounded-full text-sm font-bold transition-all">{{ __('Minggu') }}</button>
+                    <button id="btnBulan" class="px-5 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-full text-sm font-bold shadow-sm transition-all">{{ __('Bulan') }}</button>
                 </div>
             </div>
 
@@ -318,14 +318,14 @@
 
         btnMinggu.addEventListener('click', () => {
             currentFilter = 'minggu';
-            subtitleChart.innerText = "Status gizi anak dalam 7 hari terakhir";
+            subtitleChart.innerText = "{{ __('Status gizi anak dalam 7 hari terakhir') }}";
             updateButtonStyles();
             fetchChart('minggu');
         });
 
         btnBulan.addEventListener('click', () => {
             currentFilter = 'bulan';
-            subtitleChart.innerText = "Status gizi anak dalam 12 bulan terakhir";
+            subtitleChart.innerText = "{{ __('Status gizi anak dalam 12 bulan terakhir') }}";
             updateButtonStyles();
             fetchChart('bulan');
         });
