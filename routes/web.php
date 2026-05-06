@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HistoriPrediksiController;
+use App\Http\Controllers\Api\ApiTesterController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -74,4 +75,8 @@ Route::middleware('auth')->group(function () {
         'index' => 'histori.index',
         'destroy' => 'histori.destroy',
     ]);
+
+    // API Tester
+    Route::get('/api-tester', [ApiTesterController::class, 'index'])->name('api-tester.index');
+    Route::post('/api-tester/execute', [ApiTesterController::class, 'execute'])->name('api-tester.execute');
 });
