@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -53,10 +53,10 @@ class ApiTesterController extends Controller
 
         try {
             $startTime = microtime(true);
-            
+
             // Build the request
             $pendingRequest = Http::withHeaders($headers);
-            
+
             // Execute the request
             $response = match ($method) {
                 'GET'    => $pendingRequest->get($url),
@@ -86,7 +86,6 @@ class ApiTesterController extends Controller
                     'size'        => number_format(strlen($content) / 1024, 2) . ' KB'
                 ]
             ]);
-
         } catch (\Exception $e) {
             Log::error('API Tester Error: ' . $e->getMessage());
             return response()->json([
