@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
@@ -28,6 +31,128 @@
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
         }
         
+        /* Antigravity CTA Section (Light Theme) */
+        .bg-antigravity-light {
+            background-color: #f8fafc;
+            background-image: radial-gradient(circle at 50% 50%, #ffffff 0%, #e0f2fe 100%);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* Futuristic Grid (Light) */
+        .bg-antigravity-light::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Ambient Glow Spheres (Light) */
+        .ambient-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .glow-blue-light { background: #3b82f6; width: 40vw; height: 40vw; top: -10%; left: -10%; }
+        .glow-emerald-light { background: #10b981; width: 50vw; height: 50vw; bottom: -20%; right: -10%; }
+
+        /* Orbit Rings (Light) */
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(14, 165, 233, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .orbit-1 { width: 50vw; height: 50vw; animation: spin-orbit 40s linear infinite; border-style: dashed; }
+        .orbit-2 { width: 70vw; height: 70vw; animation: spin-orbit-reverse 60s linear infinite; border: 1px solid rgba(16, 185, 129, 0.15); }
+        
+        @keyframes spin-orbit { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes spin-orbit-reverse { 100% { transform: translate(-50%, -50%) rotate(-360deg); } }
+
+        /* Glass Cards (Light) */
+        .glass-antigravity-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px -10px rgba(14, 165, 233, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.5);
+            border-radius: 1.5rem;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .glass-antigravity-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #bae6fd;
+            box-shadow: 0 30px 60px -10px rgba(14, 165, 233, 0.25), inset 0 0 30px rgba(255, 255, 255, 1);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        /* Pill Button (Light) */
+        .btn-antigravity {
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.4);
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        .btn-antigravity::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        .btn-antigravity:hover {
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.6);
+            transform: translateY(-3px) scale(1.02);
+        }
+        .btn-antigravity:hover::before {
+            left: 100%;
+        }
+
+        /* Text Effects (Light) */
+        .text-glow-primary {
+            text-shadow: 0 0 30px rgba(14, 165, 233, 0.2);
+        }
+
+        /* Particles (Light) */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        .particle-blue { background: #0ea5e9; box-shadow: 0 0 10px #0ea5e9; }
+        .particle-emerald { background: #10b981; box-shadow: 0 0 10px #10b981; }
+
+        @keyframes float-anti-1 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        @keyframes float-anti-2 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(-2deg); }
+        }
+        .animate-float-anti-1 { animation: float-anti-1 8s ease-in-out infinite; }
+        .animate-float-anti-2 { animation: float-anti-2 10s ease-in-out infinite 1s; }
+
         /* Animations */
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
@@ -64,12 +189,6 @@
             background: linear-gradient(135deg, #3B82F6, #10B981);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .bg-primary-gradient {
-            background: linear-gradient(135deg, #3B82F6, #0ea5e9, #10B981);
-            background-size: 200% 200%;
-            animation: gradient-shift 10s ease infinite;
         }
 
         /* Hero Image Fix */
@@ -255,7 +374,7 @@
 
                 <!-- Impact 3: Biru -->
                 <div class="glass p-8 rounded-[2rem] hover-card border-t-4 border-blue-500 bg-blue-50/30 sm:col-span-2 lg:col-span-1" data-aos="fade-up" data-aos-delay="300">
-                    <div class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl flex items-center justify-center text-3xl md:text-4xl mb-6 shadow-sm shadow-blue-100">🛡️</div>
+        <div class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl flex items-center justify-center text-3xl md:text-4xl mb-6 shadow-sm shadow-blue-100">🛡️</div>
                     <h4 class="text-xl md:text-2xl font-bold text-slate-800 mb-3">Risiko Penyakit</h4>
                     <p class="text-slate-600 font-medium text-sm md:text-base leading-relaxed">Menurunkan sistem kekebalan tubuh, menjadikan anak lebih rentan terhadap berbagai penyakit kronis dan infeksi berkelanjutan.</p>
                 </div>
@@ -263,29 +382,109 @@
         </div>
     </section>
 
-    <!-- 5. CALL TO ACTION (CTA) -->
-    <section class="relative pt-40 pb-32 md:pt-48 md:pb-48 overflow-hidden bg-primary-gradient">
-        <!-- Wave Separator top -->
+    <!-- 5. CALL TO ACTION (CTA) ANTIGRAVITY LIGHT -->
+    <section class="bg-antigravity-light py-20 md:py-28 relative flex items-center">
+        <!-- Ambient Glows -->
+        <div class="ambient-glow glow-blue-light"></div>
+        <div class="ambient-glow glow-emerald-light"></div>
 
-        <!-- Decorative background elements -->
-        <div class="absolute top-20 right-20 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-30 animate-float pointer-events-none"></div>
-        <div class="absolute bottom-10 left-20 w-48 h-48 bg-white rounded-full mix-blend-overlay filter blur-2xl opacity-20 animate-float-delayed pointer-events-none"></div>
+        <!-- Orbit Rings -->
+        <div class="orbit-ring orbit-1"></div>
+        <div class="orbit-ring orbit-2"></div>
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" data-aos="zoom-in" data-aos-duration="1000">
-            <h2 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 md:mb-8 leading-tight tracking-tight drop-shadow-lg">
-                Mulai Pantau Kesehatan<br>Anak Anda Sekarang!
-            </h2>
-            <p class="text-xl text-blue-50 font-medium mb-12 max-w-2xl mx-auto opacity-90">
-                Dampingi setiap tahap pertumbuhan si kecil. Kami bantu deteksi potensi stunting lebih awal melalui sistem pakar yang akurat dan tepercaya dengan standar WHO.
-            </p>
-            
-            <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-10 py-5 rounded-full bg-white text-blue-600 font-extrabold text-xl hover:bg-slate-50 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-white/20 glow-button">
-                Daftar & Cek Gratis
-                <svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </a>
+        <!-- Glowing Particles -->
+        <div class="particle particle-blue w-2 h-2 top-1/4 left-[15%] animate-float-anti-1"></div>
+        <div class="particle particle-emerald w-3 h-3 bottom-1/3 right-[20%] animate-float-anti-2"></div>
+        <div class="particle particle-blue w-1.5 h-1.5 top-[20%] right-[30%] animate-float-anti-1" style="animation-delay: 2s;"></div>
+        <div class="particle particle-emerald w-2 h-2 bottom-[15%] left-[25%] animate-float-anti-2" style="animation-delay: 1.5s;"></div>
+
+        <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
+                
+                <!-- Left Column: Mini Cards -->
+                <div class="hidden lg:flex flex-col gap-10 w-1/4 relative">
+                    <!-- Holographic Reflection (Decorative) -->
+                    <div class="absolute -top-10 -left-10 w-32 h-32 bg-blue-300/20 rounded-full blur-2xl"></div>
+
+                    <!-- Card 1 -->
+                    <div class="glass-antigravity-card p-4 animate-float-anti-1 parallax-cta-layer self-start relative" data-speed="0.03">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-blue-600 text-lg bg-blue-50 border border-blue-100 shadow-sm">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">AI Monitoring</p>
+                                <p class="text-lg font-black text-slate-800 leading-none">99.9% <span class="text-[10px] font-semibold text-blue-600 block mt-1">Real-time Akurasi</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2 -->
+                    <div class="glass-antigravity-card p-4 animate-float-anti-2 parallax-cta-layer self-end -mr-12 relative" data-speed="0.05" style="animation-delay: -3s;">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-emerald-600 text-lg bg-emerald-50 border border-emerald-100 shadow-sm">
+                                <i class="fa-solid fa-shield-virus"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Data Security</p>
+                                <p class="text-xs font-bold text-slate-800 leading-tight">Enkripsi End-to-End<br><span class="text-[10px] font-medium text-emerald-600">Standar Medis Global</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area (Center) -->
+                <div class="max-w-2xl mx-auto text-center shrink-0 w-full lg:w-1/2 relative" data-aos="zoom-in" data-aos-duration="1000">
+                    <!-- Center Glow for Text Depth -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white/50 blur-3xl rounded-full z-[-1]"></div>
+
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 mb-5 leading-[1.1] tracking-tight text-glow-primary">
+                        Mulai Pantau<br>Kesehatan<br>Anak Anda Sekarang!
+                    </h2>
+                    <p class="text-base md:text-lg text-slate-600 font-medium mb-10 leading-relaxed max-w-xl mx-auto">
+                        Dampingi setiap tahap pertumbuhan si kecil. Kami bantu deteksi potensi stunting lebih awal melalui sistem pintar yang akurat dan terpercaya.
+                    </p>
+                    
+                    <a href="{{ route('login') }}" class="btn-antigravity inline-flex items-center justify-center px-10 py-4 rounded-full font-bold text-lg group">
+                        Daftar & Cek Sekarang
+                        <i class="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
+                    </a>
+                </div>
+
+                <!-- Right Column: Mini Cards -->
+                <div class="hidden lg:flex flex-col gap-10 w-1/4 relative">
+                    <!-- Holographic Reflection (Decorative) -->
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-emerald-300/20 rounded-full blur-2xl"></div>
+
+                    <!-- Card 3 -->
+                    <div class="glass-antigravity-card p-4 animate-float-anti-2 parallax-cta-layer self-end relative" data-speed="0.04" style="animation-delay: -2s;">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-cyan-600 text-lg bg-cyan-50 border border-cyan-100 shadow-sm">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Pulse Line</p>
+                                <p class="text-xs font-bold text-slate-800 leading-tight">Sinkronisasi Data<br><span class="text-[10px] font-medium text-cyan-600">Respons Instan</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4 -->
+                    <div class="glass-antigravity-card p-4 animate-float-anti-1 parallax-cta-layer self-start -ml-12 relative" data-speed="0.06" style="animation-delay: -4s;">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-indigo-600 text-lg bg-indigo-50 border border-indigo-100 shadow-sm">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Data Analytics</p>
+                                <p class="text-xs font-bold text-slate-800 leading-tight">Insight Komprehensif<br><span class="text-[10px] font-medium text-indigo-600">Visualisasi Prediktif</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-
-        <!-- Wave Separator bottom -->
     </section>
 
     <!-- FOOTER -->
@@ -333,6 +532,17 @@
                 nav.classList.remove('shadow-md');
                 nav.classList.remove('bg-white/80');
             }
+        });
+        // Parallax Effect for CTA
+        document.addEventListener('mousemove', (e) => {
+            const layers = document.querySelectorAll('.parallax-cta-layer');
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+
+            layers.forEach(layer => {
+                const speed = layer.getAttribute('data-speed');
+                layer.style.transform = `translateX(${x * speed * 20}px) translateY(${y * speed * 20}px)`;
+            });
         });
     </script>
 </body>
