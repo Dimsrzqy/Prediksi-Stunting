@@ -210,8 +210,8 @@
             <div class="flex justify-between items-center h-14">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center cursor-pointer" data-aos="fade-right" data-aos-duration="800">
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="w-10 h-10 mr-3 object-contain drop-shadow-sm">
-                    <span class="font-extrabold text-2xl tracking-tight text-slate-800">Stunt<span class="text-blue-500">Check</span></span>
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="w-8 h-8 mr-3 object-contain drop-shadow-sm">
+                    <span class="font-extrabold text-xl tracking-tight text-slate-800">Stunt<span class="text-blue-500">Check</span></span>
                 </div>
                 
                 <!-- Nav Links -->
@@ -228,12 +228,12 @@
     </nav>
 
     <!-- 1. HERO SECTION -->
-    <section id="hero" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <section id="hero" class="relative pt-28 pb-16 lg:pt-40 lg:pb-24 overflow-hidden">
         <!-- Decorative blobs -->
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full bg-blue-400/20 blur-[80px] z-0 pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[250px] md:w-[400px] h-[250px] md:h-[400px] rounded-full bg-emerald-400/20 blur-[80px] z-0 pointer-events-none"></div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <!-- Text Content -->
                 <div class="text-center lg:text-left" data-aos="fade-right" data-aos-duration="1000">
@@ -245,21 +245,21 @@
                         Platform Health-Tech Masa Depan
                     </div>
                     
-                    <h1 class="text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-800 leading-[1.1] mb-6">
+                    <h1 class="text-4xl lg:text-5xl xl:text-6xl font-extrabold text-slate-800 leading-[1.1] mb-5">
                         Cegah <span class="text-gradient">Stunting</span><br>
                         Pada Anak
                     </h1>
                     
-                    <p class="text-lg text-slate-500 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                    <p class="text-base text-slate-500 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
                         Pantau tumbuh kembang si kecil dengan teknologi cerdas. Deteksi dini potensi stunting dengan analisis berbasis sistem pakar dan standar WHO.
                     </p>
                     
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-4">
-                        <a href="{{ route('login') }}" class="btn-glow flex items-center justify-center px-8 py-4 rounded-full bg-[#10B981] text-white font-bold text-lg hover:bg-emerald-600 transition-all transform hover:scale-105">
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mt-4">
+                        <a href="{{ route('login') }}" class="btn-glow flex items-center justify-center px-7 py-3.5 rounded-full bg-[#10B981] text-white font-bold text-base hover:bg-emerald-600 transition-all transform hover:scale-105">
                             Cek Sekarang
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                         </a>
-                        <a href="#about" class="flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-200 text-slate-600 font-bold text-lg hover:border-blue-500 hover:text-blue-600 transition-all bg-white/50 backdrop-blur-sm">
+                        <a href="#about" class="flex items-center justify-center px-7 py-3.5 rounded-full border-2 border-slate-200 text-slate-600 font-bold text-base hover:border-blue-500 hover:text-blue-600 transition-all bg-white/50 backdrop-blur-sm">
                             Pelajari Lebih Lanjut
                         </a>
                     </div>
@@ -287,18 +287,18 @@
     </section>
 
     <!-- 2. ABOUT SECTION -->
-    <section id="about" class="py-24 relative z-20">
+    <section id="about" class="py-20 relative z-20">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass rounded-[2rem] p-8 md:p-16 text-center shadow-2xl relative overflow-hidden border border-white/40" data-aos="zoom-in" data-aos-duration="800">
+            <div class="glass rounded-[2rem] p-8 md:p-12 text-center shadow-2xl relative overflow-hidden border border-white/40" data-aos="zoom-in" data-aos-duration="800">
                 <!-- Decorative background pattern inside card -->
                 <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-blue-100 rounded-full opacity-30 blur-2xl pointer-events-none"></div>
                 <div class="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-emerald-100 rounded-full opacity-30 blur-2xl pointer-events-none"></div>
                 
                 <div class="relative z-10">
-                    <div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-gradient-to-br from-blue-500 to-emerald-400 rounded-2xl flex items-center justify-center mb-6 md:mb-8 shadow-lg shadow-blue-500/30 transform -rotate-6">
-                        <svg class="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    <div class="w-14 h-14 md:w-16 md:h-16 mx-auto bg-gradient-to-br from-blue-500 to-emerald-400 rounded-2xl flex items-center justify-center mb-5 md:mb-6 shadow-lg shadow-blue-500/30 transform -rotate-6">
+                        <svg class="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-6">Apa itu <span class="text-gradient">StuntCheck?</span></h2>
+                    <h2 class="text-3xl md:text-3xl font-extrabold text-slate-800 mb-5">Apa itu <span class="text-gradient">StuntCheck?</span></h2>
                     <p class="text-base md:text-lg text-slate-500 leading-relaxed font-medium max-w-3xl mx-auto">
                         StuntCheck adalah platform cerdas inovatif yang dirancang khusus untuk memantau status gizi dan tumbuh kembang anak. Kami membantu Anda mendeteksi potensi stunting sejak dini melalui analisis yang akurat, sehingga langkah pencegahan dapat dilakukan secara optimal demi masa depan yang gemilang.
                     </p>
@@ -308,11 +308,11 @@
     </section>
 
     <!-- 3. FITUR -->
-    <section id="features" class="py-24 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-sm font-bold text-blue-600 tracking-wider uppercase mb-3">Layanan Kami</h2>
-                <h3 class="text-4xl font-extrabold text-slate-800">Fitur Unggulan StuntCheck</h3>
+    <section id="features" class="py-20 relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="text-xs font-bold text-blue-600 tracking-wider uppercase mb-2">Layanan Kami</h2>
+                <h3 class="text-3xl font-extrabold text-slate-800">Fitur Unggulan StuntCheck</h3>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -350,11 +350,11 @@
     </section>
 
     <!-- 4. DAMPAK STUNTING -->
-    <section id="impact" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl font-extrabold text-slate-800 mb-4">Mengapa Stunting <span class="text-red-500">Berbahaya?</span></h2>
-                <p class="text-lg text-slate-500 font-medium max-w-2xl mx-auto">Kenali ancaman tersembunyi dari stunting yang dapat memengaruhi masa depan anak secara permanen jika tidak ditangani sedini mungkin.</p>
+    <section id="impact" class="py-20 bg-white relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="text-3xl font-extrabold text-slate-800 mb-3">Mengapa Stunting <span class="text-red-500">Berbahaya?</span></h2>
+                <p class="text-base text-slate-500 font-medium max-w-2xl mx-auto">Kenali ancaman tersembunyi dari stunting yang dapat memengaruhi masa depan anak secara permanen jika tidak ditangani sedini mungkin.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -383,7 +383,7 @@
     </section>
 
     <!-- 5. CALL TO ACTION (CTA) ANTIGRAVITY LIGHT -->
-    <section class="bg-antigravity-light py-20 md:py-28 relative flex items-center">
+    <section class="bg-antigravity-light py-16 md:py-20 relative flex items-center">
         <!-- Ambient Glows -->
         <div class="ambient-glow glow-blue-light"></div>
         <div class="ambient-glow glow-emerald-light"></div>
@@ -398,7 +398,7 @@
         <div class="particle particle-blue w-1.5 h-1.5 top-[20%] right-[30%] animate-float-anti-1" style="animation-delay: 2s;"></div>
         <div class="particle particle-emerald w-2 h-2 bottom-[15%] left-[25%] animate-float-anti-2" style="animation-delay: 1.5s;"></div>
 
-        <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
                 
                 <!-- Left Column: Mini Cards -->
@@ -438,14 +438,14 @@
                     <!-- Center Glow for Text Depth -->
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white/50 blur-3xl rounded-full z-[-1]"></div>
 
-                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 mb-5 leading-[1.1] tracking-tight text-glow-primary">
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 mb-4 leading-[1.1] tracking-tight text-glow-primary">
                         Mulai Pantau<br>Kesehatan<br>Anak Anda Sekarang!
                     </h2>
-                    <p class="text-base md:text-lg text-slate-600 font-medium mb-10 leading-relaxed max-w-xl mx-auto">
+                    <p class="text-base text-slate-600 font-medium mb-8 leading-relaxed max-w-xl mx-auto">
                         Dampingi setiap tahap pertumbuhan si kecil. Kami bantu deteksi potensi stunting lebih awal melalui sistem pintar yang akurat dan terpercaya.
                     </p>
                     
-                    <a href="{{ route('login') }}" class="btn-antigravity inline-flex items-center justify-center px-10 py-4 rounded-full font-bold text-lg group">
+                    <a href="{{ route('login') }}" class="btn-antigravity inline-flex items-center justify-center px-8 py-3.5 rounded-full font-bold text-base group">
                         Daftar & Cek Sekarang
                         <i class="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
                     </a>
@@ -493,7 +493,7 @@
         <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-50 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-emerald-50 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center justify-center text-center">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center justify-center text-center">
             <!-- Brand -->
             <div class="flex items-center justify-center mb-4">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="w-8 h-8 mr-2 object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-300">

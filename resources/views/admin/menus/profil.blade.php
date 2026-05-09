@@ -6,9 +6,15 @@
 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 dark:bg-slate-950/50 p-4 md:p-8 transition-colors duration-300">
     
     <!-- Page Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">{{ __('Profil Saya') }}</h1>
-        <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">{{ __('Kelola informasi pribadi dan kredensial akun Anda.') }}</p>
+    <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">{{ __('Profil Saya') }}</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">{{ __('Kelola informasi pribadi dan kredensial akun Anda.') }}</p>
+        </div>
+        <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 font-bold text-sm border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-all shadow-sm self-start md:self-auto group ring-1 ring-slate-200/50 dark:ring-slate-800/50">
+            <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+            {{ __('Kembali ke Dashboard') }}
+        </a>
     </div>
 
     <!-- Main Content Container -->
