@@ -46,23 +46,24 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
-        .mesh-bg {
-            background-color: #f3f4f6;
-            background-image: 
-                radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%),
-                radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%),
-                radial-gradient(at 40% 20%, hsla(228,100%,74%,1) 0px, transparent 50%);
+        .bg-animated {
+            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e0f2fe, #ecfdf5);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
         }
-        .dark .mesh-bg {
-            background-color: #030712;
-            background-image: 
-                radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%),
-                radial-gradient(at 0% 50%, hsla(280,100%,50%,0.1) 0px, transparent 50%),
-                radial-gradient(at 40% 20%, hsla(228,100%,74%,0.15) 0px, transparent 50%);
+        .dark .bg-animated {
+            background: linear-gradient(-45deg, #030712, #0f172a, #1e1b4b, #064e3b);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
-<body class="mesh-bg min-h-screen flex items-center justify-center p-6 relative overflow-hidden transition-colors duration-500">
+<body class="bg-animated min-h-screen flex items-center justify-center p-6 relative overflow-hidden transition-colors duration-500">
     
     <!-- Top Controls -->
     <div class="absolute top-6 right-6 flex items-center gap-3 z-50">
@@ -90,24 +91,22 @@
 
     <!-- Background Orbs (Optional for extra flair) -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-indigo-400/20 dark:bg-indigo-600/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob"></div>
-        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-cyan-400/20 dark:bg-cyan-600/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-purple-400/20 dark:bg-purple-600/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-400/20 dark:bg-blue-600/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-emerald-400/20 dark:bg-emerald-600/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-blue-300/20 dark:bg-blue-800/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
     </div>
 
     <div class="w-full max-w-md relative z-10">
         <div class="glass-panel rounded-3xl p-8 sm:p-10 relative overflow-hidden group">
             
             <!-- Inner Glow effect on hover -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-3xl blur-xl opacity-0 group-hover:opacity-20 dark:group-hover:opacity-30 transition duration-1000 group-hover:duration-300 z-[-1]"></div>
+            <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-500 rounded-3xl blur-xl opacity-0 group-hover:opacity-20 dark:group-hover:opacity-30 transition duration-1000 group-hover:duration-300 z-[-1]"></div>
 
             <div class="flex flex-col items-center mb-10 relative z-10">
                 <!-- Logo -->
-                <div class="relative w-16 h-16 mb-5">
-                    <div class="absolute inset-0 bg-indigo-500 rounded-2xl opacity-20 blur-xl animate-pulse"></div>
-                    <div class="relative w-full h-full bg-gradient-to-tr from-indigo-600 to-cyan-400 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-6 hover:scale-105 transition-all duration-300">
-                        <span class="text-white font-bold text-3xl tracking-tighter">S<span class="text-cyan-100">C</span></span>
-                    </div>
+                <div class="flex items-center mb-6">
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="h-14 w-auto transform hover:scale-110 transition-transform duration-300 drop-shadow-md">
+                    <span class="ml-3 text-3xl font-black tracking-tighter text-gray-900 dark:text-white">Stunt<span class="text-blue-600">Check</span></span>
                 </div>
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{{ __('Welcome Back') }}</h1>
                 <p class="text-gray-500 dark:text-gray-400 text-sm mt-2 text-center">{{ __('Sign in to your StuntCheck account to continue.') }}</p>
@@ -143,7 +142,7 @@
                             </svg>
                         </div>
                         <input id="email" name="email" type="email" value="{{ old('email') }}" required
-                            class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-300 pl-11"
+                            class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 pl-11"
                             placeholder="you@example.com">
                     </div>
                     @error('email')
@@ -160,9 +159,9 @@
                             </svg>
                         </div>
                         <input id="password" name="password" type="password" required
-                            class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-300 pl-11 pr-11"
+                            class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 pl-11 pr-11"
                             placeholder="••••••••">
-                        <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-indigo-500 transition-colors">
+                        <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-500 transition-colors">
                             <svg class="h-5 w-5" fill="none" id="eye-icon" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -173,17 +172,17 @@
 
                 <div class="flex items-center justify-between pt-2">
                     <div class="flex items-center">
-                        <input id="remember" name="remember" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded bg-white dark:bg-gray-900 dark:border-gray-700">
+                        <input id="remember" name="remember" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded bg-white dark:bg-gray-900 dark:border-gray-700">
                         <label for="remember" class="ml-2 block text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</label>
                     </div>
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors">{{ __('Forgot password?') }}</a>
+                        <a href="{{ route('password.request') }}" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors">{{ __('Forgot password?') }}</a>
                     @endif
                 </div>
 
                 <div class="pt-5">
                     <button type="submit"
-                        class="w-full flex justify-center items-center gap-2 py-3.5 px-4 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 dark:focus:ring-offset-gray-900 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-indigo-500/30">
+                        class="w-full flex justify-center items-center gap-2 py-3.5 px-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 dark:focus:ring-offset-gray-900 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-blue-500/30">
                         {{ __('Sign In') }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
@@ -193,7 +192,7 @@
         
         <!-- Footer text -->
         <div class="mt-8 text-center relative z-10">
-            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __("Don't have an account?") }} <a href="#" class="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors hover:underline">{{ __('Contact Administrator') }}</a></p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __("Don't have an account?") }} <a href="#" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors hover:underline">{{ __('Contact Administrator') }}</a></p>
         </div>
     </div>
 

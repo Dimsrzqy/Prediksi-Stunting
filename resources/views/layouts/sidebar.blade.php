@@ -2,9 +2,7 @@
     <!-- Logo Section -->
     <div class="flex items-center justify-center py-8 border-b border-white/50 dark:border-slate-800/50">
         <div class="flex items-center gap-3">
-            <div class="relative w-11 h-11 flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600 rounded-[14px] shadow-lg shadow-blue-500/30 ring-1 ring-white/50 dark:ring-slate-700/50">
-                <span class="text-white font-black text-2xl tracking-tighter">S</span>
-            </div>
+            <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="h-10 w-auto transform hover:scale-110 transition-transform duration-300 drop-shadow-sm">
             <h2 class="text-2xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 transition-colors">
                 Stunt<span class="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">Check</span>
             </h2>
