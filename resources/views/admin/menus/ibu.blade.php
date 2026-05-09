@@ -11,15 +11,17 @@
                 <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ __('Manajemen Data Ibu') }}</h1>
                 <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">{{ __('Kelola master data Profil Ibu. Buat profil di sini sebelum mendaftarkan data anak.') }}</p>
             </div>
-            <!-- Tombol Ekspor Excel -->
-            <a href="{{ route('ibu.export') }}" class="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
-                <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-500"></i>
-                {{ __('Ekspor Excel') }}
-            </a>
-            <button onclick="openModal('tambah')" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 active:scale-95">
-                <i class="fa-solid fa-plus"></i>
-                {{ __('Tambah Profil Ibu') }}
-            </button>
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+                <!-- Tombol Ekspor Excel -->
+                <a href="{{ route('ibu.export') }}" class="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
+                    <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-500"></i>
+                    {{ __('Ekspor Excel') }}
+                </a>
+                <button onclick="openModal('tambah')" class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 active:scale-95">
+                    <i class="fa-solid fa-plus"></i>
+                    {{ __('Tambah Profil Ibu') }}
+                </button>
+            </div>
         </div>
 
         <!-- NOTIFICATION CONTAINER -->
