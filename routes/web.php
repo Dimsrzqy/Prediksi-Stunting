@@ -9,6 +9,12 @@ Route::get('/', function () {
     return view('landing');
 });
 
+Route::get('/prediksi', function () {
+    return view('prediksi');
+})->name('prediksi');
+
+Route::post('/api/guest-predict', [\App\Http\Controllers\GuestPrediksiController::class, 'predict'])->name('guest.predict');
+
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
