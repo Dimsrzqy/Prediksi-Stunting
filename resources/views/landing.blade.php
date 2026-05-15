@@ -217,6 +217,7 @@
                 <!-- Nav Links -->
                 <div class="hidden md:flex space-x-8 items-center" data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">
                     <a href="#hero" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Beranda</a>
+                    <a href="{{ route('prediksi') }}" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Prediksi</a>
                     <a href="#about" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Tentang Kami</a>
                     <a href="#features" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Fitur</a>
                     <a href="#impact" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Dampak</a>
@@ -255,7 +256,7 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mt-4">
-                        <a href="{{ route('login') }}" class="btn-glow flex items-center justify-center px-7 py-3.5 rounded-full bg-[#10B981] text-white font-bold text-base hover:bg-emerald-600 transition-all transform hover:scale-105">
+                        <a href="{{ route('prediksi') }}" class="btn-glow flex items-center justify-center px-7 py-3.5 rounded-full bg-[#10B981] text-white font-bold text-base hover:bg-emerald-600 transition-all transform hover:scale-105">
                             Cek Sekarang
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                         </a>
@@ -445,7 +446,7 @@
                         Dampingi setiap tahap pertumbuhan si kecil. Kami bantu deteksi potensi stunting lebih awal melalui sistem pintar yang akurat dan terpercaya.
                     </p>
                     
-                    <a href="{{ route('login') }}" class="btn-antigravity inline-flex items-center justify-center px-8 py-3.5 rounded-full font-bold text-base group">
+                    <a href="{{ route('prediksi') }}" class="btn-antigravity inline-flex items-center justify-center px-8 py-3.5 rounded-full font-bold text-base group">
                         Daftar & Cek Sekarang
                         <i class="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
                     </a>
