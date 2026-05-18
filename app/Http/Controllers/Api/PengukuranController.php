@@ -13,7 +13,7 @@ class PengukuranController extends Controller
     public function index()
     {
         // Hanya ambil List Anak yang dimiliki si Ibu
-        $anakIds = Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
+        $anakIds = Anak::where('user_id', Auth::id())->pluck('id')->toArray();
 
         // Cari pengukuran yang bersangkutan dengan List Anak tersebut
         $data = Pengukuran::whereIn('id_anak', $anakIds)->with('anak')->get();

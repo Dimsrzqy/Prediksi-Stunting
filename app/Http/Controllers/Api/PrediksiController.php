@@ -17,7 +17,7 @@ class PrediksiController extends Controller
 {
     public function index()
     {
-        $anakIds = Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
+        $anakIds = Anak::where('user_id', Auth::id())->pluck('id')->toArray();
         $data = Prediksi::whereIn('id_anak', $anakIds)->with('anak')->get();
 
         return response()->json([
@@ -125,16 +125,15 @@ class PrediksiController extends Controller
             'tgl_pemeriksaan' => now()->toDateString(),
         ]);
 
-        // 4. Siapkan Data untuk ML API (Python/FastAPI) - format sesuai predict_api.py v2
+        // 4. Siapkan Data untuk ML API v3 (Python/FastAPI) - format sesuai main.py v3
         $mlData = [
-            'nama'          => $anak->nama_anak,
-            'jenis_kelamin' => $anak->jenis_kelamin, // string: "Laki-laki" atau "Perempuan"
-            'umur_bulan'    => (float)$request->umur_bulan,
-            'berat_badan'   => (float)$request->berat_badan,
-            'tinggi_badan'  => (float)$request->tinggi_badan,
+            'jenis_kelamin'    => $anak->jenis_kelamin, // "Laki-laki" atau "Perempuan"
+            'umur_bulan'       => (int)$request->umur_bulan,
+            'tinggi_badan_cm'  => (float)$request->tinggi_badan,
+            'berat_badan_kg'   => (float)$request->berat_badan,
         ];
 
-        // 5. Panggil ML API menggunakan library HTTP Laravel
+        // 5. Panggil ML API v3 menggunakan library HTTP Laravel
         try {
             $apiUrl = env('ML_API_URL', 'http://127.0.0.1:8001') . '/predict';
             $response = \Illuminate\Support\Facades\Http::timeout(30)->post($apiUrl, $mlData);
@@ -142,57 +141,37 @@ class PrediksiController extends Controller
             if ($response->failed()) {
                 return response()->json([
                     'pesan' => 'Gagal terhubung ke Server AI. Pastikan Server ML sudah dijalankan.',
-                    'hint'  => 'Jalankan file run_ml_server.bat di folder Machine Learning SC',
+                    'hint'  => 'Jalankan: python main.py di folder Machine Learning SC (3)',
                     'error' => $response->body()
                 ], 503);
             }
 
             $result = $response->json();
-            $prediksiML = $result['prediksi'];
-            $zScores = $result['z_score_who'] ?? null;
 
-            // Ambil keempat indikator
-            $hasilHA = $prediksiML['stunting_ha']['keterangan'] ?? 'Unknown';
-            $hasilWA = $prediksiML['berat_badan_wa']['keterangan'] ?? 'Unknown';
-            $hasilWH = $prediksiML['gizi_wh']['keterangan'] ?? 'Unknown';
-            $hasilHFA = $prediksiML['height_for_age']['keterangan'] ?? 'Unknown';
-            
-            // Probabilitas HA (untuk status utama)
-            $probabilitasHA = $prediksiML['stunting_ha']['probabilitas'] ?? 1.0;
+            // ML v3 response: { hasil_prediksi: "Normal", label_asli_sistem: "Normal", data_dimasukkan: {...} }
+            $hasilPrediksi = $result['hasil_prediksi'] ?? 'Unknown';
+            $labelSistem   = $result['label_asli_sistem'] ?? $hasilPrediksi;
 
-            // 6. Ekstrak Z-Score untuk kebutuhan mapping atau penyimpanan
-            $z_ha = $zScores['z_ha'] ?? 0;
-            $z_wa = $zScores['z_wa'] ?? 0;
-            $z_wh = $zScores['z_wh'] ?? 0;
-
-            // 7. Gunakan Keterangan Hasil dari ML API (Sudah Hybrid Logic ML + WHO)
-            $statusHA = $hasilHA;
-            $statusWA = $hasilWA;
-            $statusWH = $hasilWH;
-
-            // 8. Dapatkan Rekomendasi Terstruktur (Cek DB dulu, baru Gemini)
-            $rekomendasiData = $this->getStructuredRecommendation($statusHA, [
-                'status_ha' => $statusHA,
-                'status_wa' => $statusWA,
-                'status_wh' => $statusWH,
+            // 6. Dapatkan Rekomendasi Terstruktur (Cek DB dulu, baru Gemini)
+            $rekomendasiData = $this->getStructuredRecommendation($hasilPrediksi, [
+                'status_ha' => $hasilPrediksi,
+                'status_wa' => '-',
+                'status_wh' => '-',
                 'umur' => $request->umur_bulan,
                 'jk' => $anak->jenis_kelamin,
                 'bb' => $request->berat_badan,
                 'tb' => $request->tinggi_badan,
-                'z_ha' => $z_ha,
-                'z_wa' => $z_wa,
-                'z_wh' => $z_wh
+                'z_ha' => 0,
+                'z_wa' => 0,
+                'z_wh' => 0
             ]);
 
-            // 9. Simpan Hasil Prediksi ke Database
+            // 7. Simpan Hasil Prediksi ke Database
             $prediksi = Prediksi::create([
                 'id_anak' => $request->id_anak,
-                'hasil_prediksi' => $statusHA, // HA tetap sebagai hasil utama (Stunting)
-                'hasil_wa' => $statusWA,
-                'hasil_wh' => $statusWH,
-                'hasil_hfa' => $hasilHFA,
-                'probabilitas' => $probabilitasHA, 
-                'z_scores' => $zScores,
+                'hasil_prediksi' => $hasilPrediksi,
+                'label_sistem' => $labelSistem,
+                'probabilitas' => 1.0, // ML v3 tidak return probabilitas, default 100%
                 'tanggal_prediksi' => now()->toDateString(),
                 'rekomendasi_ai' => $rekomendasiData['teks_rekomendasi'] ?? '',
                 'rekomendasi_data' => $rekomendasiData['data_terstruktur'] ?? []
@@ -203,14 +182,9 @@ class PrediksiController extends Controller
                 'data' => [
                     'id_prediksi' => $prediksi->_id,
                     'anak' => $anak->nama_anak,
-                    'status' => [
-                        'ha' => $statusHA,
-                        'wa' => $statusWA,
-                        'wh' => $statusWH,
-                        'hfa' => $hasilHFA
-                    ],
-                    'prediksi' => $prediksiML,
-                    'z_score_who' => $zScores,
+                    'hasil_prediksi' => $hasilPrediksi,
+                    'label_sistem' => $labelSistem,
+                    'probabilitas' => 1.0,
                     'rekomendasi_teks' => $prediksi->rekomendasi_ai,
                     'rekomendasi_terstruktur' => $prediksi->rekomendasi_data,
                 ]
