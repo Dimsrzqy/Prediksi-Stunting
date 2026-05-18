@@ -13,7 +13,7 @@ Route::get('/prediksi', function () {
     return view('prediksi');
 })->name('prediksi');
 
-Route::post('/api/guest-predict', [\App\Http\Controllers\GuestPrediksiController::class, 'predict'])->name('guest.predict');
+Route::post('/api/guest-predict', [\App\Http\Controllers\Api\PrediksiController::class, 'guestPredict'])->name('guest.predict');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
@@ -63,8 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/profil/avatar', [\App\Http\Controllers\Api\AdminUserController::class, 'updateAvatar'])->name('profil.avatar');
     Route::post('/profil/password', [\App\Http\Controllers\Api\AdminUserController::class, 'updatePassword'])->name('profil.password');
 
-    Route::get('/admin-prediksi', [\App\Http\Controllers\AdminPrediksiController::class, 'index'])->name('admin.prediksi');
-    Route::post('/admin-prediksi', [\App\Http\Controllers\AdminPrediksiController::class, 'predict'])->name('admin.prediksi.submit');
+    Route::get('/admin-prediksi', [\App\Http\Controllers\Api\PrediksiController::class, 'adminIndex'])->name('admin.prediksi');
+    Route::post('/admin-prediksi', [\App\Http\Controllers\Api\PrediksiController::class, 'adminPredict'])->name('admin.prediksi.submit');
 
 
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
