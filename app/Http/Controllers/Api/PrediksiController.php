@@ -144,9 +144,9 @@ class PrediksiController extends Controller
 
             $result = $response->json();
 
-            // ML v3 response: { hasil_prediksi: "Normal", label_asli_sistem: "Normal", data_dimasukkan: {...} }
-            $hasilPrediksi = $result['hasil_prediksi'] ?? 'Unknown';
-            $labelSistem   = $result['label_asli_sistem'] ?? $hasilPrediksi;
+            // ML response: { status_stunting: "Normal", keterangan: "...", input_data: {...} }
+            $hasilPrediksi = $result['status_stunting'] ?? 'Unknown';
+            $labelSistem   = $hasilPrediksi;
 
             // 6. Dapatkan Rekomendasi Terstruktur (Cek DB dulu, baru Gemini)
             $rekomendasiData = $this->getStructuredRecommendation($hasilPrediksi, [
@@ -325,5 +325,131 @@ class PrediksiController extends Controller
         }
 
         return ['teks_rekomendasi' => 'Sistem sedang menyiapkan saran gizi.', 'data_terstruktur' => []];
+    }
+
+    public function guestPredict(Request $request)
+    {
+        $request->validate([
+            'nama_anak' => 'required|string|max:255',
+            'tgl_lahir' => 'required|date',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'umur_bulan' => 'required|numeric|min:0|max:60',
+            'berat_badan' => 'nullable|numeric|min:0',
+            'tinggi_badan' => 'required|numeric|min:0',
+        ]);
+
+        $mlData = [
+            'jenis_kelamin'    => $request->jenis_kelamin,
+            'umur_bulan'       => (int)$request->umur_bulan,
+            'tinggi_badan_cm'  => (float)$request->tinggi_badan,
+        ];
+
+        try {
+            $apiUrl = env('ML_API_URL', 'http://127.0.0.1:8001') . '/predict';
+            $response = \Illuminate\Support\Facades\Http::timeout(30)->post($apiUrl, $mlData);
+
+            if ($response->failed()) {
+                return response()->json([
+                    'success' => false,
+                    'pesan' => 'Gagal terhubung ke Server AI. Pastikan Server ML sudah dijalankan.',
+                    'error' => $response->body()
+                ], 503);
+            }
+
+            $result = $response->json();
+            $hasilPrediksi = $result['status_stunting'] ?? 'Unknown';
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'nama' => $request->nama_anak,
+                    'status' => [
+                        'ha' => $hasilPrediksi,
+                        'wa' => 'Unknown',
+                        'wh' => 'Unknown',
+                        'hfa' => $hasilPrediksi,
+                    ],
+                    'z_score' => [
+                        'z_ha' => 0,
+                        'z_wa' => 0,
+                        'z_wh' => 0
+                    ],
+                    'probabilitas' => 1.0,
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'pesan' => 'Terjadi kesalahan teknis saat menghubungi AI.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function adminIndex()
+    {
+        return view('admin.menus.prediksi');
+    }
+
+    public function adminPredict(Request $request)
+    {
+        $request->validate([
+            'umur_bulan' => 'required|numeric',
+            'tinggi_badan' => 'required|numeric',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        ]);
+
+        $mlData = [
+            'jenis_kelamin'    => $request->jenis_kelamin,
+            'umur_bulan'       => (int)$request->umur_bulan,
+            'tinggi_badan_cm'  => (float)$request->tinggi_badan,
+        ];
+
+        try {
+            $apiUrl = env('ML_API_URL', 'http://127.0.0.1:8001') . '/predict';
+            $response = \Illuminate\Support\Facades\Http::timeout(30)->post($apiUrl, $mlData);
+
+            if ($response->failed()) {
+                return back()->with('error', 'Gagal terhubung ke Server AI. Pastikan Server ML (Python) sudah dijalankan pada port 8001.')->withInput();
+            }
+
+            $result = $response->json();
+
+            // Sesuai ML v3: { status_stunting: "...", keterangan: "..." }
+            $hasilPrediksi = $result['status_stunting'] ?? 'Unknown';
+            $labelSistem = $hasilPrediksi;
+            
+            // Format warna berdasarkan status (mengikuti standar web)
+            $statusClass = 'bg-gray-100 text-gray-800';
+            $icon = 'fa-circle-question';
+            $lowerHasil = strtolower($hasilPrediksi);
+
+            if (str_contains($lowerHasil, 'normal')) {
+                $statusClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+                $icon = 'fa-check-circle';
+            } elseif (str_contains($lowerHasil, 'sangat stunting') || str_contains($lowerHasil, 'severely stunted') || str_contains($lowerHasil, 'sangat pendek')) {
+                $statusClass = 'bg-red-100 text-red-800 border-red-200';
+                $icon = 'fa-triangle-exclamation';
+            } elseif (str_contains($lowerHasil, 'stunting') || str_contains($lowerHasil, 'stunted') || str_contains($lowerHasil, 'pendek')) {
+                $statusClass = 'bg-orange-100 text-orange-800 border-orange-200';
+                $icon = 'fa-circle-exclamation';
+            } elseif (str_contains($lowerHasil, 'tinggi')) {
+                $statusClass = 'bg-blue-100 text-blue-800 border-blue-200';
+                $icon = 'fa-arrow-up-right-dots';
+            }
+
+            return view('admin.menus.prediksi', [
+                'result' => true,
+                'hasil_prediksi' => $hasilPrediksi,
+                'label_sistem' => $labelSistem,
+                'status_class' => $statusClass,
+                'icon' => $icon,
+                'input' => $mlData
+            ]);
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan teknis saat menghubungi AI: ' . $e->getMessage())->withInput();
+        }
     }
 }
