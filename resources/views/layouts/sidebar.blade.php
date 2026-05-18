@@ -64,6 +64,14 @@
                     <span class="ml-3 font-semibold text-[15px]">{{ __('Data Gizi & Menu') }}</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.prediksi') }}" class="group flex items-center rounded-2xl px-4 py-3.5 {{ request()->routeIs('admin.prediksi') ? 'bg-gradient-to-r from-teal-600 to-teal-500 shadow-md shadow-teal-500/30 text-white translate-x-1' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200' }} transition-all duration-300 active:scale-95">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('admin.prediksi') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-teal-600 dark:group-hover:text-teal-400' }} transition-colors duration-300">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                    </div>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Prediksi AI Cepat') }}</span>
+                </a>
+            </li>
 
             <li class="pt-6 pb-1">
                 <span class="px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">{{ __('Sistem') }}</span>
