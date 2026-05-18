@@ -99,7 +99,6 @@ class PrediksiController extends Controller
         $request->validate([
             'id_anak' => 'required',
             'tinggi_badan' => 'required|numeric',
-            'berat_badan' => 'required|numeric',
             'umur_bulan' => 'required|numeric',
         ]);
 
@@ -114,23 +113,20 @@ class PrediksiController extends Controller
             'id_anak' => $request->id_anak,
             'umur_bulan' => $request->umur_bulan,
             'tinggi_badan' => $request->tinggi_badan,
-            'berat_badan' => $request->berat_badan,
             'tanggal_ukur' => now()->toDateString(),
         ]);
 
         // 3. Update Data Terkini di tabel Anak
         $anak->update([
             'tinggi_badan' => $request->tinggi_badan,
-            'berat_badan' => $request->berat_badan,
             'tgl_pemeriksaan' => now()->toDateString(),
         ]);
 
-        // 4. Siapkan Data untuk ML API v3 (Python/FastAPI) - format sesuai main.py v3
+        // 4. Siapkan Data untuk ML API v3 (Python/FastAPI)
         $mlData = [
             'jenis_kelamin'    => $anak->jenis_kelamin, // "Laki-laki" atau "Perempuan"
             'umur_bulan'       => (int)$request->umur_bulan,
             'tinggi_badan_cm'  => (float)$request->tinggi_badan,
-            'berat_badan_kg'   => (float)$request->berat_badan,
         ];
 
         // 5. Panggil ML API v3 menggunakan library HTTP Laravel
@@ -159,7 +155,6 @@ class PrediksiController extends Controller
                 'status_wh' => '-',
                 'umur' => $request->umur_bulan,
                 'jk' => $anak->jenis_kelamin,
-                'bb' => $request->berat_badan,
                 'tb' => $request->tinggi_badan,
                 'z_ha' => 0,
                 'z_wa' => 0,
@@ -189,7 +184,6 @@ class PrediksiController extends Controller
                     'rekomendasi_terstruktur' => $prediksi->rekomendasi_data,
                 ]
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'pesan' => 'Terjadi kesalahan teknis saat menghubungi AI.',
@@ -264,7 +258,7 @@ class PrediksiController extends Controller
             . "- Status H/A (Stunting): {$data['status_ha']} (Z: {$data['z_ha']})\n"
             . "- Status W/A (Berat/Umur): {$data['status_wa']} (Z: {$data['z_wa']})\n"
             . "- Status W/H (Gizi/Proporsi): {$data['status_wh']} (Z: {$data['z_wh']})\n"
-            . "- Detail: Umur {$data['umur']} bln, JK: {$data['jk']}, BB: {$data['bb']}kg, TB: {$data['tb']}cm.\n\n"
+            . "- Detail: Umur {$data['umur']} bln, JK: {$data['jk']}, TB: {$data['tb']}cm.\n\n"
             . "Tugas: Berikan 2-3 jenis Nutrisi utama yang paling dibutuhkan dan 3-5 contoh Makanan spesifik untuk memperbaiki kondisi tersebut.\n"
             . "Format WAJIB JSON: \n"
             . "{\n"
@@ -281,12 +275,12 @@ class PrediksiController extends Controller
             . "Hanya kirimkan JSON saja.";
 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
-        
+
         try {
             $response = Http::withoutVerifying()->post($url, [
                 'contents' => [['parts' => [['text' => $prompt]]]]
             ]);
-            
+
             if ($response->successful()) {
                 $rawText = $response->json()['candidates'][0]['content']['parts'][0]['text'] ?? '';
                 $jsonText = preg_replace('/```json|```/', '', $rawText);
@@ -297,7 +291,7 @@ class PrediksiController extends Controller
                     foreach ($aiData['nutrisi_list'] as $n) {
                         // Simpan Nutrisi
                         $nutrisi = Nutrisi::firstOrCreate(['nama_nutrisi' => strtolower($n['nama_nutrisi'])]);
-                        
+
                         // Link kategori utama ke nutrisi
                         RekomendasiNutrisi::firstOrCreate([
                             'kategori_risiko' => $kategoriUtama,
