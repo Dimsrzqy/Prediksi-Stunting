@@ -73,6 +73,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/api-ibu/export', [\App\Http\Controllers\Api\ProfilIbuController::class, 'export'])->name('ibu.export');
     Route::apiResource('api-ibu', \App\Http\Controllers\Api\ProfilIbuController::class);
     Route::apiResource('api-users', \App\Http\Controllers\Api\AdminUserController::class);
+    Route::apiResource('api-nutrisi', \App\Http\Controllers\Api\NutrisiController::class);
+    Route::apiResource('api-makanan', \App\Http\Controllers\Api\MakananController::class);
     Route::get('/api-chart-histori', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'chartData']);
 
     Route::get('/histori-prediksi/export', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'export'])->name('histori.export');
