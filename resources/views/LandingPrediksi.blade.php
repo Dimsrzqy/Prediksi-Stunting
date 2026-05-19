@@ -416,9 +416,8 @@
                         statusBadge.className = 'inline-block px-5 py-2 rounded-full bg-gray-50 text-gray-600 font-black text-xs uppercase mb-6 border border-gray-100';
                         recommendationText.innerText = 'Hasil prediksi tidak dapat diidentifikasi.';
                     }
-
                     resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    Swal.fire({ icon: 'success', title: 'Analisis Berhasil', text: 'Hasil telah diperbarui di bawah.', timer: 2500, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: 'Analisis Berhasil', text: 'Hasil dari Model AI telah diperbarui di bawah.', timer: 2500, showConfirmButton: false });
                 } else {
                     Swal.fire({ icon: 'error', title: 'Gagal', text: result.pesan });
                 }
