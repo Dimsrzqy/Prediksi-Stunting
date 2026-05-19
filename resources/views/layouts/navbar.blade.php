@@ -25,12 +25,12 @@
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Ibu')) }}</span>
 
             @elseif(request()->routeIs('makanan.index') || request()->routeIs('makanan.*'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Data & Nutrisi')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Gizi & Menu')) }}</span>
 
             @elseif(request()->routeIs('admin.prediksi'))
-            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Data & Nutrisi')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Prediksi')) }}</span>
 
