@@ -13,26 +13,42 @@
             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Utama')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Dashboard')) }}</span>
+
             @elseif(request()->routeIs('anak.index'))
             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Anak')) }}</span>
+
             @elseif(request()->routeIs('ibu.index'))
             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Ibu')) }}</span>
+
             @elseif(request()->routeIs('makanan.index') || request()->routeIs('makanan.*'))
             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Data Gizi & Menu')) }}</span>
+
+            @elseif(request()->routeIs('admin.prediksi'))
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Master Data')) }}</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Prediksi')) }}</span>
+
             @elseif(request()->routeIs('user.index'))
             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Sistem')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Manajemen User')) }}</span>
+
             @elseif(request()->routeIs('profil.index'))
             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Sistem')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
             <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('Profil Saya')) }}</span>
+
+            @elseif(request()->routeIs('api-tester.index'))
+            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Sistem')) }}</a>
+            <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
+            <span class="text-slate-800 dark:text-slate-200">{{ strtoupper(__('API Test')) }}</span>
+
             @else
             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ strtoupper(__('Sistem')) }}</a>
             <i class="fa-solid fa-chevron-right text-[9px] mx-3 text-slate-300 dark:text-slate-700"></i>
@@ -218,14 +234,48 @@
         }
 
         // Search Functionality
-        const menuItems = [
-            { name: '{{ __("Dashboard") }}', url: '{{ route("dashboard") }}', icon: 'fa-solid fa-chart-pie', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
-            { name: '{{ __("Histori Prediksi") }}', url: '{{ route("histori.index") }}', icon: 'fa-solid fa-clock-rotate-left', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
-            { name: '{{ __("Data Ibu") }}', url: '{{ route("ibu.index") }}', icon: 'fa-solid fa-person-dress', color: 'text-pink-600 bg-pink-50 dark:bg-pink-900/30 dark:text-pink-400' },
-            { name: '{{ __("Data Anak") }}', url: '{{ route("anak.index") }}', icon: 'fa-solid fa-child-reaching', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
-            { name: '{{ __("Data Gizi & Menu") }}', url: '{{ route("makanan.index") }}', icon: 'fa-solid fa-utensils', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400' },
-            { name: '{{ __("Manajemen User") }}', url: '{{ route("user.index") }}', icon: 'fa-solid fa-users', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400' },
-            { name: '{{ __("Profil Saya") }}', url: '{{ route("profil.index") }}', icon: 'fa-regular fa-user', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400' },
+        const menuItems = [{
+                name: '{{ __("Dashboard") }}',
+                url: '{{ route("dashboard") }}',
+                icon: 'fa-solid fa-chart-pie',
+                color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400'
+            },
+            {
+                name: '{{ __("Histori Prediksi") }}',
+                url: '{{ route("histori.index") }}',
+                icon: 'fa-solid fa-clock-rotate-left',
+                color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400'
+            },
+            {
+                name: '{{ __("Data Ibu") }}',
+                url: '{{ route("ibu.index") }}',
+                icon: 'fa-solid fa-person-dress',
+                color: 'text-pink-600 bg-pink-50 dark:bg-pink-900/30 dark:text-pink-400'
+            },
+            {
+                name: '{{ __("Data Anak") }}',
+                url: '{{ route("anak.index") }}',
+                icon: 'fa-solid fa-child-reaching',
+                color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400'
+            },
+            {
+                name: '{{ __("Data Gizi & Menu") }}',
+                url: '{{ route("makanan.index") }}',
+                icon: 'fa-solid fa-utensils',
+                color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400'
+            },
+            {
+                name: '{{ __("Manajemen User") }}',
+                url: '{{ route("user.index") }}',
+                icon: 'fa-solid fa-users',
+                color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400'
+            },
+            {
+                name: '{{ __("Profil Saya") }}',
+                url: '{{ route("profil.index") }}',
+                icon: 'fa-regular fa-user',
+                color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400'
+            },
         ];
 
         if (searchInput) {
@@ -284,16 +334,21 @@
 
     function confirmLogout() {
         const isDark = document.documentElement.classList.contains('dark');
-        
+
         Swal.fire({
-            title: '{{ __('Konfirmasi Keluar') }}',
-            text: '{{ __('Apakah Anda yakin ingin keluar?') }}',
-            icon: 'warning',
+            title: '{{ __('
+            Konfirmasi Keluar ') }}',
+            text: '{{ __('
+            Apakah Anda yakin ingin keluar ? ') }}',
+            icon : 'warning',
             showCancelButton: true,
             confirmButtonColor: '#e11d48',
             cancelButtonColor: isDark ? '#334155' : '#94a3b8',
-            confirmButtonText: '{{ __('Ya, Keluar!') }}',
-            cancelButtonText: '{{ __('Batal') }}',
+            confirmButtonText: '{{ __('
+            Ya,
+            Keluar!') }}',
+            cancelButtonText: '{{ __('
+            Batal ') }}',
             background: isDark ? '#1e293b' : '#ffffff',
             color: isDark ? '#f1f5f9' : '#1e293b',
             borderRadius: '24px',
