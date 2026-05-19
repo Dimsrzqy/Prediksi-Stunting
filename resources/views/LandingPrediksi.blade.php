@@ -293,33 +293,7 @@
                         </div>
                         <div id="statusBadge" class="inline-block px-5 py-2 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs uppercase mb-6 border border-emerald-100">Risiko Rendah</div>
                         <div class="p-5 bg-slate-50 rounded-2xl text-left border border-slate-100">
-<<<<<<< HEAD:resources/views/prediksi.blade.php
-                            <p id="recommendationText" class="text-[11px] font-bold text-slate-600 leading-relaxed">Analisis menunjukkan kondisi si kecil berada dalam kategori normal. Teruskan pola hidup sehat.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="lg:col-span-8">
-                    <div class="glass-card p-10 h-full">
-                        <h4 class="font-black text-lg text-slate-800 mb-8">Parameter Input Data Anak</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Tinggi Badan (cm)</p>
-                                <p id="z_ha" class="text-2xl font-black text-slate-800 mb-4">-</p>
-                                <span class="px-3 py-1 rounded-lg bg-blue-100 text-blue-600 text-[9px] font-black uppercase">Tinggi Anak</span>
-                            </div>
-                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Berat Badan (kg)</p>
-                                <p id="z_wa" class="text-2xl font-black text-slate-800 mb-4">-</p>
-                                <span class="px-3 py-1 rounded-lg bg-blue-100 text-blue-600 text-[9px] font-black uppercase">Berat Anak</span>
-                            </div>
-                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Usia Anak (bulan)</p>
-                                <p id="z_wh" class="text-2xl font-black text-slate-800 mb-4">-</p>
-                                <span class="px-3 py-1 rounded-lg bg-blue-100 text-blue-600 text-[9px] font-black uppercase">Usia Anak</span>
-                            </div>
-=======
                             <p id="recommendationText" class="text-[11px] font-bold text-slate-600 leading-relaxed">...</p>
->>>>>>> f5c6c0905b1bf03b77fbb7f4ee5f05ae2e7080d0:resources/views/LandingPrediksi.blade.php
                         </div>
                     </div>
                 </div>
@@ -403,59 +377,6 @@
                 const result = await response.json();
                 if (result.success) {
                     const data = result.data;
-<<<<<<< HEAD:resources/views/prediksi.blade.php
-                    const hasil = data.hasil_prediksi;
-                    const labelAsli = data.label_asli;
-                    const lowerHasil = hasil.toLowerCase();
-                    
-                    resultsArea.classList.remove('opacity-0', 'translate-y-10');
-                    
-                    // Update UI dinamik berdasarkan output Model ML
-                    let score = 100;
-                    let color = '#10b981';
-                    let badgeClass = '';
-                    let badgeText = '';
-                    let recText = '';
-
-                    if (lowerHasil.includes('sangat pendek') || lowerHasil.includes('severely stunted')) {
-                        score = 95;
-                        color = '#ef4444';
-                        badgeText = 'Risiko Tinggi (Sangat Pendek)';
-                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-red-50 text-red-600 font-black text-xs uppercase mb-6 border border-red-100';
-                        recText = `Berdasarkan analisis AI terpercaya, kondisi **${data.nama}** terindikasi **Sangat Pendek (Severely Stunted)**. Sangat disarankan untuk segera melakukan pemeriksaan medis intensif ke dokter spesialis anak atau fasilitas kesehatan terdekat untuk penanganan gizi mendesak.`;
-                    } else if (lowerHasil.includes('pendek') || lowerHasil.includes('stunted')) {
-                        score = 70;
-                        color = '#f59e0b';
-                        badgeText = 'Risiko Sedang (Pendek)';
-                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-yellow-50 text-yellow-600 font-black text-xs uppercase mb-6 border border-yellow-100';
-                        recText = `Berdasarkan analisis AI terpercaya, kondisi **${data.nama}** terindikasi **Pendek (Stunted)**. Segera tingkatkan asupan nutrisi protein hewani, zat besi, dan konsultasikan dengan posyandu atau puskesmas terdekat untuk intervensi dini.`;
-                    } else if (lowerHasil.includes('tinggi') || lowerHasil.includes('tall')) {
-                        score = 15;
-                        color = '#3b82f6';
-                        badgeText = 'Tinggi';
-                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-blue-50 text-blue-600 font-black text-xs uppercase mb-6 border border-blue-100';
-                        recText = `Berdasarkan analisis AI terpercaya, kondisi tumbuh kembang **${data.nama}** dikategorikan **Tinggi (Tall)**. Ini menunjukkan pertumbuhan tinggi badan di atas rata-rata usianya. Tetap jaga keseimbangan nutrisi harian anak.`;
-                    } else { // Normal
-                        score = 10;
-                        color = '#10b981';
-                        badgeText = 'Risiko Rendah (Normal)';
-                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs uppercase mb-6 border border-emerald-100';
-                        recText = `Berdasarkan analisis AI terpercaya, kondisi tumbuh kembang **${data.nama}** dalam keadaan **Normal**. Teruskan pemberian pola asuh, nutrisi bergizi seimbang, dan rutin lakukan pemantauan tumbuh kembang setiap bulannya.`;
-                    }
-
-                    gaugeFill.style.strokeDashoffset = 440 - (440 * score / 100);
-                    gaugeFill.style.stroke = color;
-                    probText.innerText = score + '%';
-                    statusBadge.innerText = badgeText;
-                    statusBadge.className = badgeClass;
-                    recommendationText.innerHTML = recText;
-
-                    // Update Indikator Param Input
-                    document.getElementById('z_ha').innerText = data.input.tinggi_badan_cm + ' cm';
-                    document.getElementById('z_wa').innerText = data.input.berat_badan_kg + ' kg';
-                    document.getElementById('z_wh').innerText = data.input.umur_bulan + ' bulan';
-
-=======
                     const ha = (data.status?.ha || 'Unknown').toLowerCase();
                     const prob = ((data.probabilitas || 1.0) * 100).toFixed(0);
                     
@@ -495,8 +416,6 @@
                         statusBadge.className = 'inline-block px-5 py-2 rounded-full bg-gray-50 text-gray-600 font-black text-xs uppercase mb-6 border border-gray-100';
                         recommendationText.innerText = 'Hasil prediksi tidak dapat diidentifikasi.';
                     }
-
->>>>>>> f5c6c0905b1bf03b77fbb7f4ee5f05ae2e7080d0:resources/views/LandingPrediksi.blade.php
                     resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     Swal.fire({ icon: 'success', title: 'Analisis Berhasil', text: 'Hasil dari Model AI telah diperbarui di bawah.', timer: 2500, showConfirmButton: false });
                 } else {
