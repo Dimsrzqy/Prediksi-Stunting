@@ -300,22 +300,22 @@
                 </div>
                 <div class="lg:col-span-8">
                     <div class="glass-card p-10 h-full">
-                        <h4 class="font-black text-lg text-slate-800 mb-8">Indikator Status Gizi (WHO Standard)</h4>
+                        <h4 class="font-black text-lg text-slate-800 mb-8">Parameter Input Data Anak</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                             <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Tinggi Badan/Umur (TB/U)</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Tinggi Badan (cm)</p>
                                 <p id="z_ha" class="text-2xl font-black text-slate-800 mb-4">-</p>
-                                <span class="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-600 text-[9px] font-black uppercase">Normal</span>
+                                <span class="px-3 py-1 rounded-lg bg-blue-100 text-blue-600 text-[9px] font-black uppercase">Tinggi Anak</span>
                             </div>
                             <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Berat Badan/Umur (BB/U)</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Berat Badan (kg)</p>
                                 <p id="z_wa" class="text-2xl font-black text-slate-800 mb-4">-</p>
-                                <span class="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-600 text-[9px] font-black uppercase">Normal</span>
+                                <span class="px-3 py-1 rounded-lg bg-blue-100 text-blue-600 text-[9px] font-black uppercase">Berat Anak</span>
                             </div>
                             <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Berat Badan/Tinggi (BB/TB)</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Usia Anak (bulan)</p>
                                 <p id="z_wh" class="text-2xl font-black text-slate-800 mb-4">-</p>
-                                <span class="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-600 text-[9px] font-black uppercase">Normal</span>
+                                <span class="px-3 py-1 rounded-lg bg-blue-100 text-blue-600 text-[9px] font-black uppercase">Usia Anak</span>
                             </div>
                         </div>
                     </div>
@@ -400,37 +400,59 @@
                 const result = await response.json();
                 if (result.success) {
                     const data = result.data;
-                    const prob = (data.probabilitas * 100).toFixed(0);
-                    const ha = data.status.ha.toLowerCase();
+                    const hasil = data.hasil_prediksi;
+                    const labelAsli = data.label_asli;
+                    const lowerHasil = hasil.toLowerCase();
                     
                     resultsArea.classList.remove('opacity-0', 'translate-y-10');
-                    gaugeFill.style.strokeDashoffset = 440 - (440 * prob / 100);
-                    probText.innerText = prob + '%';
+                    
+                    // Update UI dinamik berdasarkan output Model ML
+                    let score = 100;
+                    let color = '#10b981';
+                    let badgeClass = '';
+                    let badgeText = '';
+                    let recText = '';
 
-                    // Dynamic UI Updates
-                    if (ha.includes('normal')) {
-                        gaugeFill.style.stroke = '#10b981';
-                        statusBadge.innerText = 'Risiko Rendah';
-                        statusBadge.className = 'inline-block px-5 py-2 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs uppercase mb-6 border border-emerald-100';
-                        recommendationText.innerText = 'Analisis menunjukkan kondisi si kecil berada dalam kategori normal. Teruskan pemberian nutrisi seimbang dan pantau tumbuh kembang secara rutin.';
-                    } else if (ha.includes('risiko') || ha.includes('berisiko')) {
-                        gaugeFill.style.stroke = '#f59e0b';
-                        statusBadge.innerText = 'Risiko Sedang';
-                        statusBadge.className = 'inline-block px-5 py-2 rounded-full bg-yellow-50 text-yellow-600 font-black text-xs uppercase mb-6 border border-yellow-100';
-                        recommendationText.innerText = 'Si kecil menunjukkan tanda risiko stunting. Segera konsultasikan dengan tenaga kesehatan atau posyandu terdekat untuk penanganan dini.';
-                    } else {
-                        gaugeFill.style.stroke = '#ef4444';
-                        statusBadge.innerText = 'Risiko Tinggi';
-                        statusBadge.className = 'inline-block px-5 py-2 rounded-full bg-red-50 text-red-600 font-black text-xs uppercase mb-6 border border-red-100';
-                        recommendationText.innerText = 'Ditemukan indikasi stunting yang signifikan. Sangat disarankan untuk segera melakukan pemeriksaan medis intensif ke dokter spesialis anak.';
+                    if (lowerHasil.includes('sangat pendek') || lowerHasil.includes('severely stunted')) {
+                        score = 95;
+                        color = '#ef4444';
+                        badgeText = 'Risiko Tinggi (Sangat Pendek)';
+                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-red-50 text-red-600 font-black text-xs uppercase mb-6 border border-red-100';
+                        recText = `Berdasarkan analisis AI terpercaya, kondisi **${data.nama}** terindikasi **Sangat Pendek (Severely Stunted)**. Sangat disarankan untuk segera melakukan pemeriksaan medis intensif ke dokter spesialis anak atau fasilitas kesehatan terdekat untuk penanganan gizi mendesak.`;
+                    } else if (lowerHasil.includes('pendek') || lowerHasil.includes('stunted')) {
+                        score = 70;
+                        color = '#f59e0b';
+                        badgeText = 'Risiko Sedang (Pendek)';
+                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-yellow-50 text-yellow-600 font-black text-xs uppercase mb-6 border border-yellow-100';
+                        recText = `Berdasarkan analisis AI terpercaya, kondisi **${data.nama}** terindikasi **Pendek (Stunted)**. Segera tingkatkan asupan nutrisi protein hewani, zat besi, dan konsultasikan dengan posyandu atau puskesmas terdekat untuk intervensi dini.`;
+                    } else if (lowerHasil.includes('tinggi') || lowerHasil.includes('tall')) {
+                        score = 15;
+                        color = '#3b82f6';
+                        badgeText = 'Tinggi';
+                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-blue-50 text-blue-600 font-black text-xs uppercase mb-6 border border-blue-100';
+                        recText = `Berdasarkan analisis AI terpercaya, kondisi tumbuh kembang **${data.nama}** dikategorikan **Tinggi (Tall)**. Ini menunjukkan pertumbuhan tinggi badan di atas rata-rata usianya. Tetap jaga keseimbangan nutrisi harian anak.`;
+                    } else { // Normal
+                        score = 10;
+                        color = '#10b981';
+                        badgeText = 'Risiko Rendah (Normal)';
+                        badgeClass = 'inline-block px-5 py-2 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs uppercase mb-6 border border-emerald-100';
+                        recText = `Berdasarkan analisis AI terpercaya, kondisi tumbuh kembang **${data.nama}** dalam keadaan **Normal**. Teruskan pemberian pola asuh, nutrisi bergizi seimbang, dan rutin lakukan pemantauan tumbuh kembang setiap bulannya.`;
                     }
 
-                    document.getElementById('z_ha').innerText = (data.z_score.z_ha || 0).toFixed(2);
-                    document.getElementById('z_wa').innerText = (data.z_score.z_wa || 0).toFixed(2);
-                    document.getElementById('z_wh').innerText = (data.z_score.z_wh || 0).toFixed(2);
+                    gaugeFill.style.strokeDashoffset = 440 - (440 * score / 100);
+                    gaugeFill.style.stroke = color;
+                    probText.innerText = score + '%';
+                    statusBadge.innerText = badgeText;
+                    statusBadge.className = badgeClass;
+                    recommendationText.innerHTML = recText;
+
+                    // Update Indikator Param Input
+                    document.getElementById('z_ha').innerText = data.input.tinggi_badan_cm + ' cm';
+                    document.getElementById('z_wa').innerText = data.input.berat_badan_kg + ' kg';
+                    document.getElementById('z_wh').innerText = data.input.umur_bulan + ' bulan';
 
                     resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    Swal.fire({ icon: 'success', title: 'Analisis Berhasil', text: 'Hasil telah diperbarui di bawah.', timer: 2500, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: 'Analisis Berhasil', text: 'Hasil dari Model AI telah diperbarui di bawah.', timer: 2500, showConfirmButton: false });
                 } else {
                     Swal.fire({ icon: 'error', title: 'Gagal', text: result.pesan });
                 }
