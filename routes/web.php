@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 Route::get('/prediksi', function () {
-    return view('prediksi');
+    return view('LandingPrediksi');
 })->name('prediksi');
 
 Route::post('/api/guest-predict', [\App\Http\Controllers\Api\PrediksiController::class, 'guestPredict'])->name('guest.predict');
