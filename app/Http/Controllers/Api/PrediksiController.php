@@ -45,7 +45,7 @@ class PrediksiController extends Controller
 
         return response()->json([
             'pesan' => 'Data prediksi berhasil disimpan',
-            'data' => $prediksi
+            'data' => $prediksi 
         ], 201);
     }
 
@@ -334,7 +334,6 @@ class PrediksiController extends Controller
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'umur_bulan' => 'required|numeric|min:0|max:60',
-            'berat_badan' => 'nullable|numeric|min:0',
             'tinggi_badan' => 'required|numeric|min:0',
         ]);
 
@@ -411,6 +410,12 @@ class PrediksiController extends Controller
             $response = \Illuminate\Support\Facades\Http::timeout(30)->post($apiUrl, $mlData);
 
             if ($response->failed()) {
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'pesan' => 'Gagal terhubung ke Server AI. Pastikan Server ML (Python) sudah dijalankan pada port 8001.'
+                    ], 503);
+                }
                 return back()->with('error', 'Gagal terhubung ke Server AI. Pastikan Server ML (Python) sudah dijalankan pada port 8001.')->withInput();
             }
 
@@ -439,6 +444,17 @@ class PrediksiController extends Controller
                 $icon = 'fa-arrow-up-right-dots';
             }
 
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'hasil_prediksi' => $hasilPrediksi,
+                        'label_asli' => $labelSistem,
+                        'input' => $mlData
+                    ]
+                ]);
+            }
+
             return view('admin.menus.prediksi', [
                 'result' => true,
                 'hasil_prediksi' => $hasilPrediksi,
@@ -449,6 +465,12 @@ class PrediksiController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'pesan' => 'Terjadi kesalahan teknis saat menghubungi AI: ' . $e->getMessage()
+                ], 500);
+            }
             return back()->with('error', 'Terjadi kesalahan teknis saat menghubungi AI: ' . $e->getMessage())->withInput();
         }
     }

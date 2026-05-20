@@ -16,7 +16,6 @@ class Pengukuran extends Model
         'id_anak',
         'umur_bulan',
         'tinggi_badan',
-        'berat_badan',
         'tanggal_ukur',
     ];
 

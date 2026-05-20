@@ -19,9 +19,7 @@ class Anak extends Model
         'tgl_lahir',
         'jenis_kelamin',
         'id_ibu',
-        'bb_lahir',
         'tb_lahir',
-        'berat_badan',
         'tinggi_badan',
         'tgl_pemeriksaan'
     ];
