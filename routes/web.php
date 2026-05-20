@@ -10,10 +10,10 @@ Route::get('/', function () {
 });
 
 Route::get('/prediksi', function () {
-    return view('prediksi');
+    return view('LandingPrediksi');
 })->name('prediksi');
 
-Route::post('/api/guest-predict', [\App\Http\Controllers\GuestPrediksiController::class, 'predict'])->name('guest.predict');
+Route::post('/api/guest-predict', [\App\Http\Controllers\Api\PrediksiController::class, 'guestPredict'])->name('guest.predict');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
@@ -63,8 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/profil/avatar', [\App\Http\Controllers\Api\AdminUserController::class, 'updateAvatar'])->name('profil.avatar');
     Route::post('/profil/password', [\App\Http\Controllers\Api\AdminUserController::class, 'updatePassword'])->name('profil.password');
 
-    Route::get('/admin-prediksi', [\App\Http\Controllers\AdminPrediksiController::class, 'index'])->name('admin.prediksi');
-    Route::post('/admin-prediksi', [\App\Http\Controllers\AdminPrediksiController::class, 'predict'])->name('admin.prediksi.submit');
+    Route::get('/admin-prediksi', [\App\Http\Controllers\Api\PrediksiController::class, 'adminIndex'])->name('admin.prediksi');
+    Route::post('/admin-prediksi', [\App\Http\Controllers\Api\PrediksiController::class, 'adminPredict'])->name('admin.prediksi.submit');
 
 
     // Rute API untuk dipanggil dari view web (menggunakan session auth bawaan web)
@@ -73,6 +73,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/api-ibu/export', [\App\Http\Controllers\Api\ProfilIbuController::class, 'export'])->name('ibu.export');
     Route::apiResource('api-ibu', \App\Http\Controllers\Api\ProfilIbuController::class);
     Route::apiResource('api-users', \App\Http\Controllers\Api\AdminUserController::class);
+    Route::apiResource('api-nutrisi', \App\Http\Controllers\Api\NutrisiController::class);
+    Route::apiResource('api-makanan', \App\Http\Controllers\Api\MakananController::class);
     Route::get('/api-chart-histori', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'chartData']);
 
     Route::get('/histori-prediksi/export', [\App\Http\Controllers\Api\HistoriPrediksiController::class, 'export'])->name('histori.export');
