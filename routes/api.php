@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\NutrisiController;
 use App\Http\Controllers\Api\RekomendasiNutrisiController;
 use App\Http\Controllers\Api\MakananController;
 use App\Http\Controllers\Api\PengukuranController;
+use App\Http\Controllers\Api\HistoriPrediksiController;
 
 // ==========================================
 // 🔓 AREA PUBLIK (Bebas Masuk Tanpa Token)
@@ -32,6 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('nutrisi', NutrisiController::class);
     Route::apiResource('rekomendasi-nutrisi', RekomendasiNutrisiController::class);
     Route::apiResource('makanan', MakananController::class);
+
+    // API Endpoints untuk Riwayat Prediksi (Mobile App)
+    // More specific route first (grafik) to avoid route conflict
+    Route::get('/riwayat/grafik/{idAnak}', [HistoriPrediksiController::class, 'getGrafikByAnak']);
+    Route::get('/riwayat/{idAnak}', [HistoriPrediksiController::class, 'getRiwayatByAnak']);
 
     // Endpoint khusus Profil Ibu
     Route::get('/profil', [\App\Http\Controllers\Api\ProfilUserController::class, 'show']);

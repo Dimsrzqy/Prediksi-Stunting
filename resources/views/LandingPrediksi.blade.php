@@ -734,12 +734,18 @@
                                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-wider mt-2.5">Tingkat Risiko</span>
                             </div>
                         </div>
+<<<<<<< HEAD
                         
                         <div id="statusBadge" class="inline-block px-6 py-2.5 rounded-full bg-emerald-50 text-emerald-600 font-extrabold text-xs uppercase mb-8 border border-emerald-100 tracking-wider">Risiko Rendah</div>
                         
                         <div class="p-6 bg-white/70 backdrop-blur-md rounded-2xl text-left border border-slate-100/50 shadow-sm relative z-10">
                             <h4 class="text-[10px] font-black text-indigo-500 uppercase tracking-wider mb-2">Rekomendasi Medis AI:</h4>
                             <p id="recommendationText" class="text-sm font-semibold text-slate-600 leading-relaxed">...</p>
+=======
+                        <div id="statusBadge" class="inline-block px-5 py-2 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs uppercase mb-6 border border-emerald-100">Risiko Rendah</div>
+                        <div class="p-5 bg-slate-50 rounded-2xl text-left border border-slate-100">
+                            <p id="recommendationText" class="text-[11px] font-bold text-slate-600 leading-relaxed">...</p>
+>>>>>>> 8fd0f3e8f68bd4a8f6ac20a335cfb27ba003e170
                         </div>
                     </div>
                 </div>
@@ -870,7 +876,10 @@
                         statusBadge.className = 'inline-block px-6 py-2.5 rounded-full bg-gray-50 text-gray-600 font-extrabold text-xs uppercase mb-8 border border-gray-100 tracking-wider';
                         recommendationText.innerText = 'Hasil prediksi tidak dapat diidentifikasi secara terperinci. Pastikan data tinggi badan dan usia diinput secara akurat.';
                     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8fd0f3e8f68bd4a8f6ac20a335cfb27ba003e170
                     resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     Swal.fire({ 
                         icon: 'success', 
