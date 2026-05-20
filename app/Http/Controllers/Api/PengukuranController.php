@@ -29,7 +29,6 @@ class PengukuranController extends Controller
             'id_anak' => 'required',
             'umur_bulan' => 'required|numeric',
             'tinggi_badan' => 'required|numeric',
-            'berat_badan' => 'required|numeric',
             'tanggal_ukur' => 'required|date',
         ]);
 

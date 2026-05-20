@@ -49,7 +49,7 @@ class AnakController extends Controller
         ];
 
         // Daftar header kolom untuk file CSV/Excel
-        $columns = ['No', 'NIK', 'Nama Anak', 'Nama Ibu', 'Tanggal Lahir', 'Jenis Kelamin', 'BB Lahir (kg)', 'TB Lahir (cm)', 'Pemeriksaan Terakhir (BB kg)', 'Pemeriksaan Terakhir (TB cm)'];
+        $columns = ['No', 'NIK', 'Nama Anak', 'Nama Ibu', 'Tanggal Lahir', 'Jenis Kelamin', 'TB Lahir (cm)', 'Pemeriksaan Terakhir (TB cm)'];
 
         $callback = function () use ($anak, $columns) {
             $file = fopen('php://output', 'w');
@@ -71,9 +71,7 @@ class AnakController extends Controller
                     $namaIbu,
                     $data->tgl_lahir,
                     $jenisKelamin,
-                    $data->bb_lahir ?? '-',
                     $data->tb_lahir ?? '-',
-                    $data->berat_badan ?? '-',
                     $data->tinggi_badan ?? '-'
                 ]);
             }
@@ -92,9 +90,7 @@ class AnakController extends Controller
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
             'id_ibu' => 'nullable',
-            'bb_lahir' => 'nullable|numeric',
             'tb_lahir' => 'nullable|numeric',
-            'berat_badan' => 'nullable|numeric',
             'tinggi_badan' => 'nullable|numeric',
             'tgl_pemeriksaan' => 'nullable|date',
         ]);
@@ -155,9 +151,7 @@ class AnakController extends Controller
             'tgl_lahir' => 'nullable|date',
             'jenis_kelamin' => 'nullable',
             'nama_ortu' => 'nullable',
-            'bb_lahir' => 'nullable|numeric',
             'tb_lahir' => 'nullable|numeric',
-            'berat_badan' => 'nullable|numeric',
             'tinggi_badan' => 'nullable|numeric',
             'tgl_pemeriksaan' => 'nullable|date',
         ]);

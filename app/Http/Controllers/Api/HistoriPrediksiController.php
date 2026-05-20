@@ -102,14 +102,14 @@ class HistoriPrediksiController extends Controller
         $filter = $request->query('filter', 'bulan'); // default 'bulan'
         
         $periods = [];
-        
         if ($filter === 'minggu') {
             // Siapkan array untuk 7 hari terakhir
             for ($i = 6; $i >= 0; $i--) {
                 $periods[\Carbon\Carbon::now()->subDays($i)->format('Y-m-d')] = [
                     'Normal' => 0,
-                    'Berisiko' => 0,
+                    'Tinggi' => 0,
                     'Stunting' => 0,
+                    'Sangat Stunting' => 0,
                 ];
             }
         } else {
@@ -117,8 +117,9 @@ class HistoriPrediksiController extends Controller
             for ($i = 11; $i >= 0; $i--) {
                 $periods[\Carbon\Carbon::now()->subMonths($i)->format('Y-m')] = [
                     'Normal' => 0,
-                    'Berisiko' => 0,
+                    'Tinggi' => 0,
                     'Stunting' => 0,
+                    'Sangat Stunting' => 0,
                 ];
             }
         }
@@ -140,9 +141,15 @@ class HistoriPrediksiController extends Controller
                 if (isset($periods[$key])) {
                     $res = ucfirst(strtolower($item->hasil_prediksi));
                     
-                    // Map "Resiko stunting" and "Resiko" to "Berisiko"
-                    if ($res === 'Resiko stunting' || $res === 'Resiko') {
-                        $res = 'Berisiko';
+                    // Map "Sangat stunting" or "Severely stunted" to "Sangat Stunting"
+                    if (str_contains(strtolower($res), 'sangat') || str_contains(strtolower($res), 'severely')) {
+                        $res = 'Sangat Stunting';
+                    } elseif (str_contains(strtolower($res), 'tinggi')) {
+                        $res = 'Tinggi';
+                    } elseif (str_contains(strtolower($res), 'stunt') || str_contains(strtolower($res), 'pendek')) {
+                        $res = 'Stunting';
+                    } else {
+                        $res = 'Normal';
                     }
 
                     if (isset($periods[$key][$res])) {
@@ -157,8 +164,9 @@ class HistoriPrediksiController extends Controller
         // Format output array
         $labels = [];
         $dataNormal = [];
-        $dataBerisiko = [];
+        $dataTinggi = [];
         $dataStunting = [];
+        $dataSangatStunting = [];
 
         foreach ($periods as $k => $v) {
             if ($filter === 'minggu') {
@@ -167,8 +175,9 @@ class HistoriPrediksiController extends Controller
                 $labels[] = \Carbon\Carbon::createFromFormat('Y-m', $k)->translatedFormat('M Y');
             }
             $dataNormal[] = $v['Normal'];
-            $dataBerisiko[] = $v['Berisiko'];
+            $dataTinggi[] = $v['Tinggi'];
             $dataStunting[] = $v['Stunting'];
+            $dataSangatStunting[] = $v['Sangat Stunting'];
         }
 
         return response()->json([
@@ -177,28 +186,96 @@ class HistoriPrediksiController extends Controller
                 [
                     'label' => 'Normal',
                     'data' => $dataNormal,
-                    'borderColor' => '#10B981', // Hijau Toska
+                    'borderColor' => '#10B981', // Emerald
                     'backgroundColor' => 'rgba(16, 185, 129, 0.2)',
                     'fill' => true,
                     'tension' => 0.4
                 ],
                 [
-                    'label' => 'Berisiko',
-                    'data' => $dataBerisiko,
-                    'borderColor' => '#F59E0B', // Kuning Oranye
-                    'backgroundColor' => 'rgba(245, 158, 11, 0.2)',
+                    'label' => 'Tinggi',
+                    'data' => $dataTinggi,
+                    'borderColor' => '#3B82F6', // Blue
+                    'backgroundColor' => 'rgba(59, 130, 246, 0.2)',
                     'fill' => true,
                     'tension' => 0.4
                 ],
                 [
                     'label' => 'Stunting',
                     'data' => $dataStunting,
-                    'borderColor' => '#EF4444', // Merah
-                    'backgroundColor' => 'rgba(239, 68, 68, 0.2)',
+                    'borderColor' => '#F59E0B', // Amber
+                    'backgroundColor' => 'rgba(245, 158, 11, 0.2)',
+                    'fill' => true,
+                    'tension' => 0.4
+                ],
+                [
+                    'label' => 'Sangat Stunting',
+                    'data' => $dataSangatStunting,
+                    'borderColor' => '#E11D48', // Rose
+                    'backgroundColor' => 'rgba(225, 29, 72, 0.2)',
                     'fill' => true,
                     'tension' => 0.4
                 ]
             ]
+        ]);
+    }
+
+    /**
+     * API Endpoint: Get prediction history for a specific child
+     * Called by Mobile App: GET /api/riwayat/{idAnak}
+     */
+    public function getRiwayatByAnak($idAnak)
+    {
+        // Verify that the child belongs to the authenticated user
+        $anak = \App\Models\Anak::where('_id', $idAnak)->where('user_id', Auth::id())->first();
+        if (!$anak) {
+            return response()->json([
+                'status' => 'error',
+                'pesan' => 'Anak tidak ditemukan atau tidak memiliki akses'
+            ], 403);
+        }
+
+        // Get prediction history for this child
+        $riwayat = Prediksi::where('id_anak', $idAnak)
+            ->with('anak')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $riwayat
+        ]);
+    }
+
+    /**
+     * API Endpoint: Get chart data for a specific child
+     * Called by Mobile App: GET /api/riwayat/grafik/{idAnak}
+     */
+    public function getGrafikByAnak($idAnak, Request $request)
+    {
+        // Verify that the child belongs to the authenticated user
+        $anak = \App\Models\Anak::where('_id', $idAnak)->where('user_id', Auth::id())->first();
+        if (!$anak) {
+            return response()->json([
+                'status' => 'error',
+                'pesan' => 'Anak tidak ditemukan atau tidak memiliki akses'
+            ], 403);
+        }
+
+        // Get measurement history for this specific child
+        $pengukuran = \App\Models\Pengukuran::where('id_anak', $idAnak)
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'tinggi' => $item->tinggi_badan ?? 0,
+                    'umur_bulan' => $item->umur_bulan,
+                    'tanggal_ukur' => $item->tanggal_ukur,
+                ];
+            });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $pengukuran
         ]);
     }
 }

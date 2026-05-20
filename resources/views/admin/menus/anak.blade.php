@@ -159,11 +159,7 @@
                             <!-- Sub-header: Data Lahir -->
                             <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
                                 <h4 class="text-sm font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 mb-4 ml-1">{{ __('Spesifikasi Lahir') }}</h4>
-                                <div class="grid grid-cols-2 gap-5">
-                                    <div>
-                                        <label for="bb_lahir" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('BB Lahir (kg)') }}</label>
-                                        <input type="number" step="0.01" id="bb_lahir" name="bb_lahir" placeholder="3.2" class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all">
-                                    </div>
+                                <div class="grid grid-cols-1 gap-5">
                                     <div>
                                         <label for="tb_lahir" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('TB Lahir (cm)') }}</label>
                                         <input type="number" step="0.1" id="tb_lahir" name="tb_lahir" placeholder="50.5" class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all">
@@ -174,11 +170,7 @@
                             <!-- Sub-header: Pemeriksaan -->
                             <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
                                 <h4 class="text-sm font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 mb-4 ml-1">{{ __('Pemeriksaan Terakhir') }}</h4>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div>
-                                        <label for="berat_badan" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('BB (kg)') }}</label>
-                                        <input type="number" step="0.01" id="berat_badan" name="berat_badan" class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all">
-                                    </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label for="tinggi_badan" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('TB (cm)') }}</label>
                                         <input type="number" step="0.1" id="tinggi_badan" name="tinggi_badan" class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all">
@@ -301,9 +293,7 @@
 
             const namaIbu = anak.ibu ? anak.ibu.nama_ibu : (anak.nama_ortu ? `${anak.nama_ortu} <span class="text-[10px] text-amber-500 font-bold uppercase">(Belum Link)</span>` : '<span class="text-rose-400">N/A</span>');
 
-            const bbLahir = anak.bb_lahir ? `${anak.bb_lahir} kg` : '-';
             const tbLahir = anak.tb_lahir ? `${anak.tb_lahir} cm` : '-';
-            const beratBadan = anak.berat_badan ? `${anak.berat_badan} kg` : '-';
             const tinggiBadan = anak.tinggi_badan ? `${anak.tinggi_badan} cm` : '-';
             const tglPeriksa = anak.tgl_pemeriksaan ? anak.tgl_pemeriksaan.split('T')[0] : '-';
 
@@ -330,15 +320,14 @@
                 
                 <td class="px-6 py-5 whitespace-nowrap">
                     <div class="flex flex-col text-[11px] font-bold">
-                        <span class="text-slate-600 dark:text-slate-400"><span class="text-slate-400 dark:text-slate-500">BB:</span> ${bbLahir}</span>
-                        <span class="text-slate-600 dark:text-slate-400 mt-0.5"><span class="text-slate-400 dark:text-slate-500">TB:</span> ${tbLahir}</span>
+                        <span class="text-slate-600 dark:text-slate-400"><span class="text-slate-400 dark:text-slate-500">TB:</span> ${tbLahir}</span>
                     </div>
                 </td>
 
                 <td class="px-6 py-5 whitespace-nowrap">
                     <div class="flex flex-col text-[11px] font-bold">
                         <span class="text-indigo-600 dark:text-indigo-400 whitespace-nowrap"><i class="fa-regular fa-calendar-check mr-1"></i> ${tglPeriksa}</span>
-                        <span class="text-slate-600 dark:text-slate-400 mt-0.5">BB: ${beratBadan} | TB: ${tinggiBadan}</span>
+                        <span class="text-slate-600 dark:text-slate-400 mt-0.5">TB: ${tinggiBadan}</span>
                     </div>
                 </td>
 
@@ -378,9 +367,7 @@
             document.getElementById('tgl_lahir').value = data.tgl_lahir || '';
             document.getElementById('jenis_kelamin').value = (data.jenis_kelamin === 'Laki-laki' ? 'L' : (data.jenis_kelamin === 'Perempuan' ? 'P' : data.jenis_kelamin)) || '';
 
-            document.getElementById('bb_lahir').value = data.bb_lahir || '';
             document.getElementById('tb_lahir').value = data.tb_lahir || '';
-            document.getElementById('berat_badan').value = data.berat_badan || '';
             document.getElementById('tinggi_badan').value = data.tinggi_badan || '';
 
             let tglPeriksa = data.tgl_pemeriksaan ? data.tgl_pemeriksaan.split('T')[0] : '';
