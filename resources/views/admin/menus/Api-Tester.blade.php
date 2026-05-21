@@ -13,8 +13,8 @@
                     <i class="fa-solid fa-satellite-dish text-white text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">API Tester</h1>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Uji coba endpoint API secara langsung dari browser.</p>
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">{{ __('API Tester') }}</h1>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('Uji coba endpoint API secara langsung dari browser.') }}</p>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 {{-- URL & Method --}}
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-5 transition-colors">
                     <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-link text-violet-500"></i> Request
+                        <i class="fa-solid fa-link text-violet-500"></i> {{ __('Request') }}
                     </h2>
                     <div class="flex gap-2">
                         <select id="httpMethod" class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-bold px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all">
@@ -42,7 +42,7 @@
                     </div>
                     <button id="btnSend" onclick="sendRequest()"
                         class="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-violet-500/30 hover:from-violet-700 hover:to-purple-700 active:scale-[0.98] transition-all">
-                        <i class="fa-solid fa-paper-plane"></i> Kirim Request
+                        <i class="fa-solid fa-paper-plane"></i> {{ __('Kirim Request') }}
                     </button>
                 </div>
 
@@ -50,10 +50,10 @@
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-5 transition-colors">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                            <i class="fa-solid fa-sliders text-violet-500"></i> Headers
+                            <i class="fa-solid fa-sliders text-violet-500"></i> {{ __('Headers') }}
                         </h2>
                         <button onclick="addHeader()" class="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-700 flex items-center gap-1 transition-colors">
-                            <i class="fa-solid fa-plus"></i> Tambah
+                            <i class="fa-solid fa-plus"></i> {{ __('Tambah') }}
                         </button>
                     </div>
                     <div id="headersContainer" class="space-y-2">
@@ -75,12 +75,12 @@
                 {{-- Body --}}
                 <div id="bodyPanel" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-5 transition-colors">
                     <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-code text-violet-500"></i> Body (JSON)
+                        <i class="fa-solid fa-code text-violet-500"></i> {{ __('Body (JSON)') }}
                     </h2>
                     <textarea id="requestBody" rows="6" placeholder='{\n  "key": "value"\n}'
                         class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-mono px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-400 transition-all resize-none"></textarea>
                     <button onclick="formatJson()" class="mt-2 text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-700 flex items-center gap-1 transition-colors">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Format JSON
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> {{ __('Format JSON') }}
                     </button>
                 </div>
 
@@ -108,18 +108,18 @@
                     <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
                         <button onclick="switchTab('body')" id="tab-body"
                             class="tab-btn px-5 py-3.5 text-sm font-semibold border-b-2 border-violet-500 text-violet-600 dark:text-violet-400 transition-all">
-                            Body
+                            {{ __('Body') }}
                         </button>
                         <button onclick="switchTab('headers')" id="tab-headers"
                             class="tab-btn px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-all">
-                            Headers
+                            {{ __('Headers') }}
                         </button>
                     </div>
 
                     {{-- Loading State --}}
                     <div id="loadingState" class="hidden flex-col items-center justify-center py-16 gap-4">
                         <div class="w-12 h-12 rounded-full border-4 border-violet-200 dark:border-violet-900 border-t-violet-600 animate-spin"></div>
-                        <p class="text-sm text-slate-400 dark:text-slate-500 font-medium">Mengirim request...</p>
+                        <p class="text-sm text-slate-400 dark:text-slate-500 font-medium">{{ __('Mengirim request...') }}</p>
                     </div>
 
                     {{-- Empty State --}}
@@ -127,8 +127,8 @@
                         <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                             <i class="fa-solid fa-satellite-dish text-2xl text-slate-300 dark:text-slate-600"></i>
                         </div>
-                        <p class="text-sm font-semibold text-slate-400 dark:text-slate-500">Belum ada response</p>
-                        <p class="text-xs text-slate-300 dark:text-slate-600">Kirim request untuk melihat hasilnya</p>
+                        <p class="text-sm font-semibold text-slate-400 dark:text-slate-500">{{ __('Belum ada response') }}</p>
+                        <p class="text-xs text-slate-300 dark:text-slate-600">{{ __('Kirim request untuk melihat hasilnya') }}</p>
                     </div>
 
                     {{-- Error State --}}
@@ -137,7 +137,7 @@
                             <div class="flex items-start gap-3">
                                 <i class="fa-solid fa-circle-exclamation text-rose-500 mt-0.5"></i>
                                 <div>
-                                    <p class="text-sm font-bold text-rose-700 dark:text-rose-400">Request Gagal</p>
+                                    <p class="text-sm font-bold text-rose-700 dark:text-rose-400">{{ __('Request Gagal') }}</p>
                                     <p id="errorMsg" class="text-xs text-rose-600 dark:text-rose-500 mt-1"></p>
                                 </div>
                             </div>
@@ -148,11 +148,11 @@
                     <div id="tab-content-body" class="hidden p-4">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2">
-                                <button onclick="setView('pretty')" id="viewPretty" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-400 transition-all">Pretty</button>
-                                <button onclick="setView('raw')" id="viewRaw" class="text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">Raw</button>
+                                <button onclick="setView('pretty')" id="viewPretty" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-400 transition-all">{{ __('Pretty') }}</button>
+                                <button onclick="setView('raw')" id="viewRaw" class="text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">{{ __('Raw') }}</button>
                             </div>
                             <button onclick="copyResponse()" class="text-xs text-slate-400 hover:text-violet-600 flex items-center gap-1 transition-colors">
-                                <i class="fa-regular fa-copy"></i> Salin
+                                <i class="fa-regular fa-copy"></i> {{ __('Salin') }}
                             </button>
                         </div>
                         <pre id="responseBody" class="text-xs font-mono bg-slate-50 dark:bg-slate-950 rounded-xl p-4 overflow-auto max-h-[420px] text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-all border border-slate-100 dark:border-slate-800"></pre>
@@ -170,6 +170,14 @@
 </main>
 
 <script>
+    const translations = {
+        responseCopied: '{{ __("Response disalin!") }}',
+        invalidJson: '{{ __("JSON tidak valid!") }}',
+        urlRequired: '{{ __("URL tidak boleh kosong!") }}',
+        sending: '{{ __("Mengirim...") }}',
+        sendRequest: '{{ __("Kirim Request") }}'
+    };
+
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let currentView = 'pretty';
     let rawResponseData = null;
@@ -233,7 +241,7 @@
     function copyResponse() {
         const text = document.getElementById('responseBody').textContent;
         navigator.clipboard.writeText(text).then(() => {
-            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Response disalin!', showConfirmButton: false, timer: 1500 });
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: translations.responseCopied, showConfirmButton: false, timer: 1500 });
         });
     }
 
@@ -242,7 +250,7 @@
         try {
             el.value = JSON.stringify(JSON.parse(el.value), null, 2);
         } catch {
-            Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'JSON tidak valid!', showConfirmButton: false, timer: 1500 });
+            Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: translations.invalidJson, showConfirmButton: false, timer: 1500 });
         }
     }
 
@@ -255,7 +263,7 @@
         document.getElementById('tab-content-headers').classList.add('hidden');
         const btn = document.getElementById('btnSend');
         btn.disabled = show;
-        btn.innerHTML = show ? '<i class="fa-solid fa-circle-notch fa-spin"></i> Mengirim...' : '<i class="fa-solid fa-paper-plane"></i> Kirim Request';
+        btn.innerHTML = show ? '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + translations.sending : '<i class="fa-solid fa-paper-plane"></i> ' + translations.sendRequest;
     }
 
     async function sendRequest() {
@@ -264,7 +272,7 @@
         const body = document.getElementById('requestBody').value.trim();
 
         if (!url) {
-            Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'URL tidak boleh kosong!', showConfirmButton: false, timer: 1800 });
+            Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: translations.urlRequired, showConfirmButton: false, timer: 1800 });
             return;
         }
 

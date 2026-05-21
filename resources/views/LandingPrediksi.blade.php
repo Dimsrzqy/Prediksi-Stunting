@@ -107,37 +107,14 @@
             100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
-        /* Glassmorphism Navbar */
-        .nav-glass {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
         }
-        .nav-glass.scrolled {
-            background: rgba(255, 255, 255, 0.7);
-            border-bottom: 1px solid rgba(99, 102, 241, 0.08);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 1px 0 rgba(255, 255, 255, 0.5);
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-        .nav-link {
-            position: relative;
-            color: #64748b;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; left: 0; width: 0; height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--purple));
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-        .nav-link:hover { color: #0f172a; }
-        .nav-link:hover::after { width: 100%; }
 
         .nav-cta {
             background: linear-gradient(135deg, var(--primary), var(--purple));
@@ -479,25 +456,22 @@
     <div class="particles" id="particles"></div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 nav-glass transition-all duration-300 py-4" id="navbar">
+    <nav class="fixed w-full z-50 glass transition-all duration-300 py-3" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-14">
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="flex-shrink-0 flex items-center cursor-pointer" data-aos="fade-right" data-aos-duration="800">
-                    <div class="relative w-9 h-9 mr-3 flex items-center justify-center bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 rounded-xl shadow-lg shadow-indigo-500/20 group">
-                        <i class="fa-solid fa-square-poll-vertical text-white text-base group-hover:scale-110 transition-transform"></i>
-                        <span class="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    </div>
-                    <span class="font-extrabold text-2xl tracking-tight text-slate-800">Stunt<span class="text-indigo-600 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">Check</span></span>
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="w-8 h-8 mr-3 object-contain drop-shadow-sm">
+                    <span class="font-extrabold text-xl tracking-tight text-slate-800">Stunt<span class="text-blue-500">Check</span></span>
                 </a>
                 
                 <!-- Nav Links -->
                 <div class="hidden md:flex space-x-8 items-center" data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">
-                    <a href="{{ url('/') }}#hero" class="nav-link">Beranda</a>
-                    <a href="{{ route('prediksi') }}" class="nav-link text-indigo-600">Prediksi</a>
-                    <a href="{{ url('/') }}#about" class="nav-link">Tentang Kami</a>
-                    <a href="{{ url('/') }}#features" class="nav-link">Fitur</a>
-                    <a href="{{ url('/') }}#impact" class="nav-link">Dampak</a>
+                    <a href="{{ url('/') }}" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Beranda</a>
+                    <a href="{{ route('prediksi') }}" class="text-blue-600 font-semibold transition-colors">Prediksi</a>
+                    <a href="{{ url('/') }}#about" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Tentang Kami</a>
+                    <a href="{{ url('/') }}#features" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Fitur</a>
+                    <a href="{{ url('/') }}#impact" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Dampak</a>
                 </div>
             </div>
         </div>
@@ -660,23 +634,11 @@
 
                         <form id="prediksiForm" class="space-y-6">
                             @csrf
+                            <!-- Hidden Fields for Guest Info to ensure backward compatibility and smooth backend execution -->
+                            <input type="hidden" name="nama_anak" value="Anak Tamu">
+                            <input type="hidden" name="tgl_lahir" value="{{ date('Y-m-d') }}">
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div class="relative">
-                                    <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Nama Lengkap</label>
-                                    <div class="relative">
-                                        <input type="text" name="nama_anak" required class="w-full input-premium" placeholder="Budi Santoso">
-                                        <span class="input-icon-wrapper"><i class="fa-solid fa-user"></i></span>
-                                    </div>
-                                </div>
-                                
-                                <div class="relative">
-                                    <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Tanggal Lahir</label>
-                                    <div class="relative">
-                                        <input type="date" name="tgl_lahir" required class="w-full input-premium">
-                                        <span class="input-icon-wrapper"><i class="fa-solid fa-calendar-alt"></i></span>
-                                    </div>
-                                </div>
-                                
                                 <div class="relative">
                                     <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Jenis Kelamin</label>
                                     <div class="gender-select">
@@ -734,18 +696,12 @@
                                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-wider mt-2.5">Tingkat Risiko</span>
                             </div>
                         </div>
-<<<<<<< HEAD
                         
                         <div id="statusBadge" class="inline-block px-6 py-2.5 rounded-full bg-emerald-50 text-emerald-600 font-extrabold text-xs uppercase mb-8 border border-emerald-100 tracking-wider">Risiko Rendah</div>
                         
                         <div class="p-6 bg-white/70 backdrop-blur-md rounded-2xl text-left border border-slate-100/50 shadow-sm relative z-10">
                             <h4 class="text-[10px] font-black text-indigo-500 uppercase tracking-wider mb-2">Rekomendasi Medis AI:</h4>
                             <p id="recommendationText" class="text-sm font-semibold text-slate-600 leading-relaxed">...</p>
-=======
-                        <div id="statusBadge" class="inline-block px-5 py-2 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs uppercase mb-6 border border-emerald-100">Risiko Rendah</div>
-                        <div class="p-5 bg-slate-50 rounded-2xl text-left border border-slate-100">
-                            <p id="recommendationText" class="text-[11px] font-bold text-slate-600 leading-relaxed">...</p>
->>>>>>> 8fd0f3e8f68bd4a8f6ac20a335cfb27ba003e170
                         </div>
                     </div>
                 </div>
@@ -808,9 +764,11 @@
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 20) {
-                nav.classList.add('scrolled');
+                nav.classList.add('shadow-md');
+                nav.classList.add('bg-white/80');
             } else {
-                nav.classList.remove('scrolled');
+                nav.classList.remove('shadow-md');
+                nav.classList.remove('bg-white/80');
             }
         });
 
@@ -876,10 +834,7 @@
                         statusBadge.className = 'inline-block px-6 py-2.5 rounded-full bg-gray-50 text-gray-600 font-extrabold text-xs uppercase mb-8 border border-gray-100 tracking-wider';
                         recommendationText.innerText = 'Hasil prediksi tidak dapat diidentifikasi secara terperinci. Pastikan data tinggi badan dan usia diinput secara akurat.';
                     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 8fd0f3e8f68bd4a8f6ac20a335cfb27ba003e170
                     resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     Swal.fire({ 
                         icon: 'success', 

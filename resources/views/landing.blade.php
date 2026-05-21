@@ -216,7 +216,6 @@
                 
                 <!-- Nav Links -->
                 <div class="hidden md:flex space-x-8 items-center" data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">
-                    <a href="#hero" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Beranda</a>
                     <a href="{{ route('prediksi') }}" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Prediksi</a>
                     <a href="#about" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Tentang Kami</a>
                     <a href="#features" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Fitur</a>
