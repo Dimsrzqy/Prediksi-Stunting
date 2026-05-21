@@ -330,8 +330,8 @@ class PrediksiController extends Controller
     public function guestPredict(Request $request)
     {
         $request->validate([
-            'nama_anak' => 'required|string|max:255',
-            'tgl_lahir' => 'required|date',
+            'nama_anak' => 'nullable|string|max:255',
+            'tgl_lahir' => 'nullable|date',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'umur_bulan' => 'required|numeric|min:0|max:60',
             'tinggi_badan' => 'required|numeric|min:0',
@@ -361,7 +361,7 @@ class PrediksiController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'nama' => $request->nama_anak,
+                    'nama' => $request->nama_anak ?? 'Anak Tamu',
                     'status' => [
                         'ha' => $hasilPrediksi,
                         'wa' => 'Unknown',

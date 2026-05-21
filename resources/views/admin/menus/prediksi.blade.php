@@ -23,7 +23,7 @@
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">{{ __('Data Balita') }}</h3>
-                                <p class="text-xs text-slate-500 font-medium mt-1">Lengkapi form di bawah ini</p>
+                                <p class="text-xs text-slate-500 font-medium mt-1">{{ __('Lengkapi form di bawah ini') }}</p>
                             </div>
                         </div>
 
@@ -34,18 +34,18 @@
                                 <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Jenis Kelamin') }} <span class="text-rose-500">*</span></label>
                                 <select name="jenis_kelamin" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all appearance-none cursor-pointer">
                                     <option value="" disabled selected>{{ __('Pilih Jenis Kelamin...') }}</option>
-                                    <option value="Laki-laki">Laki-laki</option>
-                                    <option value="Perempuan">Perempuan</option>
+                                    <option value="Laki-laki">{{ __('Laki-laki') }}</option>
+                                    <option value="Perempuan">{{ __('Perempuan') }}</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Umur') }} <span class="text-slate-400 font-normal">(Bulan)</span> <span class="text-rose-500">*</span></label>
+                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Umur') }} <span class="text-slate-400 font-normal">({{ __('Bulan') }})</span> <span class="text-rose-500">*</span></label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                         <i class="fa-regular fa-calendar text-slate-400"></i>
                                     </div>
-                                    <input type="number" step="1" name="umur_bulan" required class="block w-full pl-11 rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="Contoh: 24">
+                                    <input type="number" step="1" name="umur_bulan" required class="block w-full pl-11 rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="{{ __('Contoh: 24') }}">
                                 </div>
                             </div>
 
@@ -55,7 +55,7 @@
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                         <i class="fa-solid fa-ruler-vertical text-slate-400"></i>
                                     </div>
-                                    <input type="number" step="0.1" name="tinggi_badan" required class="block w-full pl-11 rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="Contoh: 85.5">
+                                    <input type="number" step="0.1" name="tinggi_badan" required class="block w-full pl-11 rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all" placeholder="{{ __('Contoh: 85.5') }}">
                                 </div>
                             </div>
 
@@ -86,7 +86,7 @@
                     </div>
                     
                     <div class="p-8 md:p-12 flex flex-col items-center justify-center flex-1 text-center relative z-10">
-                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Status Gizi (H/A)</h4>
+                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">{{ __('Status Gizi (H/A)') }}</h4>
                         
                         <div id="statusIconBg" class="inline-flex items-center justify-center w-32 h-32 rounded-full mb-8 shadow-xl border-4">
                             <i id="statusIcon" class="fa-solid text-6xl drop-shadow-sm"></i>
@@ -98,7 +98,7 @@
                         
                         <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mb-12">
                             <i class="fa-solid fa-robot text-slate-400 text-sm"></i>
-                            <span id="labelSistemText" class="text-sm font-bold text-slate-600 dark:text-slate-300">Label AI: -</span>
+                            <span id="labelSistemText" class="text-sm font-bold text-slate-600 dark:text-slate-300">{{ __('Label AI') }}: -</span>
                         </div>
 
                         <div class="w-full max-w-2xl bg-slate-50/80 dark:bg-slate-800/50 rounded-3xl p-6 md:p-8 border border-slate-100 dark:border-slate-700/50">
@@ -106,15 +106,15 @@
                             
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
                                 <div>
-                                    <div class="text-sm text-slate-500 mb-1 font-medium">Gender</div>
+                                    <div class="text-sm text-slate-500 mb-1 font-medium">{{ __('Gender') }}</div>
                                     <div id="inputGender" class="font-black text-slate-800 dark:text-slate-200 text-lg">-</div>
                                 </div>
                                 <div>
-                                    <div class="text-sm text-slate-500 mb-1 font-medium">Umur</div>
-                                    <div class="font-black text-slate-800 dark:text-slate-200 text-lg"><span id="inputUmur">-</span> <span class="text-sm font-bold text-slate-400">Bln</span></div>
+                                    <div class="text-sm text-slate-500 mb-1 font-medium">{{ __('Umur') }}</div>
+                                    <div class="font-black text-slate-800 dark:text-slate-200 text-lg"><span id="inputUmur">-</span> <span class="text-sm font-bold text-slate-400">{{ __('Bln') }}</span></div>
                                 </div>
                                 <div>
-                                    <div class="text-sm text-slate-500 mb-1 font-medium">Tinggi</div>
+                                    <div class="text-sm text-slate-500 mb-1 font-medium">{{ __('Tinggi') }}</div>
                                     <div class="font-black text-slate-800 dark:text-slate-200 text-lg"><span id="inputTinggi">-</span> <span class="text-sm font-bold text-slate-400">cm</span></div>
                                 </div>
                             </div>
@@ -126,8 +126,8 @@
                     <div class="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6 text-slate-300 dark:text-slate-600">
                         <i class="fa-solid fa-chart-pie text-5xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-slate-700 dark:text-slate-300 mb-3 tracking-tight">Kalkulator Siap Digunakan</h3>
-                    <p class="text-slate-500 max-w-md font-medium">Silakan lengkapi data balita di sebelah kiri dan tekan tombol <strong class="text-indigo-600 dark:text-indigo-400">Mulai Analisis AI</strong> untuk melihat status gizi anak secara detail.</p>
+                    <h3 class="text-2xl font-bold text-slate-700 dark:text-slate-300 mb-3 tracking-tight">{{ __('Kalkulator Siap Digunakan') }}</h3>
+                    <p class="text-slate-500 max-w-md font-medium">{{ __('Silakan lengkapi data balita di sebelah kiri dan tekan tombol') }} <strong class="text-indigo-600 dark:text-indigo-400">{{ __('Mulai Analisis AI') }}</strong> {{ __('untuk melihat status gizi anak secara detail.') }}</p>
                 </div>
             </div>
 
@@ -146,6 +146,31 @@
 </style>
 
 <script>
+    const translations = {
+        processing: '{{ __("Memproses...") }}',
+        aiLabel: '{{ __("Label AI") }}',
+        analysisSuccess: '{{ __("Analisis Berhasil") }}',
+        analysisSuccessDesc: '{{ __("Hasil dari Model AI telah diperbarui secara real-time.") }}',
+        failed: '{{ __("Gagal") }}',
+        errorOccurred: '{{ __("Terjadi kesalahan.") }}',
+        genderMap: {
+            'Laki-laki': '{{ __("Laki-laki") }}',
+            'Perempuan': '{{ __("Perempuan") }}',
+            'Male': '{{ __("Laki-laki") }}',
+            'Female': '{{ __("Perempuan") }}'
+        },
+        statusMap: {
+            'normal': '{{ __("Normal") }}',
+            'sangat stunting': '{{ __("Sangat Stunting") }}',
+            'sangat pendek': '{{ __("Sangat Pendek") }}',
+            'stunting': '{{ __("Stunting") }}',
+            'pendek': '{{ __("Pendek") }}',
+            'tinggi': '{{ __("Tinggi") }}',
+            'severely stunting': '{{ __("Sangat Stunting") }}',
+            'severely short': '{{ __("Sangat Pendek") }}'
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('prediksiFormAdmin');
         const btn = document.getElementById('btnSubmitAdmin');
@@ -156,7 +181,7 @@
             e.preventDefault();
             btn.disabled = true;
             const originalHtml = btn.innerHTML;
-            btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> <span class="ml-2">Memproses...</span>';
+            btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> <span class="ml-2">' + translations.processing + '</span>';
 
             const formData = new FormData(form);
             try {
@@ -183,9 +208,15 @@
                     resultBox.classList.remove('hidden');
                     resultBox.classList.add('flex');
 
-                    document.getElementById('hasilPrediksiText').innerText = hasil;
-                    document.getElementById('labelSistemText').innerText = 'Label AI: ' + labelAsli;
-                    document.getElementById('inputGender').innerText = data.input?.jenis_kelamin || formData.get('jenis_kelamin');
+                    // Dynamically translate dynamic outputs
+                    const translatedHasil = translations.statusMap[hasil.toLowerCase()] || hasil;
+                    const translatedLabelAsli = translations.statusMap[labelAsli.toLowerCase()] || labelAsli;
+                    const rawGender = data.input?.jenis_kelamin || formData.get('jenis_kelamin');
+                    const translatedGender = translations.genderMap[rawGender] || rawGender;
+
+                    document.getElementById('hasilPrediksiText').innerText = translatedHasil;
+                    document.getElementById('labelSistemText').innerText = translations.aiLabel + ': ' + translatedLabelAsli;
+                    document.getElementById('inputGender').innerText = translatedGender;
                     document.getElementById('inputUmur').innerText = data.input?.umur_bulan || formData.get('umur_bulan');
                     document.getElementById('inputTinggi').innerText = data.input?.tinggi_badan_cm || data.input?.tinggi_badan || formData.get('tinggi_badan');
 
@@ -213,9 +244,9 @@
                     const statusIcon = document.getElementById('statusIcon');
                     statusIcon.className = 'fa-solid text-6xl drop-shadow-sm ' + icon;
 
-                    Swal.fire({ icon: 'success', title: 'Analisis Berhasil', text: 'Hasil dari Model AI telah diperbarui secara real-time.', timer: 2000, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: translations.analysisSuccess, text: translations.analysisSuccessDesc, timer: 2000, showConfirmButton: false });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Gagal', text: result.pesan || result.message || 'Terjadi kesalahan.' });
+                    Swal.fire({ icon: 'error', title: translations.failed, text: result.pesan || result.message || translations.errorOccurred });
                 }
             } catch (err) {
                 console.error(err);
