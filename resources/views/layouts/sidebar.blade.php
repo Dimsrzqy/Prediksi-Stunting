@@ -69,7 +69,7 @@
                     <div class="flex items-center justify-center w-8 h-8 rounded-xl {{ request()->routeIs('admin.prediksi') ? 'bg-white/25 text-white' : 'bg-white dark:bg-slate-800 shadow-sm text-slate-400 dark:text-slate-500 group-hover:text-teal-600 dark:group-hover:text-teal-400' }} transition-colors duration-300">
                         <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
                     </div>
-                    <span class="ml-3 font-semibold text-[15px]">{{ __('Prediksi AI Cepat') }}</span>
+                    <span class="ml-3 font-semibold text-[15px]">{{ __('Prediksi Cepat') }}</span>
                 </a>
             </li>
 
