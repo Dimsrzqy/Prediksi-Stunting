@@ -336,19 +336,14 @@
         const isDark = document.documentElement.classList.contains('dark');
 
         Swal.fire({
-            title: '{{ __('
-            Konfirmasi Keluar ') }}',
-            text: '{{ __('
-            Apakah Anda yakin ingin keluar ? ') }}',
-            icon : 'warning',
+            title: '{{ __("Konfirmasi Keluar") }}',
+            text: '{{ __("Apakah Anda yakin ingin keluar?") }}',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#e11d48',
             cancelButtonColor: isDark ? '#334155' : '#94a3b8',
-            confirmButtonText: '{{ __('
-            Ya,
-            Keluar!') }}',
-            cancelButtonText: '{{ __('
-            Batal ') }}',
+            confirmButtonText: '{{ __("Ya, Keluar!") }}',
+            cancelButtonText: '{{ __("Batal") }}',
             background: isDark ? '#1e293b' : '#ffffff',
             color: isDark ? '#f1f5f9' : '#1e293b',
             borderRadius: '24px',
