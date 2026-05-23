@@ -22,7 +22,7 @@ class ForgotPasswordController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            return back()->withErrors(['email' => 'Email tidak terdaftar.']);
+            return back()->withErrors(['email' => __('Email is not registered.')]);
         }
 
         // Generate token manual untuk simulasi
@@ -32,6 +32,6 @@ class ForgotPasswordController extends Controller
         return redirect()->route('password.reset', [
             'token' => $token,
             'email' => $request->email
-        ])->with('status', 'Token otomatis terisi! Silakan ganti password dalam 1 menit.');
+        ])->with('status', __('Token automatically filled! Please change password within 1 minute.'));
     }
 }
