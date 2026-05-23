@@ -23,13 +23,13 @@
         :root {
             --primary: #3b82f6;
             --primary-rgb: 59, 130, 246;
-            --indigo: #6366f1;
-            --indigo-rgb: 99, 102, 241;
-            --purple: #8b5cf6;
-            --purple-rgb: 139, 92, 246;
-            --cyan: #06b6d4;
-            --cyan-rgb: 6, 182, 212;
-            --bg-soft: #fcfdfe;
+            --indigo: #10b981;
+            --indigo-rgb: 16, 185, 129;
+            --purple: #0ea5e9;
+            --purple-rgb: 14, 165, 233;
+            --cyan: #34d399;
+            --cyan-rgb: 52, 211, 153;
+            --bg-soft: #fafafa;
         }
 
         /* Custom Scrollbar */
@@ -40,12 +40,12 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.15);
+            background: rgba(var(--indigo-rgb), 0.15);
             border-radius: 9999px;
             border: 2px solid transparent;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.35);
+            background: rgba(var(--indigo-rgb), 0.35);
         }
 
         body { 
@@ -58,7 +58,9 @@
         /* Premium Background Components */
         .bg-premium {
             position: fixed; inset: 0; z-index: -1; overflow: hidden;
-            background: #f8fafc;
+            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e0f2fe, #ecfdf5);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
         }
         .mesh-gradient {
             position: absolute; inset: 0;
@@ -198,7 +200,7 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--indigo), var(--purple), var(--cyan));
+            background: linear-gradient(90deg, var(--primary), var(--purple), var(--primary), var(--purple));
             opacity: 0.8;
         }
 
@@ -217,11 +219,11 @@
         }
         .input-premium:focus {
             outline: none;
-            border-color: var(--indigo);
+            border-color: var(--primary);
             background: #ffffff;
             box-shadow: 
-                0 0 0 4px rgba(99, 102, 241, 0.1),
-                0 10px 25px -10px rgba(99, 102, 241, 0.08);
+                0 0 0 4px rgba(var(--primary-rgb), 0.1),
+                0 10px 25px -10px rgba(var(--primary-rgb), 0.08);
             transform: translateY(-1px);
         }
 
@@ -236,21 +238,21 @@
             pointer-events: none;
         }
         .input-premium:focus ~ .input-icon-wrapper {
-            color: var(--indigo);
+            color: var(--primary);
         }
 
         .btn-predict {
-            background: linear-gradient(135deg, var(--primary), var(--indigo), var(--purple));
+            background: linear-gradient(135deg, var(--primary), var(--purple));
             background-size: 150% auto;
             color: #fff; padding: 1.15rem; border-radius: 18px; font-weight: 800; font-size: 1.1rem;
             display: flex; align-items: center; justify-content: center; gap: 0.8rem;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.25);
+            box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.25);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .btn-predict:hover:not(:disabled) {
             transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.35);
+            box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.35);
             background-position: right center;
         }
         .btn-predict:active:not(:disabled) {
@@ -417,8 +419,8 @@
         }
         .gender-btn input:checked + label {
             color: #ffffff;
-            background: linear-gradient(135deg, var(--primary), var(--indigo));
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.25);
         }
 
         /* Floating Badge Cards */
@@ -488,7 +490,7 @@
                             Cek Risiko <span class="text-gradient">Stunting</span> Anak Sejak Dini
                         </h1>
                         <p class="text-slate-500 font-medium text-lg lg:text-xl leading-relaxed max-w-xl">
-                            Deteksi dini potensi stunting dengan bantuan <span class="text-slate-800 font-semibold">AI Cerdas</span> yang disinkronisasi standar medis <span class="text-indigo-600 font-semibold">WHO</span> secara real-time.
+                            Deteksi dini potensi stunting dengan bantuan <span class="text-slate-800 font-semibold">AI Cerdas</span> yang disinkronisasi standar medis <span class="text-blue-600 font-semibold">WHO</span> secara real-time.
                         </p>
                     </div>
 
@@ -535,9 +537,9 @@
                                     <span class="window-dot dot-green"></span>
                                     <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 ml-3">Diagnostic Monitor</span>
                                 </div>
-                                <div class="flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 rounded-full px-2.5 py-0.5">
-                                    <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-ping"></span>
-                                    <span class="text-[9px] font-black text-indigo-600 uppercase tracking-wider">LIVE</span>
+                                <div class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-100 rounded-full px-2.5 py-0.5">
+                                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                                    <span class="text-[9px] font-black text-emerald-600 uppercase tracking-wider">LIVE</span>
                                 </div>
                             </div>
                             
@@ -555,12 +557,12 @@
                                                 </linearGradient>
                                             </defs>
                                             <!-- Grid lines in SVG -->
-                                            <line x1="0" y1="20" x2="200" y2="20" stroke="rgba(99,102,241,0.05)" stroke-width="1" />
-                                            <line x1="0" y1="40" x2="200" y2="40" stroke="rgba(99,102,241,0.05)" stroke-width="1" />
-                                            <line x1="0" y1="60" x2="200" y2="60" stroke="rgba(99,102,241,0.05)" stroke-width="1" />
+                                            <line x1="0" y1="20" x2="200" y2="20" stroke="rgba(16,185,129,0.05)" stroke-width="1" />
+                                            <line x1="0" y1="40" x2="200" y2="40" stroke="rgba(16,185,129,0.05)" stroke-width="1" />
+                                            <line x1="0" y1="60" x2="200" y2="60" stroke="rgba(16,185,129,0.05)" stroke-width="1" />
                                             <!-- Pulse wave -->
                                             <path class="neon-stroke" d="M 0 50 Q 25 20 50 60 T 100 30 T 150 50 T 200 20" />
-                                            <circle class="pulse-dot" cx="150" cy="50" r="4" fill="#6366f1" />
+                                            <circle class="pulse-dot" cx="150" cy="50" r="4" fill="#10b981" />
                                         </svg>
                                     </div>
                                 </div>
@@ -568,7 +570,7 @@
                                 <div class="dashboard-stat-card flex flex-col justify-between">
                                     <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-wider">WHO Z-score</h4>
                                     <div>
-                                        <p class="text-2xl font-extrabold text-indigo-600 leading-none">99.4%</p>
+                                        <p class="text-2xl font-extrabold text-blue-600 leading-none">99.4%</p>
                                         <span class="text-[9px] font-bold text-slate-400">Match Accuracy</span>
                                     </div>
                                 </div>
@@ -613,7 +615,7 @@
                         </div>
 
                         <div class="floating-badge bottom-8 -right-8" style="animation-delay: 2.5s;">
-                            <div class="w-8 h-8 bg-purple-50 text-purple-500 rounded-lg flex items-center justify-center text-sm shadow-sm"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="w-8 h-8 bg-emerald-50 text-emerald-500 rounded-lg flex items-center justify-center text-sm shadow-sm"><i class="fa-solid fa-shield-halved"></i></div>
                             <div>
                                 <p class="text-[8px] font-black text-slate-400 uppercase leading-none">Secure Shield</p>
                                 <p class="text-xs font-black text-slate-800 mt-1">HIPAA Compliant</p>
@@ -625,7 +627,7 @@
                 <!-- Right: Prediction Form Card -->
                 <div class="lg:col-span-6" data-aos="fade-left">
                     <div class="glass-card p-8 sm:p-10 md:p-12 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-8 opacity-5 text-indigo-600"><i class="fa-solid fa-stethoscope text-[120px]"></i></div>
+                        <div class="absolute top-0 right-0 p-8 opacity-5 text-blue-600"><i class="fa-solid fa-stethoscope text-[120px]"></i></div>
                         
                         <div class="mb-8">
                             <h2 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Data Si Kecil</h2>
@@ -683,7 +685,7 @@
             <div id="resultsArea" class="mt-24 grid grid-cols-1 lg:grid-cols-12 gap-8 hidden opacity-0 translate-y-10 transition-all duration-700">
                 <div class="lg:col-span-6 lg:col-start-4">
                     <div class="glass-card p-10 text-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-b from-indigo-50/10 to-transparent pointer-events-none"></div>
+                        <div class="absolute inset-0 bg-gradient-to-b from-blue-50/10 to-transparent pointer-events-none"></div>
                         <h3 class="font-black text-2xl text-slate-800 mb-8 tracking-tight">Hasil Prediksi AI</h3>
                         
                         <div class="gauge-wrap mb-8">
@@ -700,7 +702,7 @@
                         <div id="statusBadge" class="inline-block px-6 py-2.5 rounded-full bg-emerald-50 text-emerald-600 font-extrabold text-xs uppercase mb-8 border border-emerald-100 tracking-wider">Risiko Rendah</div>
                         
                         <div class="p-6 bg-white/70 backdrop-blur-md rounded-2xl text-left border border-slate-100/50 shadow-sm relative z-10">
-                            <h4 class="text-[10px] font-black text-indigo-500 uppercase tracking-wider mb-2">Rekomendasi Medis AI:</h4>
+                            <h4 class="text-[10px] font-black text-blue-600 uppercase tracking-wider mb-2">Rekomendasi Medis AI:</h4>
                             <p id="recommendationText" class="text-sm font-semibold text-slate-600 leading-relaxed">...</p>
                         </div>
                     </div>
@@ -795,45 +797,53 @@
                 const result = await response.json();
                 if (result.success) {
                     const data = result.data;
-                    const ha = (data.status?.ha || 'Unknown').toLowerCase();
-                    const prob = ((data.probabilitas || 1.0) * 100).toFixed(0);
+                    const hasilPrediksi = data.hasil_prediksi || 'Unknown';
+                    const labelSistem = data.label_asli || hasilPrediksi;
+                    const inputData = data.input || {};
                     
                     resultsArea.classList.remove('hidden');
-                    // Delay slightly to trigger visual transitions smoothly
                     setTimeout(() => {
                         resultsArea.classList.remove('opacity-0', 'translate-y-10');
                     }, 50);
 
+                    // Set probability to 100% for all cases
+                    const prob = 100;
                     gaugeFill.style.strokeDashoffset = 440 - (440 * prob / 100);
                     probText.innerText = prob + '%';
 
-                    // Dynamic UI Updates based on AI analysis
-                    if (ha.includes('normal')) {
-                        gaugeFill.style.stroke = '#10b981';
-                        statusBadge.innerText = 'Normal';
-                        statusBadge.className = 'inline-block px-6 py-2.5 rounded-full bg-emerald-50 text-emerald-600 font-extrabold text-xs uppercase mb-8 border border-emerald-100 tracking-wider shadow-sm shadow-emerald-500/5';
-                        recommendationText.innerText = 'Analisis menunjukkan kondisi si kecil berada dalam kategori normal. Teruskan pemberian nutrisi seimbang, pantau tumbuh kembang secara rutin, dan konsultasikan secara berkala dengan posyandu terdekat.';
-                    } else if (ha.includes('sangat stunting') || ha.includes('severely stunted') || ha.includes('sangat pendek')) {
-                        gaugeFill.style.stroke = '#ef4444';
-                        statusBadge.innerText = 'Sangat Stunting';
-                        statusBadge.className = 'inline-block px-6 py-2.5 rounded-full bg-red-50 text-red-600 font-extrabold text-xs uppercase mb-8 border border-red-100 tracking-wider shadow-sm shadow-red-500/5';
-                        recommendationText.innerText = 'Ditemukan indikasi stunting yang signifikan (Sangat Stunting). Sangat disarankan untuk segera melakukan pemeriksaan medis secara intensif ke dokter spesialis anak terdekat demi intervensi gizi segera.';
-                    } else if (ha.includes('stunting') || ha.includes('stunted') || ha.includes('pendek')) {
-                        gaugeFill.style.stroke = '#f97316'; // orange
-                        statusBadge.innerText = 'Stunting';
-                        statusBadge.className = 'inline-block px-6 py-2.5 rounded-full bg-orange-50 text-orange-600 font-extrabold text-xs uppercase mb-8 border border-orange-100 tracking-wider shadow-sm shadow-orange-500/5';
-                        recommendationText.innerText = 'Si kecil menunjukkan tanda risiko stunting. Segera konsultasikan dengan posyandu atau dokter anak terdekat untuk perbaikan gizi dan penanganan medis dini.';
-                    } else if (ha.includes('tinggi')) {
-                        gaugeFill.style.stroke = '#3b82f6'; // blue
-                        statusBadge.innerText = 'Tinggi';
-                        statusBadge.className = 'inline-block px-6 py-2.5 rounded-full bg-blue-50 text-blue-600 font-extrabold text-xs uppercase mb-8 border border-blue-100 tracking-wider shadow-sm shadow-blue-500/5';
-                        recommendationText.innerText = 'Tinggi badan si kecil berada di atas rata-rata kelompok usianya. Teruskan menjaga asupan gizi yang kaya nutrisi seimbang untuk mendukung fase perkembangan optimalnya.';
-                    } else {
-                        gaugeFill.style.stroke = '#6b7280'; // gray
-                        statusBadge.innerText = 'Tidak Diketahui';
-                        statusBadge.className = 'inline-block px-6 py-2.5 rounded-full bg-gray-50 text-gray-600 font-extrabold text-xs uppercase mb-8 border border-gray-100 tracking-wider';
-                        recommendationText.innerText = 'Hasil prediksi tidak dapat diidentifikasi secara terperinci. Pastikan data tinggi badan dan usia diinput secara akurat.';
+                    // Dynamic UI Updates based on hasil_prediksi (following prediksi.blade.php algorithm)
+                    const lowerHasil = hasilPrediksi.toLowerCase();
+                    let gaugeFillColor = '#6b7280'; // gray
+                    let statusText = 'Unknown';
+                    let statusBgClass = 'bg-gray-50 text-gray-600 border border-gray-100';
+                    let recommendText = 'Hasil prediksi tidak dapat diidentifikasi. Pastikan data tinggi badan dan usia diinput secara akurat.';
+
+                    if (lowerHasil.includes('normal')) {
+                        gaugeFillColor = '#10b981'; // emerald
+                        statusText = 'Normal';
+                        statusBgClass = 'bg-emerald-50 text-emerald-600 border border-emerald-100';
+                        recommendText = 'Analisis menunjukkan kondisi si kecil berada dalam kategori normal. Teruskan pemberian nutrisi seimbang, pantau tumbuh kembang secara rutin, dan konsultasikan secara berkala dengan posyandu terdekat.';
+                    } else if (lowerHasil.includes('sangat stunting') || lowerHasil.includes('sangat pendek') || lowerHasil.includes('severely stunting') || lowerHasil.includes('severely stunted') || lowerHasil.includes('severely short')) {
+                        gaugeFillColor = '#ef4444'; // red
+                        statusText = 'Sangat Stunting';
+                        statusBgClass = 'bg-red-50 text-red-600 border border-red-100';
+                        recommendText = 'Ditemukan indikasi stunting yang signifikan (Sangat Stunting). Sangat disarankan untuk segera melakukan pemeriksaan medis secara intensif ke dokter spesialis anak terdekat demi intervensi gizi segera.';
+                    } else if (lowerHasil.includes('stunting') || lowerHasil.includes('stunted') || lowerHasil.includes('pendek') || lowerHasil.includes('berisiko')) {
+                        gaugeFillColor = '#f97316'; // orange
+                        statusText = 'Stunting';
+                        statusBgClass = 'bg-orange-50 text-orange-600 border border-orange-100';
+                        recommendText = 'Si kecil menunjukkan tanda risiko stunting. Segera konsultasikan dengan posyandu atau dokter anak terdekat untuk perbaikan gizi dan penanganan medis dini.';
+                    } else if (lowerHasil.includes('tinggi')) {
+                        gaugeFillColor = '#3b82f6'; // blue
+                        statusText = 'Tinggi';
+                        statusBgClass = 'bg-blue-50 text-blue-600 border border-blue-100';
+                        recommendText = 'Tinggi badan si kecil berada di atas rata-rata kelompok usianya. Teruskan menjaga asupan gizi yang kaya nutrisi seimbang untuk mendukung fase perkembangan optimalnya.';
                     }
+
+                    gaugeFill.style.stroke = gaugeFillColor;
+                    statusBadge.innerText = statusText;
+                    statusBadge.className = 'inline-block px-6 py-2.5 rounded-full font-extrabold text-xs uppercase mb-8 tracking-wider shadow-sm ' + statusBgClass;
+                    recommendationText.innerText = recommendText;
 
                     resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     Swal.fire({ 

@@ -19,7 +19,12 @@
         <!-- Tabel User -->
         <div class="flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden transition-colors">
             <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-                <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200">{{ __('Daftar Akun Server') }}</h2>
+                <div class="flex items-center gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200">{{ __('Daftar Akun Server') }}</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ __('Total') }}: <span id="totalCount" class="font-bold text-slate-700 dark:text-slate-300">0</span> | {{ __('Admin') }}: <span id="adminCount" class="font-bold text-rose-600 dark:text-rose-400">0</span> | {{ __('User') }}: <span id="userCount" class="font-bold text-blue-600 dark:text-blue-400">0</span></p>
+                    </div>
+                </div>
                 <button onclick="fetchUsers()" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700">
                     <i class="fa-solid fa-rotate-right text-slate-400 dark:text-slate-500"></i> {{ __('Refresh') }}
                 </button>
@@ -61,9 +66,9 @@
                 </div>
 
                 <div class="p-6">
-                    <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 rounded-2xl text-sm text-blue-700 dark:text-blue-400 flex gap-3 items-start">
+                    <div id="infoBox" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 rounded-2xl text-sm text-blue-700 dark:text-blue-400 flex gap-3 items-start">
                         <i class="fa-solid fa-circle-info mt-0.5 text-blue-500"></i>
-                        <p>Password otomatis disetel ke <strong>Bunda123</strong>. Pengguna dapat mengubahnya nanti di profil mereka.</p>
+                        <p>Password otomatis disetel ke <strong id="defaultPassword">Bunda123</strong>. Pengguna dapat mengubahnya nanti di profil mereka.</p>
                     </div>
 
                     <form id="userForm">
@@ -83,7 +88,7 @@
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 ml-1">{{ __('Posisi Jabatan (Role)') }} <span class="text-rose-500">*</span></label>
                                 <select id="role" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all appearance-none">
-                                    <option value="user" selected>{{ __('User / Ibu Pasien') }}</option>
+                                    <option value="user" selected>{{ __('User (orang tua)') }}</option>
                                     <option value="admin">{{ __('Administrator Sistem') }}</option>
                                 </select>
                             </div>
@@ -104,6 +109,12 @@
     document.addEventListener("DOMContentLoaded", () => {
         fetchUsers();
         
+        // Update password display when role changes
+        document.getElementById('role').addEventListener('change', function() {
+            const passwordDisplay = document.getElementById('defaultPassword');
+            passwordDisplay.textContent = this.value === 'admin' ? 'Admin123' : 'Bunda123';
+        });
+        
         document.getElementById('userForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             await saveUser();
@@ -116,7 +127,18 @@
                 headers: { 'Accept': 'application/json' }
             });
             const data = await response.json();
-            renderTable(data.data || []);
+            const allUsers = data.data || [];
+            
+            // Hitung per role
+            const adminCount = allUsers.filter(u => u.role === 'admin').length;
+            const userCount = allUsers.filter(u => u.role !== 'admin').length;
+            
+            // Update counters
+            document.getElementById('totalCount').textContent = allUsers.length;
+            document.getElementById('adminCount').textContent = adminCount;
+            document.getElementById('userCount').textContent = userCount;
+            
+            renderTable(allUsers);
         } catch (error) {
             console.error("Gagal get users", error);
         }
@@ -133,7 +155,7 @@
         users.forEach((user, index) => {
             const roleBadge = user.role === 'admin' 
                 ? `<span class="inline-flex items-center rounded-lg bg-rose-50 dark:bg-rose-900/20 px-2.5 py-1 text-xs font-bold text-rose-700 dark:text-rose-400 ring-1 ring-inset ring-rose-600/20">{{ __('Admin Pusat') }}</span>`
-                : `<span class="inline-flex items-center rounded-lg bg-blue-50 dark:bg-blue-900/20 px-2.5 py-1 text-xs font-bold text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-700/10">{{ __('User / Ibu') }}</span>`;
+                : `<span class="inline-flex items-center rounded-lg bg-blue-50 dark:bg-blue-900/20 px-2.5 py-1 text-xs font-bold text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-700/10">{{ __('user (orang tua)') }}</span>`;
 
             const row = `
                 <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
@@ -166,11 +188,14 @@
         btnSave.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
         btnSave.disabled = true;
 
+        const role = document.getElementById('role').value;
+        const defaultPassword = role === 'admin' ? 'Admin123' : 'Bunda123';
+
         const payload = {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
             no_hp: document.getElementById('no_hp').value,
-            role: document.getElementById('role').value
+            role: role
         };
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -189,7 +214,7 @@
             if (response.ok) {
                 closeModal();
                 fetchUsers();
-                alert('Berhasil membuat akun! Password disetel ke Bunda123');
+                alert('Berhasil membuat akun! Password disetel ke ' + defaultPassword);
             } else {
                 const data = await response.json();
                 alert('Gagal: ' + (data.message || 'Periksa isian Anda (mungkin email sudah dipakai)'));

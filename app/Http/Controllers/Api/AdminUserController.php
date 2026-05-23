@@ -29,12 +29,15 @@ class AdminUserController extends Controller
             'no_hp' => 'nullable|string'
         ]);
 
+        // Set password berdasarkan role
+        $defaultPassword = $request->role === 'admin' ? 'Admin123' : 'Bunda123';
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'no_hp' => $request->no_hp ?? '',
             'role' => $request->role,
-            'password' => Hash::make('Bunda123')
+            'password' => Hash::make($defaultPassword)
         ]);
 
         return response()->json(['message' => 'Berhasil menambah pengguna.', 'data' => $user], 201);

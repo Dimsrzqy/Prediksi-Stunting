@@ -228,5 +228,13 @@
     "Stunting": "Stunting",
     "Pendek": "Short",
     "Tinggi": "Tall",
-    "Cek status gizi anak secara instan dengan teknologi Kila AI. Data ini tidak akan disimpan ke dalam riwayat Anda.": "Instantly check your child's nutritional status with Kila AI technology. This data will not be saved to your history."
+    "Cek status gizi anak secara instan dengan teknologi Kila AI. Data ini tidak akan disimpan ke dalam riwayat Anda.": "Instantly check your child's nutritional status with Kila AI technology. This data will not be saved to your history.",
+    "Forgot Password?": "Forgot Password?",
+    "No problem! Just let us know your email address and we will email you a password reset link.": "No problem! Just let us know your email address and we will email you a password reset link.",
+    "Email Password Reset Link": "Email Password Reset Link",
+    "Back to Login": "Back to Login",
+    "Reset Password": "Reset Password",
+    "Set your new password below.": "Set your new password below.",
+    "Email is not registered.": "Email is not registered.",
+    "Token automatically filled! Please change password within 1 minute.": "Token automatically filled! Please change password within 1 minute."
 }
