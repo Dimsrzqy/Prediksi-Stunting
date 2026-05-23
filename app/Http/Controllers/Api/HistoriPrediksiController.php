@@ -92,15 +92,28 @@ class HistoriPrediksiController extends Controller
      */
     public function chartData(Request $request)
     {
-        // Jika admin, ambil semua. Jika user, ambil miliknya saja.
-        if (Auth::user()->role === 'admin') {
-            $histori = Prediksi::all();
+        $filter = $request->query('filter', 'bulan'); // default 'bulan'
+
+        // Tentukan rentang waktu sesuai filter
+        if ($filter === 'minggu') {
+            $startDate = \Carbon\Carbon::now()->subDays(6)->startOfDay();
         } else {
-            $histori = Prediksi::all();
+            $startDate = \Carbon\Carbon::now()->subMonths(11)->startOfMonth();
         }
 
-        $filter = $request->query('filter', 'bulan'); // default 'bulan'
-        
+        // Ambil data hanya dalam rentang waktu yang relevan, diurutkan dari terbaru
+        if (Auth::user()->role === 'admin') {
+            $histori = Prediksi::where('created_at', '>=', $startDate)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            $anakIds = \App\Models\Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
+            $histori = Prediksi::whereIn('id_anak', $anakIds)
+                ->where('created_at', '>=', $startDate)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
         $periods = [];
         if ($filter === 'minggu') {
             // Siapkan array untuk 7 hari terakhir
@@ -126,22 +139,23 @@ class HistoriPrediksiController extends Controller
 
         foreach ($histori as $item) {
             try {
-                // Memastikan properti string atau default ke object ID creation time
-                $tanggal = $item->tanggal_prediksi ?? clone $item->created_at;
-                
+                // Gunakan created_at sebagai acuan waktu utama (data terbaru)
+                $tanggal = $item->created_at ?? ($item->tanggal_prediksi ?? null);
+
+                if (!$tanggal) continue;
+
                 // Cek jika field MongoDB\BSON\UTCDateTime exist
                 if ($tanggal instanceof \MongoDB\BSON\UTCDateTime) {
                     $tanggal = $tanggal->toDateTime();
                 }
 
                 $date = \Carbon\Carbon::parse($tanggal);
-                
                 $key = $filter === 'minggu' ? $date->format('Y-m-d') : $date->format('Y-m');
 
                 if (isset($periods[$key])) {
                     $res = ucfirst(strtolower($item->hasil_prediksi));
-                    
-                    // Map "Sangat stunting" or "Severely stunted" to "Sangat Stunting"
+
+                    // Map hasil ke kategori standar
                     if (str_contains(strtolower($res), 'sangat') || str_contains(strtolower($res), 'severely')) {
                         $res = 'Sangat Stunting';
                     } elseif (str_contains(strtolower($res), 'tinggi')) {
@@ -186,7 +200,7 @@ class HistoriPrediksiController extends Controller
                 [
                     'label' => 'Normal',
                     'data' => $dataNormal,
-                    'borderColor' => '#10B981', // Emerald
+                    'borderColor' => '#10B981',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.2)',
                     'fill' => true,
                     'tension' => 0.4
@@ -194,7 +208,7 @@ class HistoriPrediksiController extends Controller
                 [
                     'label' => 'Tinggi',
                     'data' => $dataTinggi,
-                    'borderColor' => '#3B82F6', // Blue
+                    'borderColor' => '#3B82F6',
                     'backgroundColor' => 'rgba(59, 130, 246, 0.2)',
                     'fill' => true,
                     'tension' => 0.4
@@ -202,7 +216,7 @@ class HistoriPrediksiController extends Controller
                 [
                     'label' => 'Stunting',
                     'data' => $dataStunting,
-                    'borderColor' => '#F59E0B', // Amber
+                    'borderColor' => '#F59E0B',
                     'backgroundColor' => 'rgba(245, 158, 11, 0.2)',
                     'fill' => true,
                     'tension' => 0.4
@@ -210,7 +224,7 @@ class HistoriPrediksiController extends Controller
                 [
                     'label' => 'Sangat Stunting',
                     'data' => $dataSangatStunting,
-                    'borderColor' => '#E11D48', // Rose
+                    'borderColor' => '#E11D48',
                     'backgroundColor' => 'rgba(225, 29, 72, 0.2)',
                     'fill' => true,
                     'tension' => 0.4

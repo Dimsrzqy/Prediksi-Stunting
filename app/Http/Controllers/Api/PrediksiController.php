@@ -361,19 +361,13 @@ class PrediksiController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'nama' => $request->nama_anak ?? 'Anak Tamu',
-                    'status' => [
-                        'ha' => $hasilPrediksi,
-                        'wa' => 'Unknown',
-                        'wh' => 'Unknown',
-                        'hfa' => $hasilPrediksi,
-                    ],
-                    'z_score' => [
-                        'z_ha' => 0,
-                        'z_wa' => 0,
-                        'z_wh' => 0
-                    ],
-                    'probabilitas' => 1.0,
+                    'hasil_prediksi' => $hasilPrediksi,
+                    'label_asli' => $hasilPrediksi,
+                    'input' => [
+                        'jenis_kelamin' => $request->jenis_kelamin,
+                        'umur_bulan' => $request->umur_bulan,
+                        'tinggi_badan' => $request->tinggi_badan,
+                    ]
                 ]
             ]);
 
