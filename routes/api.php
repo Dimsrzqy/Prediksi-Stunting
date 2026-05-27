@@ -11,17 +11,22 @@ use App\Http\Controllers\Api\RekomendasiNutrisiController;
 use App\Http\Controllers\Api\MakananController;
 use App\Http\Controllers\Api\PengukuranController;
 use App\Http\Controllers\Api\HistoriPrediksiController;
+use App\Http\Controllers\Api\ArtikelController;
 
 // ==========================================
 // 🔓 AREA PUBLIK (Bebas Masuk Tanpa Token)
 // ==========================================
 Route::post('/register', [AuthController::class, 'registerApi']);
 Route::post('/login', [AuthController::class, 'loginApi']);
+Route::post('/inspirasi/sync', [ArtikelController::class, 'sync']); // Endpoint untuk Web Scraper Python
 
 // ==========================================
 // 🔒 AREA VIP (Wajib Bawa Token Sanctum)
 // ==========================================
 Route::middleware('auth:sanctum')->group(function () {
+    
+    // Endpoint Inspirasi Harian
+    Route::get('/inspirasi', [ArtikelController::class, 'index']);
     
     // Semua rute di dalam kotak ini sudah digembok!
     Route::apiResource('anak', AnakController::class);

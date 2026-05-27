@@ -104,7 +104,10 @@ class ProfilIbuController extends Controller
             $data['nama_ibu'] = $user->name;
         }
 
-        $profilIbu = ProfilIbu::create($data);
+        $profilIbu = ProfilIbu::updateOrCreate(
+            ['user_id' => $user->id],
+            $data
+        );
 
         return response()->json($profilIbu, 201);
     }
