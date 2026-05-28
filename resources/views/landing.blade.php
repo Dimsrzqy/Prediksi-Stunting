@@ -446,7 +446,7 @@
                     </p>
                     
                     <a href="{{ route('prediksi') }}" class="btn-antigravity inline-flex items-center justify-center px-8 py-3.5 rounded-full font-bold text-base group">
-                        Daftar & Cek Sekarang
+                        Cek Sekarang
                         <i class="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
                     </a>
                 </div>
