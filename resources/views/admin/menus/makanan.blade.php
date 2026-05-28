@@ -112,15 +112,23 @@
 
                         <div>
                             <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 ml-1">{{ __('Kategori Nutrisi') }} <span class="text-rose-500">*</span></label>
-                            <div class="flex gap-2">
-                                <select id="id_nutrisi" name="id_nutrisi" required class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all appearance-none">
-                                    <option value="" disabled selected>{{ __('Memuat data...') }}</option>
-                                </select>
+                            <div class="flex gap-2 relative">
+                                <div class="relative w-full">
+                                    <input type="hidden" id="id_nutrisi" name="id_nutrisi" required>
+
+                                    <input type="text" id="search_nutrisi" autocomplete="off"
+                                        class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-3 border transition-all"
+                                        placeholder="{{ __('Ketik nama nutrisi...') }}">
+
+                                    <ul id="dropdown_nutrisi" class="absolute z-20 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-48 overflow-y-auto hidden divide-y divide-slate-100 dark:divide-slate-700">
+                                    </ul>
+                                </div>
+
                                 <button type="button" onclick="tambahKategoriCepat()" class="inline-flex items-center justify-center px-4 rounded-2xl bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50 font-bold transition-colors" title="Tambah Kategori Nutrisi Baru">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </div>
-                            <p class="text-[11px] text-slate-500 mt-1 ml-1">{{ __('Klik tombol') }} <strong class="text-emerald-600 dark:text-emerald-400">+</strong> {{ __('jika kategori belum tersedia.') }}</p>
+                            <p class="text-[11px] text-slate-500 mt-1 ml-1">{{ __('Ketik untuk mencari, atau klik tombol') }} <strong class="text-emerald-600 dark:text-emerald-400">+</strong> {{ __('jika belum tersedia.') }}</p>
                         </div>
 
                         <div>
@@ -150,6 +158,7 @@
     const API_NUTRISI = '/api-nutrisi';
 
     let globalNutrisiData = [];
+    let globalMakananData = []; // VARIABEL BARU: Untuk menyimpan data makanan
     let isEditMakanan = false;
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -157,7 +166,7 @@
     });
 
     async function loadAllData() {
-        await fetchNutrisiData(); // Pastikan nutrisi termuat untuk dropdown form
+        await fetchNutrisiData();
         await fetchMakananData();
     }
 
@@ -165,6 +174,8 @@
         const wrapper = document.getElementById('notificationWrapper');
         const msgBlock = document.getElementById('notificationMessage');
         const iconBlock = document.getElementById('notificationIcon');
+
+        if (!wrapper || !msgBlock || !iconBlock) return;
 
         msgBlock.innerText = message;
         if (isError) {
@@ -180,10 +191,11 @@
     }
 
     function closeNotification() {
-        document.getElementById('notificationWrapper').classList.add('hidden');
+        const wrapper = document.getElementById('notificationWrapper');
+        if (wrapper) wrapper.classList.add('hidden');
     }
 
-    // --- LOGIKA KATEGORI NUTRISI (HANYA UNTUK DROPDOWN & QUICK ADD) ---
+    // --- LOGIKA KATEGORI NUTRISI ---
     async function fetchNutrisiData() {
         try {
             const res = await fetch(API_NUTRISI, {
@@ -193,16 +205,74 @@
             });
             const data = await res.json();
             globalNutrisiData = data.data || [];
-            populateSelectNutrisi();
+            setupSearchableDropdown();
         } catch (e) {
-            console.error("Gagal memuat kategori nutrisi", e);
+            console.error("Gagal memuat nutrisi", e);
         }
     }
 
-    function populateSelectNutrisi() {
-        const sel = document.getElementById('id_nutrisi');
-        sel.innerHTML = '<option value="" disabled selected>{{ __('Pilih Kategori...') }}</option>' +
-            globalNutrisiData.map(n => `<option value="${n._id || n.id}">${n.nama_nutrisi}</option>`).join('');
+    function setupSearchableDropdown() {
+        const searchInput = document.getElementById('search_nutrisi');
+        const hiddenInput = document.getElementById('id_nutrisi');
+        const dropdown = document.getElementById('dropdown_nutrisi');
+
+        if (!searchInput || !dropdown) return;
+
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.toLowerCase();
+            const filteredData = globalNutrisiData.filter(n => n.nama_nutrisi.toLowerCase().includes(keyword));
+            renderDropdownItems(filteredData);
+            dropdown.classList.remove('hidden');
+        });
+
+        searchInput.addEventListener('focus', function() {
+            renderDropdownItems(globalNutrisiData);
+            dropdown.classList.remove('hidden');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+                const isMatch = globalNutrisiData.find(n => n.nama_nutrisi === searchInput.value);
+                if (!isMatch) {
+                    if (hiddenInput) hiddenInput.value = '';
+                    searchInput.value = '';
+                }
+            }
+        });
+    }
+
+    function renderDropdownItems(data) {
+        const dropdown = document.getElementById('dropdown_nutrisi');
+        if (!dropdown) return;
+
+        if (data.length === 0) {
+            dropdown.innerHTML = '<li class="px-4 py-3 text-sm text-slate-500 text-center italic">Tidak ditemukan</li>';
+            return;
+        }
+
+        // Amankan tanda kutip pada nama nutrisi agar tidak error saat diklik
+        dropdown.innerHTML = data.map(n => {
+            const safeName = n.nama_nutrisi.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+            return `<li onclick="pilihNutrisi('${n._id || n.id}', '${safeName}')" class="px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 hover:text-indigo-700 cursor-pointer transition-colors">${n.nama_nutrisi}</li>`;
+        }).join('');
+    }
+
+    function pilihNutrisi(id, nama) {
+        // Kembalikan entity HTML (seperti &#39;) ke aslinya saat dimasukkan ke input form
+        const decodeHtml = (html) => {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
+        };
+
+        const hiddenInput = document.getElementById('id_nutrisi');
+        const searchInput = document.getElementById('search_nutrisi');
+        const dropdown = document.getElementById('dropdown_nutrisi');
+
+        if (hiddenInput) hiddenInput.value = id;
+        if (searchInput) searchInput.value = decodeHtml(nama);
+        if (dropdown) dropdown.classList.add('hidden');
     }
 
     async function tambahKategoriCepat() {
@@ -224,23 +294,27 @@
             const result = await res.json();
 
             if (res.ok) {
-                showNotification('{{ __('Kategori baru berhasil ditambahkan!') }}');
-                await fetchNutrisiData(); // Update isi dropdown
-                // Otomatis pilih kategori yang baru ditambahkan
+                showNotification('Kategori baru berhasil ditambahkan!');
+                await fetchNutrisiData();
                 const newId = result.data._id || result.data.id;
-                document.getElementById('id_nutrisi').value = newId;
+                const hiddenInput = document.getElementById('id_nutrisi');
+                const searchInput = document.getElementById('search_nutrisi');
+
+                if (hiddenInput) hiddenInput.value = newId;
+                if (searchInput) searchInput.value = namaNutrisi.trim();
             } else {
                 alert('Gagal menambahkan: ' + (result.message || result.pesan));
             }
         } catch (e) {
-            alert('{{ __('Terjadi kesalahan saat menghubungi server.') }}');
+            alert('Terjadi kesalahan koneksi.');
         }
     }
 
-
     // --- LOGIKA MENU MAKANAN ---
     async function fetchMakananData() {
-        document.getElementById('makananLoading').classList.remove('hidden');
+        const loading = document.getElementById('makananLoading');
+        if (loading) loading.classList.remove('hidden');
+
         try {
             const res = await fetch(API_MAKANAN, {
                 headers: {
@@ -248,86 +322,123 @@
                 }
             });
             const data = await res.json();
-            renderMakananTable(data.data || []);
+
+            globalMakananData = data.data || []; // Simpan data ke memori
+            renderMakananTable(globalMakananData); // Render tabel
         } catch (e) {
             console.error(e);
         } finally {
-            document.getElementById('makananLoading').classList.add('hidden');
+            if (loading) loading.classList.add('hidden');
         }
     }
 
     function renderMakananTable(dataArray) {
         const tbody = document.getElementById('makananBody');
+        const emptyState = document.getElementById('makananEmptyState');
+
+        if (!tbody) return;
+
         if (dataArray.length === 0) {
             tbody.innerHTML = '';
-            document.getElementById('makananEmptyState').classList.remove('hidden');
+            if (emptyState) emptyState.classList.remove('hidden');
             return;
         }
-        document.getElementById('makananEmptyState').classList.add('hidden');
+        if (emptyState) emptyState.classList.add('hidden');
 
         tbody.innerHTML = dataArray.map(item => {
-            const namaNutrisi = item.nutrisi ? item.nutrisi.nama_nutrisi : '<span class="text-rose-400">{{ __('Tanpa Kategori') }}</span>';
+            const namaNutrisi = item.nutrisi ? item.nutrisi.nama_nutrisi : '<span class="text-rose-400">Tanpa Kategori</span>';
+            const itemId = item._id || item.id;
+
             return `
             <tr class="group transition-colors hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                 <td class="px-6 py-5 whitespace-nowrap">
                     <div class="flex items-center gap-3">
-                        <div class="h-10 w-10 flex items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 shadow-sm">
+                        <div class="h-10 w-10 flex items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 shadow-sm">
                             <i class="fa-solid fa-bowl-food"></i>
                         </div>
                         <span class="font-bold text-slate-800 dark:text-slate-200 tracking-tight">${item.nama_makanan}</span>
                     </div>
                 </td>
                 <td class="px-6 py-5 whitespace-nowrap">
-                    <span class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 text-[10px] font-black text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-600/20 uppercase tracking-wider">
+                    <span class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1 text-[10px] font-black text-emerald-700 ring-1 ring-emerald-600/20 uppercase tracking-wider">
                         ${namaNutrisi}
                     </span>
                 </td>
                 <td class="px-6 py-5">
-                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 max-w-xs truncate" title="${item.deskripsi || ''}">
+                    <p class="text-xs font-medium text-slate-500 max-w-xs truncate" title="${item.deskripsi || ''}">
                         ${item.deskripsi || '-'}
                     </p>
                 </td>
                 <td class="px-6 py-5 text-center whitespace-nowrap">
                     <div class="flex items-center justify-center gap-2">
-                        <button onclick='openModalMakanan("edit", ${JSON.stringify(item).replace(/'/g, "&#39;")})' class="w-9 h-9 flex items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 transition-all hover:bg-blue-600 hover:text-white">
+                        <button onclick="openModalMakanan('edit', '${itemId}')" class="w-9 h-9 flex items-center justify-center rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all">
                             <i class="fa-solid fa-pen-to-square text-sm"></i>
                         </button>
-                        <button onclick='deleteMakanan("${item._id || item.id}")' class="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 transition-all hover:bg-rose-600 hover:text-white">
+                        <button onclick="deleteMakanan('${itemId}')" class="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-all">
                             <i class="fa-solid fa-trash-can text-sm"></i>
                         </button>
                     </div>
                 </td>
             </tr>
-        `
+            `;
         }).join('');
     }
 
-    function openModalMakanan(mode, data = null) {
-        document.getElementById('makananErrorWrapper').classList.add('hidden');
+    // --- MANAJEMEN MODAL ---
+    function openModalMakanan(mode, id = null) {
+        const errorWrapper = document.getElementById('makananErrorWrapper');
+        if (errorWrapper) errorWrapper.classList.add('hidden');
+
+        const form = document.getElementById('formMakanan');
+        const title = document.getElementById('modalMakananTitle');
+        const inId = document.getElementById('makananId');
+        const inNama = document.getElementById('nama_makanan');
+        const inDesc = document.getElementById('deskripsi');
+        const inNutrisi = document.getElementById('id_nutrisi');
+        const inSearch = document.getElementById('search_nutrisi');
+
         if (mode === 'tambah') {
             isEditMakanan = false;
-            document.getElementById('modalMakananTitle').innerText = 'Tambah Data Gizi';
-            document.getElementById('formMakanan').reset();
-            document.getElementById('makananId').value = '';
+            if (title) title.innerText = 'Tambah Data Gizi';
+            if (form) form.reset();
+
+            if (inId) inId.value = '';
+            if (inNutrisi) inNutrisi.value = '';
+            if (inSearch) inSearch.value = '';
         } else {
             isEditMakanan = true;
-            document.getElementById('modalMakananTitle').innerText = 'Edit Data Gizi';
-            document.getElementById('makananId').value = data._id || data.id;
-            document.getElementById('nama_makanan').value = data.nama_makanan;
-            document.getElementById('id_nutrisi').value = data.id_nutrisi;
-            document.getElementById('deskripsi').value = data.deskripsi || '';
+            if (title) title.innerText = 'Edit Data Gizi';
+
+            // Logika Baru: Tarik data dari Array berdasarkan ID
+            const data = globalMakananData.find(m => (m._id || m.id) == id);
+
+            if (data) {
+                if (inId) inId.value = data._id || data.id;
+                if (inNama) inNama.value = data.nama_makanan;
+                if (inDesc) inDesc.value = data.deskripsi || '';
+
+                const nutrisiId = data.id_nutrisi;
+                if (inNutrisi) inNutrisi.value = nutrisiId;
+
+                // Set isi pencarian dropdown
+                const foundNutrisi = globalNutrisiData.find(n => (n._id || n.id) == nutrisiId);
+                if (inSearch) inSearch.value = foundNutrisi ? foundNutrisi.nama_nutrisi : '';
+            }
         }
-        document.getElementById('modalMakanan').classList.remove('hidden');
+
+        const modal = document.getElementById('modalMakanan');
+        if (modal) modal.classList.remove('hidden');
     }
 
     function closeModalMakanan() {
-        document.getElementById('modalMakanan').classList.add('hidden');
+        const modal = document.getElementById('modalMakanan');
+        if (modal) modal.classList.add('hidden');
     }
 
     async function submitMakanan() {
         const form = document.getElementById('formMakanan');
-        if (!form.checkValidity()) {
-            form.reportValidity();
+        if (!form || !form.checkValidity()) {
+            if (form) form.reportValidity();
             return;
         }
 
@@ -337,8 +448,10 @@
         const btn = document.getElementById('btnSubmitMakanan');
 
         try {
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-            btn.disabled = true;
+            if (btn) {
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+            }
 
             const res = await fetch(endpoint, {
                 method: method,
@@ -353,30 +466,34 @@
 
             if (res.ok) {
                 closeModalMakanan();
-                showNotification(result.pesan);
-                await fetchMakananData();
+                showNotification(result.pesan || 'Berhasil menyimpan data');
+                await fetchMakananData(); // Render ulang tabel
             } else throw new Error(result.message || result.pesan);
         } catch (e) {
-            document.getElementById('makananFormError').innerText = e.message;
-            document.getElementById('makananErrorWrapper').classList.remove('hidden');
+            const errText = document.getElementById('makananFormError');
+            const errWrap = document.getElementById('makananErrorWrapper');
+            if (errText) errText.innerText = e.message;
+            if (errWrap) errWrap.classList.remove('hidden');
         } finally {
-            btn.innerHTML = 'Simpan Data';
-            btn.disabled = false;
+            if (btn) {
+                btn.innerHTML = 'Simpan Data';
+                btn.disabled = false;
+            }
         }
     }
 
     async function deleteMakanan(id) {
         const isDark = document.documentElement.classList.contains('dark');
-        
+
         Swal.fire({
-            title: '{{ __('Hapus Data?') }}',
-            text: '{{ __('Data gizi ini akan dihapus secara permanen.') }}',
+            title: 'Hapus Data?',
+            text: 'Data gizi ini akan dihapus secara permanen.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#e11d48',
             cancelButtonColor: isDark ? '#334155' : '#94a3b8',
-            confirmButtonText: '{{ __('Ya, Hapus!') }}',
-            cancelButtonText: '{{ __('Batal') }}',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
             background: isDark ? '#1e293b' : '#ffffff',
             color: isDark ? '#f1f5f9' : '#1e293b',
             customClass: {
@@ -396,11 +513,11 @@
                         }
                     });
                     if (res.ok) {
-                        showNotification('{{ __('Data berhasil dihapus') }}');
+                        showNotification('Data berhasil dihapus');
                         fetchMakananData();
-                    } else showNotification('{{ __('Gagal menghapus data') }}', true);
+                    } else showNotification('Gagal menghapus data', true);
                 } catch (e) {
-                    showNotification('{{ __('Terjadi kesalahan koneksi.') }}', true);
+                    showNotification('Terjadi kesalahan koneksi.', true);
                 }
             }
         });
