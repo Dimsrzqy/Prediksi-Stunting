@@ -214,11 +214,22 @@
             currentFilter = filter;
             try {
                 const isDark = document.documentElement.classList.contains('dark');
-                const res = await fetch(`/api-chart-histori?filter=${filter}`);
+                // Tetap mengambil data dari Controller (tanpa limit di backend)
+                const res = await fetch(`/api-chart-histori?filter=bulan`);
                 const chartData = await res.json();
 
+                // LOGIKA BARU: Jika filter adalah 'bulan', potong data menjadi 6 terakhir
+                if (filter === 'bulan' && chartData.labels && chartData.labels.length > 6) {
+                    // slice(-6) akan selalu mengambil 6 elemen terakhir dari array
+                    chartData.labels = chartData.labels.slice(-6);
+                    chartData.datasets.forEach(ds => {
+                        ds.data = ds.data.slice(-6);
+                    });
+                }
+
+                // --- SISANYA TETAP SAMA ---
                 if (chartData.datasets) {
-                    chartData.datasets.forEach((ds, index) => {
+                    chartData.datasets.forEach((ds) => {
                         ds.tension = 0.4;
                         ds.borderWidth = 3;
                         ds.pointRadius = 4;
@@ -271,25 +282,7 @@
                                 labels: {
                                     usePointStyle: true,
                                     padding: 20,
-                                    color: isDark ? '#e2e8f0' : '#1e293b',
-                                    font: {
-                                        family: "'Inter', sans-serif",
-                                        weight: '600'
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255,255,255,0.9)',
-                                titleColor: isDark ? '#f8fafc' : '#1e293b',
-                                bodyColor: isDark ? '#94a3b8' : '#475569',
-                                borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                                borderWidth: 1,
-                                padding: 12,
-                                boxPadding: 6,
-                                usePointStyle: true,
-                                titleFont: {
-                                    size: 13,
-                                    family: "'Inter', sans-serif"
+                                    color: isDark ? '#e2e8f0' : '#1e293b'
                                 }
                             }
                         }
