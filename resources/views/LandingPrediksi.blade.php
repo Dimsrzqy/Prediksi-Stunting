@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>StuntCheck - Premium AI Prediction</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <style>
         :root {
             --primary: #3b82f6;
@@ -36,77 +37,155 @@
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: transparent;
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(var(--indigo-rgb), 0.15);
             border-radius: 9999px;
             border: 2px solid transparent;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(var(--indigo-rgb), 0.35);
         }
 
-        body { 
-            font-family: 'Outfit', 'Inter', sans-serif; 
-            background-color: var(--bg-soft); 
+        body {
+            font-family: 'Outfit', 'Inter', sans-serif;
+            background-color: var(--bg-soft);
             color: #0f172a;
             overflow-x: hidden;
         }
-        
+
         /* Premium Background Components */
         .bg-premium {
-            position: fixed; inset: 0; z-index: -1; overflow: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
             background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e0f2fe, #ecfdf5);
             background-size: 400% 400%;
             animation: gradient-shift 15s ease infinite;
         }
+
         .mesh-gradient {
-            position: absolute; inset: 0;
-            background: 
+            position: absolute;
+            inset: 0;
+            background:
                 radial-gradient(circle at 10% 15%, rgba(59, 130, 246, 0.08) 0px, transparent 40%),
                 radial-gradient(circle at 95% 10%, rgba(139, 92, 246, 0.07) 0px, transparent 35%),
                 radial-gradient(circle at 90% 85%, rgba(6, 182, 212, 0.07) 0px, transparent 40%),
                 radial-gradient(circle at 15% 90%, rgba(99, 102, 241, 0.05) 0px, transparent 45%);
             filter: blur(80px);
         }
+
         .grid-futuristic {
-            position: absolute; inset: 0;
+            position: absolute;
+            inset: 0;
             background-image: linear-gradient(rgba(99, 102, 241, 0.025) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(99, 102, 241, 0.025) 1px, transparent 1px);
+                linear-gradient(90deg, rgba(99, 102, 241, 0.025) 1px, transparent 1px);
             background-size: 50px 50px;
             mask-image: radial-gradient(circle at center, black, transparent 80%);
             animation: grid-move 60s linear infinite;
         }
+
         @keyframes grid-move {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; }
-        }
-        .blob {
-            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; z-index: -1;
-            animation: pulse-blob 20s infinite ease-in-out;
-        }
-        .blob-1 { width: 550px; height: 550px; background: radial-gradient(circle, var(--indigo) 0%, var(--cyan) 100%); top: -150px; left: -150px; animation-duration: 25s; }
-        .blob-2 { width: 450px; height: 450px; background: radial-gradient(circle, var(--purple) 0%, var(--primary) 100%); bottom: 5%; right: -150px; animation-duration: 22s; }
-        .blob-3 { width: 350px; height: 350px; background: radial-gradient(circle, var(--cyan) 0%, var(--indigo) 100%); top: 35%; left: 35%; animation-duration: 28s; opacity: 0.15; }
-        
-        @keyframes pulse-blob {
-            0%, 100% { transform: scale(1) translate(0, 0) rotate(0deg); }
-            33% { transform: scale(1.1) translate(30px, -20px) rotate(120deg); }
-            66% { transform: scale(0.95) translate(-15px, 30px) rotate(240deg); }
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 50px 50px;
+            }
         }
 
-        .particles { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.25;
+            z-index: -1;
+            animation: pulse-blob 20s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, var(--indigo) 0%, var(--cyan) 100%);
+            top: -150px;
+            left: -150px;
+            animation-duration: 25s;
+        }
+
+        .blob-2 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, var(--purple) 0%, var(--primary) 100%);
+            bottom: 5%;
+            right: -150px;
+            animation-duration: 22s;
+        }
+
+        .blob-3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, var(--cyan) 0%, var(--indigo) 100%);
+            top: 35%;
+            left: 35%;
+            animation-duration: 28s;
+            opacity: 0.15;
+        }
+
+        @keyframes pulse-blob {
+
+            0%,
+            100% {
+                transform: scale(1) translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: scale(1.1) translate(30px, -20px) rotate(120deg);
+            }
+
+            66% {
+                transform: scale(0.95) translate(-15px, 30px) rotate(240deg);
+            }
+        }
+
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
         .particle {
-            position: absolute; width: 4px; height: 4px; background: linear-gradient(135deg, var(--indigo), var(--cyan));
-            border-radius: 50%; opacity: 0.15; animation: float-p var(--d) linear infinite;
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--indigo), var(--cyan));
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: float-p var(--d) linear infinite;
             box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
         }
+
         @keyframes float-p {
-            0% { transform: translateY(105vh) scale(0.8); opacity: 0; }
-            50% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+            0% {
+                transform: translateY(105vh) scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
         }
 
         /* Glassmorphism Utilities */
@@ -120,13 +199,17 @@
 
         .nav-cta {
             background: linear-gradient(135deg, var(--primary), var(--purple));
-            color: #fff; padding: 0.6rem 1.5rem; border-radius: 9999px;
-            font-weight: 700; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+            color: #fff;
+            padding: 0.6rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .nav-cta:hover { 
-            transform: translateY(-2px); 
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
         }
 
@@ -134,13 +217,21 @@
         .text-gradient {
             background: linear-gradient(135deg, var(--primary) 0%, var(--indigo) 35%, var(--purple) 70%, var(--cyan) 100%);
             background-size: 200% auto;
-            -webkit-background-clip: text; 
+            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradient-shift 8s ease infinite;
         }
+
         @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         /* Premium Badge Cards */
@@ -157,11 +248,13 @@
             gap: 0.75rem;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .premium-badge-card:hover {
             transform: translateY(-4px) scale(1.02);
             border-color: rgba(99, 102, 241, 0.25);
             box-shadow: 0 20px 35px -10px rgba(99, 102, 241, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
+
         .badge-icon-wrapper {
             width: 36px;
             height: 36px;
@@ -175,6 +268,7 @@
             color: var(--indigo);
             transition: all 0.3s ease;
         }
+
         .premium-badge-card:hover .badge-icon-wrapper {
             background: linear-gradient(135deg, var(--indigo), var(--cyan));
             color: #ffffff;
@@ -189,17 +283,21 @@
             -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.75);
             border-radius: 32px;
-            box-shadow: 
+            box-shadow:
                 0 30px 70px -15px rgba(99, 102, 241, 0.05),
                 0 10px 30px -10px rgba(0, 0, 0, 0.02),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
             position: relative;
             overflow: hidden;
         }
+
         .glass-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--purple), var(--primary), var(--purple));
             opacity: 0.8;
         }
@@ -214,14 +312,16 @@
             font-weight: 500;
             color: #1e293b;
         }
+
         .input-premium::placeholder {
             color: #94a3b8;
         }
+
         .input-premium:focus {
             outline: none;
             border-color: var(--primary);
             background: #ffffff;
-            box-shadow: 
+            box-shadow:
                 0 0 0 4px rgba(var(--primary-rgb), 0.1),
                 0 10px 25px -10px rgba(var(--primary-rgb), 0.08);
             transform: translateY(-1px);
@@ -237,27 +337,38 @@
             transition: color 0.3s ease;
             pointer-events: none;
         }
-        .input-premium:focus ~ .input-icon-wrapper {
+
+        .input-premium:focus~.input-icon-wrapper {
             color: var(--primary);
         }
 
         .btn-predict {
             background: linear-gradient(135deg, var(--primary), var(--purple));
             background-size: 150% auto;
-            color: #fff; padding: 1.15rem; border-radius: 18px; font-weight: 800; font-size: 1.1rem;
-            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+            color: #fff;
+            padding: 1.15rem;
+            border-radius: 18px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
             box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.25);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .btn-predict:hover:not(:disabled) {
             transform: translateY(-3px) scale(1.01);
             box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.35);
             background-position: right center;
         }
+
         .btn-predict:active:not(:disabled) {
             transform: translateY(-1px) scale(0.99);
         }
+
         .btn-predict:disabled {
             opacity: 0.7;
             cursor: not-allowed;
@@ -275,6 +386,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .dashboard-header {
             display: flex;
             align-items: center;
@@ -283,13 +395,27 @@
             padding-bottom: 0.85rem;
             margin-bottom: 1.25rem;
         }
+
         .window-dot {
-            width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
         }
-        .dot-red { background: #ff5f56; }
-        .dot-yellow { background: #ffbd2e; }
-        .dot-green { background: #27c93f; }
-        
+
+        .dot-red {
+            background: #ff5f56;
+        }
+
+        .dot-yellow {
+            background: #ffbd2e;
+        }
+
+        .dot-green {
+            background: #27c93f;
+        }
+
         .dashboard-stat-card {
             background: rgba(255, 255, 255, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.8);
@@ -298,6 +424,7 @@
             padding: 0.85rem;
             transition: all 0.3s ease;
         }
+
         .dashboard-stat-card:hover {
             transform: translateY(-2px);
             border-color: rgba(99, 102, 241, 0.15);
@@ -313,28 +440,72 @@
             stroke-dashoffset: 600;
             animation: draw-line 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards infinite;
         }
+
         @keyframes draw-line {
-            0% { stroke-dashoffset: 600; }
-            45% { stroke-dashoffset: 0; }
-            80% { stroke-dashoffset: 0; }
-            100% { stroke-dashoffset: 600; }
+            0% {
+                stroke-dashoffset: 600;
+            }
+
+            45% {
+                stroke-dashoffset: 0;
+            }
+
+            80% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 600;
+            }
         }
 
         .pulse-dot {
             animation: pulse-glow 2s infinite ease-in-out;
         }
+
         @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 2px var(--indigo)); }
-            50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 8px var(--indigo)); }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+                filter: drop-shadow(0 0 2px var(--indigo));
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 1;
+                filter: drop-shadow(0 0 8px var(--indigo));
+            }
         }
 
         /* Results Display */
-        .gauge-wrap { position: relative; width: 170px; height: 170px; margin: 0 auto; }
-        .gauge-svg { transform: rotate(-90deg); filter: drop-shadow(0 4px 15px rgba(99, 102, 241, 0.1)); }
-        .gauge-bar { fill: none; stroke: rgba(226, 232, 240, 0.8); stroke-width: 12; }
+        .gauge-wrap {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            margin: 0 auto;
+        }
+
+        .gauge-svg {
+            transform: rotate(-90deg);
+            filter: drop-shadow(0 4px 15px rgba(99, 102, 241, 0.1));
+        }
+
+        .gauge-bar {
+            fill: none;
+            stroke: rgba(226, 232, 240, 0.8);
+            stroke-width: 12;
+        }
+
         .gauge-progress {
-            fill: none; stroke: var(--indigo); stroke-width: 12; stroke-linecap: round;
-            stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1.5s ease-in-out, stroke 0.5s ease;
+            fill: none;
+            stroke: var(--indigo);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1.5s ease-in-out, stroke 0.5s ease;
         }
 
         /* Step Section */
@@ -350,20 +521,29 @@
             box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.02);
             position: relative;
         }
+
         .step-card:hover {
             transform: translateY(-8px);
             border-color: rgba(99, 102, 241, 0.2);
             box-shadow: 0 30px 50px -20px rgba(99, 102, 241, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
+
         .step-num {
-            width: 54px; height: 54px;
+            width: 54px;
+            height: 54px;
             background: linear-gradient(135deg, rgba(var(--indigo-rgb), 0.08), rgba(var(--cyan-rgb), 0.08));
             border: 1px solid rgba(99, 102, 241, 0.15);
             color: var(--indigo);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 1.1rem; margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin: 0 auto 1.5rem;
             transition: all 0.3s ease;
         }
+
         .step-card:hover .step-num {
             background: linear-gradient(135deg, var(--indigo), var(--cyan));
             color: #ffffff;
@@ -382,8 +562,20 @@
         }
 
         /* Loader */
-        .loader { width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-top: 3.5px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .loader {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3.5px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
         /* Gender Radio Selector Custom Capsule style */
         .gender-select {
@@ -395,13 +587,16 @@
             gap: 0.35rem;
             position: relative;
         }
+
         .gender-btn {
             flex: 1;
             position: relative;
         }
+
         .gender-btn input {
             display: none;
         }
+
         .gender-btn label {
             display: flex;
             align-items: center;
@@ -417,7 +612,8 @@
             z-index: 2;
             position: relative;
         }
-        .gender-btn input:checked + label {
+
+        .gender-btn input:checked+label {
             color: #ffffff;
             background: linear-gradient(135deg, var(--primary), var(--purple));
             box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.25);
@@ -432,19 +628,28 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
             padding: 0.75rem 1.15rem;
             border-radius: 20px;
-            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
             display: flex;
             align-items: center;
             gap: 0.75rem;
             animation: float 5s ease-in-out infinite;
             z-index: 10;
         }
-        @keyframes float { 
-            0%, 100% { transform: translateY(0) rotate(0deg); } 
-            50% { transform: translateY(-12px) rotate(1deg); } 
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-12px) rotate(1deg);
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div class="bg-premium">
@@ -454,7 +659,7 @@
         <div class="blob blob-2"></div>
         <div class="blob blob-3"></div>
     </div>
-    
+
     <div class="particles" id="particles"></div>
 
     <!-- Navigation -->
@@ -463,10 +668,10 @@
             <div class="flex justify-between items-center h-14">
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="flex-shrink-0 flex items-center cursor-pointer" data-aos="fade-right" data-aos-duration="800">
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="w-8 h-8 mr-3 object-contain drop-shadow-sm">
+                    <img src="{{ asset('img/logo_stuntcheck.jpeg') }}" alt="Logo StuntCheck" class="w-8 h-8 mr-3 object-contain drop-shadow-sm">
                     <span class="font-extrabold text-xl tracking-tight text-slate-800">Stunt<span class="text-blue-500">Check</span></span>
                 </a>
-                
+
                 <!-- Nav Links -->
                 <div class="hidden md:flex space-x-8 items-center" data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">
                     <a href="{{ url('/') }}" class="text-slate-600 hover:text-blue-600 font-semibold transition-colors">Beranda</a>
@@ -482,7 +687,7 @@
     <main class="pt-36 pb-24 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                
+
                 <!-- Left: Content & Premium AI Mockup Dashboard -->
                 <div class="lg:col-span-6 space-y-8" data-aos="fade-right">
                     <div class="space-y-4">
@@ -505,7 +710,7 @@
                                 <p class="text-xs font-bold text-slate-700">AI Powered</p>
                             </div>
                         </div>
-                        
+
                         <div class="premium-badge-card">
                             <div class="badge-icon-wrapper">
                                 <i class="fa-solid fa-award"></i>
@@ -542,7 +747,7 @@
                                     <span class="text-[9px] font-black text-emerald-600 uppercase tracking-wider">LIVE</span>
                                 </div>
                             </div>
-                            
+
                             <div class="grid grid-cols-3 gap-3 mb-4">
                                 <div class="dashboard-stat-card col-span-2">
                                     <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-1">Pertumbuhan Tinggi</h4>
@@ -566,7 +771,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                
+
                                 <div class="dashboard-stat-card flex flex-col justify-between">
                                     <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-wider">WHO Z-score</h4>
                                     <div>
@@ -628,7 +833,7 @@
                 <div class="lg:col-span-6" data-aos="fade-left">
                     <div class="glass-card p-8 sm:p-10 md:p-12 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-5 text-blue-600"><i class="fa-solid fa-stethoscope text-[120px]"></i></div>
-                        
+
                         <div class="mb-8">
                             <h2 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Data Si Kecil</h2>
                             <p class="text-slate-400 font-bold text-sm">Lengkapi data di bawah untuk memulai diagnosis medis AI</p>
@@ -654,7 +859,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="relative">
                                     <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Usia (bulan)</label>
                                     <div class="relative">
@@ -662,7 +867,7 @@
                                         <span class="input-icon-wrapper"><i class="fa-solid fa-baby"></i></span>
                                     </div>
                                 </div>
-                                
+
                                 <div class="md:col-span-2 relative">
                                     <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Tinggi Badan (cm)</label>
                                     <div class="relative">
@@ -671,7 +876,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <button type="submit" id="btnSubmit" class="w-full btn-predict mt-6">
                                 <span>Mulai Prediksi Sekarang</span>
                                 <i class="fa-solid fa-arrow-right-long"></i>
@@ -687,7 +892,7 @@
                     <div class="glass-card p-10 text-center relative overflow-hidden">
                         <div class="absolute inset-0 bg-gradient-to-b from-blue-50/10 to-transparent pointer-events-none"></div>
                         <h3 class="font-black text-2xl text-slate-800 mb-8 tracking-tight">Hasil Prediksi AI</h3>
-                        
+
                         <div class="gauge-wrap mb-8">
                             <svg class="gauge-svg" width="170" height="170" viewBox="0 0 160 160">
                                 <circle class="gauge-bar" cx="80" cy="80" r="70"></circle>
@@ -698,9 +903,9 @@
                                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-wider mt-2.5">Tingkat Risiko</span>
                             </div>
                         </div>
-                        
+
                         <div id="statusBadge" class="inline-block px-6 py-2.5 rounded-full bg-emerald-50 text-emerald-600 font-extrabold text-xs uppercase mb-8 border border-emerald-100 tracking-wider">Risiko Rendah</div>
-                        
+
                         <div class="p-6 bg-white/70 backdrop-blur-md rounded-2xl text-left border border-slate-100/50 shadow-sm relative z-10">
                             <h4 class="text-[10px] font-black text-blue-600 uppercase tracking-wider mb-2">Rekomendasi Medis AI:</h4>
                             <p id="recommendationText" class="text-sm font-semibold text-slate-600 leading-relaxed">...</p>
@@ -715,7 +920,7 @@
                     <h3 class="text-3xl font-black text-slate-900 tracking-tight">Cara Kerja Analisis AI Kami</h3>
                     <p class="text-slate-400 font-bold text-sm mt-3 leading-relaxed">Proses pemindaian klinis cerdas kami mendiagnosis rasio potensi stunting secara komprehensif dalam tiga langkah mudah.</p>
                 </div>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
                     <div class="step-card" data-aos="fade-up">
                         <div class="step-num">01</div>
@@ -723,14 +928,14 @@
                         <p class="text-sm text-slate-400 font-medium leading-relaxed">Masukkan informasi akurat mengenai umur, tanggal lahir, dan tinggi badan si kecil.</p>
                         <div class="hidden md:block step-connector"></div>
                     </div>
-                    
+
                     <div class="step-card" data-aos="fade-up" data-aos-delay="100">
                         <div class="step-num">02</div>
                         <h5 class="text-lg font-black text-slate-800 mb-3 tracking-tight">AI Menganalisis Data</h5>
                         <p class="text-sm text-slate-400 font-medium leading-relaxed">Algoritma AI cerdas kami menyelaraskan parameter dengan standar pertumbuhan internasional WHO.</p>
                         <div class="hidden md:block step-connector" style="background: linear-gradient(90deg, rgba(6, 182, 212, 0.3), rgba(139, 92, 246, 0.3), transparent);"></div>
                     </div>
-                    
+
                     <div class="step-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="step-num">03</div>
                         <h5 class="text-lg font-black text-slate-800 mb-3 tracking-tight">Hasil Prediksi & Laporan</h5>
@@ -749,11 +954,14 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        AOS.init({ duration: 1000, once: true });
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
 
         // Particles Background Generation
         const partWrap = document.getElementById('particles');
-        for(let i=0; i<25; i++) {
+        for (let i = 0; i < 25; i++) {
             const p = document.createElement('div');
             p.className = 'particle';
             p.style.left = Math.random() * 100 + 'vw';
@@ -792,7 +1000,10 @@
                 const response = await fetch('{{ route("guest.predict") }}', {
                     method: 'POST',
                     body: formData,
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -800,7 +1011,7 @@
                     const hasilPrediksi = data.hasil_prediksi || 'Unknown';
                     const labelSistem = data.label_asli || hasilPrediksi;
                     const inputData = data.input || {};
-                    
+
                     resultsArea.classList.remove('hidden');
                     setTimeout(() => {
                         resultsArea.classList.remove('opacity-0', 'translate-y-10');
@@ -845,22 +1056,33 @@
                     statusBadge.className = 'inline-block px-6 py-2.5 rounded-full font-extrabold text-xs uppercase mb-8 tracking-wider shadow-sm ' + statusBgClass;
                     recommendationText.innerText = recommendText;
 
-                    resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    Swal.fire({ 
-                        icon: 'success', 
-                        title: 'Analisis Berhasil', 
-                        text: 'Hasil dari Model AI telah diperbarui di bawah.', 
-                        timer: 2500, 
+                    resultsArea.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Analisis Berhasil',
+                        text: 'Hasil dari Model AI telah diperbarui di bawah.',
+                        timer: 2500,
                         showConfirmButton: false,
                         customClass: {
                             popup: 'rounded-2xl border border-slate-100'
                         }
                     });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Gagal', text: result.pesan });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: result.pesan
+                    });
                 }
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Gagal menghubungi server AI.' });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Gagal menghubungi server AI.'
+                });
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<span>Mulai Prediksi Sekarang</span><i class="fa-solid fa-arrow-right-long"></i>';
@@ -868,4 +1090,5 @@
         });
     </script>
 </body>
+
 </html>
