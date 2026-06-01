@@ -11,7 +11,15 @@
             <p class="mt-1 text-slate-500 dark:text-slate-400 font-medium">{{ __('Daftar riwayat deteksi dini status gizi balita') }}</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('histori.export') }}" class="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
+            <form action="{{ route('histori.index') }}" method="GET" class="flex items-center gap-2">
+                <select name="month" onchange="this.form.submit()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all focus:ring-2 focus:ring-indigo-500/50 outline-none">
+                    <option value="">{{ __('Semua Bulan') }}</option>
+                    @foreach(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $idx => $m)
+                        <option value="{{ $idx + 1 }}" {{ (request('month') == ($idx + 1)) ? 'selected' : '' }}>{{ $m }}</option>
+                    @endforeach
+                </select>
+            </form>
+            <a href="{{ route('histori.export', ['month' => request('month')]) }}" class="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-400">
                 <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-500"></i>
                 {{ __('Ekspor Excel') }}
             </a>

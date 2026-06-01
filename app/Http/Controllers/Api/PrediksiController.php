@@ -218,21 +218,28 @@ class PrediksiController extends Controller
 
     private function getStructuredRecommendation($kategoriUtama, $dataLengkap)
     {
-        // 1. Cek di Database dulu (berdasarkan status utama HA)
+        $umur = $dataLengkap['umur'];
+        $rentangUmur = '0-5'; // Default ASI Eksklusif
+        if ($umur >= 6 && $umur <= 11) $rentangUmur = '6-11';
+        elseif ($umur >= 12 && $umur <= 23) $rentangUmur = '12-23';
+        elseif ($umur >= 24) $rentangUmur = '24-60';
+
+        // 1. Cek di Database (berdasarkan status utama HA DAN rentang umur)
         $existingRecs = RekomendasiNutrisi::where('kategori_risiko', $kategoriUtama)
+            ->where('rentang_umur', $rentangUmur)
             ->with('nutrisi.makanan')
             ->get();
 
         if ($existingRecs->isNotEmpty()) {
             $dataTerstruktur = [];
-            $teksArr = ["Berdasarkan database gizi kami, untuk kondisi anak Anda (Status H/A: $kategoriUtama), berikut saran nutrisinya:"];
+            $teksArr = ["Berdasarkan database gizi kami, untuk kondisi anak Anda (Status H/A: $kategoriUtama, Umur: $umur bulan), berikut saran nutrisinya:"];
 
             foreach ($existingRecs as $rec) {
                 if ($rec->nutrisi) {
                     $makanans = $rec->nutrisi->makanan->pluck('nama_makanan')->toArray();
                     $dataTerstruktur[] = [
                         'nutrisi' => $rec->nutrisi->nama_nutrisi,
-                        'makanan' => $rec->nutrisi->makanan
+                        'makanan' => $rec->nutrisi->makanan->toArray()
                     ];
                     $teksArr[] = "- " . ucwords($rec->nutrisi->nama_nutrisi) . ": " . implode(', ', $makanans);
                 }
@@ -244,11 +251,11 @@ class PrediksiController extends Controller
             ];
         }
 
-        // 2. Jika belum ada, Panggil Gemini untuk membuat data baru (JSON)
-        return $this->generateGeminiStructured($kategoriUtama, $dataLengkap);
+        // 2. Jika belum ada, Panggil Gemini untuk membuat data baru
+        return $this->generateGeminiStructured($kategoriUtama, $rentangUmur, $dataLengkap);
     }
 
-    private function generateGeminiStructured($kategoriUtama, $data)
+    private function generateGeminiStructured($kategoriUtama, $rentangUmur, $data)
     {
         $apiKey = env('GEMINI_API_KEY');
         if (!$apiKey) return ['teks_rekomendasi' => 'API Key missing.', 'data_terstruktur' => []];
@@ -259,18 +266,19 @@ class PrediksiController extends Controller
             . "- Status W/A (Berat/Umur): {$data['status_wa']} (Z: {$data['z_wa']})\n"
             . "- Status W/H (Gizi/Proporsi): {$data['status_wh']} (Z: {$data['z_wh']})\n"
             . "- Detail: Umur {$data['umur']} bln, JK: {$data['jk']}, TB: {$data['tb']}cm.\n\n"
-            . "Tugas: Berikan 2-3 jenis Nutrisi utama yang paling dibutuhkan dan 3-5 contoh Makanan spesifik untuk memperbaiki kondisi tersebut.\n"
+            . "Tugas: Berikan 2-3 jenis Nutrisi utama yang paling dibutuhkan dan 3-5 contoh MPASI/Makanan spesifik yang sangat relevan dan aman untuk umur {$data['umur']} bulan guna memperbaiki kondisi tersebut.\n"
+            . "PENTING: Jika umur anak di bawah 6 bulan, wajib prioritaskan ASI Eksklusif dan sebutkan makanan untuk IBU menyusui, BUKAN untuk bayi.\n"
             . "Format WAJIB JSON: \n"
             . "{\n"
             . "  \"nutrisi_list\": [\n"
             . "    {\n"
             . "      \"nama_nutrisi\": \"Nama Nutrisi\",\n"
             . "      \"makanan_list\": [\n"
-            . "        {\"nama\": \"Nama Makanan\", \"deskripsi\": \"Mengapa makanan ini baik untuk kondisi di atas?\"}\n"
+            . "        {\"nama\": \"Nama Makanan\", \"deskripsi\": \"Mengapa makanan ini baik dan tekstur yang cocok untuk umur {$data['umur']} bulan?\"}\n"
             . "      ]\n"
             . "    }\n"
             . "  ],\n"
-            . "  \"saran_teks\": \"Tulis 2-3 kalimat saran gizi holistik berdasarkan ketiga status di atas.\"\n"
+            . "  \"saran_teks\": \"Tulis 1-2 kalimat singkat, padat, dan ramah sebagai saran gizi holistik berdasarkan kondisi dan UMUR anak di atas.\"\n"
             . "}\n"
             . "Hanya kirimkan JSON saja.";
 
@@ -292,9 +300,10 @@ class PrediksiController extends Controller
                         // Simpan Nutrisi
                         $nutrisi = Nutrisi::firstOrCreate(['nama_nutrisi' => strtolower($n['nama_nutrisi'])]);
 
-                        // Link kategori utama ke nutrisi
+                        // Link kategori utama ke nutrisi beserta rentang umur
                         RekomendasiNutrisi::firstOrCreate([
                             'kategori_risiko' => $kategoriUtama,
+                            'rentang_umur' => $rentangUmur,
                             'id_nutrisi' => $nutrisi->id
                         ]);
 
@@ -305,7 +314,7 @@ class PrediksiController extends Controller
                                 ['nama_makanan' => $m['nama']],
                                 ['id_nutrisi' => $nutrisi->id, 'deskripsi' => $m['deskripsi']]
                             );
-                            $makananList[] = $makanan;
+                            $makananList[] = $makanan->toArray();
                         }
 
                         $savedData[] = [

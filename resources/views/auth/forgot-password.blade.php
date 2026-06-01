@@ -105,7 +105,7 @@
             <div class="flex flex-col items-center mb-10 relative z-10">
                 <!-- Logo -->
                 <div class="flex items-center mb-6">
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo StuntCheck" class="h-14 w-auto transform hover:scale-110 transition-transform duration-300 drop-shadow-md">
+                    <img src="{{ asset('img/logo_stuntcheck.jpeg') }}" alt="Logo StuntCheck" class="h-14 w-auto transform hover:scale-110 transition-transform duration-300 drop-shadow-md">
                     <span class="ml-3 text-3xl font-black tracking-tighter text-gray-900 dark:text-white">Stunt<span class="text-blue-600">Check</span></span>
                 </div>
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight text-center">{{ __('Forgot Password?') }}</h1>

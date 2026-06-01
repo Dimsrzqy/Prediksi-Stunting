@@ -13,35 +13,58 @@ class HistoriPrediksiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->role === 'admin') {
-            $histori = Prediksi::with('anak')->orderBy('created_at', 'desc')->get();
-        } else {
-            // Ambil ID anak yang dimiliki user
+        $month = $request->query('month');
+
+        $query = Prediksi::with('anak')->orderBy('created_at', 'desc');
+
+        if (Auth::user()->role !== 'admin') {
             $anakIds = \App\Models\Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
-            $histori = Prediksi::whereIn('id_anak', $anakIds)
-                ->with('anak')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $query->whereIn('id_anak', $anakIds);
         }
 
-        return view('admin.menus.histori', compact('histori'));
+        $histori = $query->get();
+
+        // MongoDB filtering via collection since we can't easily use whereMonth in jenssegers if date is string or UTCDateTime
+        if ($month) {
+            $histori = $histori->filter(function($item) use ($month) {
+                $tanggal = $item->created_at ?? ($item->tanggal_prediksi ?? null);
+                if (!$tanggal) return false;
+                if ($tanggal instanceof \MongoDB\BSON\UTCDateTime) {
+                    $tanggal = $tanggal->toDateTime();
+                }
+                return \Carbon\Carbon::parse($tanggal)->format('n') == $month;
+            })->values();
+        }
+
+        return view('admin.menus.histori', compact('histori', 'month'));
     }
 
     /**
      * Export data to CSV (Excel compatible).
      */
-    public function export()
+    public function export(Request $request)
     {
-        if (Auth::user()->role === 'admin') {
-            $histori = Prediksi::with('anak')->orderBy('created_at', 'desc')->get();
-        } else {
+        $month = $request->query('month');
+
+        $query = Prediksi::with('anak')->orderBy('created_at', 'desc');
+        if (Auth::user()->role !== 'admin') {
             $anakIds = \App\Models\Anak::where('user_id', Auth::id())->pluck('_id')->toArray();
-            $histori = Prediksi::whereIn('id_anak', $anakIds)
-                ->with('anak')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $query->whereIn('id_anak', $anakIds);
+        }
+        
+        $histori = $query->get();
+
+        if ($month) {
+            $histori = $histori->filter(function($item) use ($month) {
+                $tanggal = $item->created_at ?? ($item->tanggal_prediksi ?? null);
+                if (!$tanggal) return false;
+                if ($tanggal instanceof \MongoDB\BSON\UTCDateTime) {
+                    $tanggal = $tanggal->toDateTime();
+                }
+                return \Carbon\Carbon::parse($tanggal)->format('n') == $month;
+            })->values();
         }
 
         $filename = "histori_prediksi_" . date('Y-m-d_H-i-s') . ".csv";
@@ -93,12 +116,38 @@ class HistoriPrediksiController extends Controller
     public function chartData(Request $request)
     {
         $filter = $request->query('filter', 'bulan'); // default 'bulan'
+        $startMonth = $request->query('start_month'); // default 1 (Januari)
 
-        // Tentukan rentang waktu sesuai filter
+        $periods = [];
         if ($filter === 'minggu') {
-            $startDate = \Carbon\Carbon::now()->subDays(6)->startOfDay();
+            // Start of current week (Monday)
+            $startDate = \Carbon\Carbon::now()->startOfWeek();
+            // Siapkan array untuk Senin sampai Minggu (7 hari)
+            for ($i = 0; $i < 7; $i++) {
+                $periods[$startDate->copy()->addDays($i)->format('Y-m-d')] = [
+                    'Normal' => 0,
+                    'Tinggi' => 0,
+                    'Stunting' => 0,
+                    'Sangat Stunting' => 0,
+                ];
+            }
         } else {
-            $startDate = \Carbon\Carbon::now()->subMonths(11)->startOfMonth();
+            // Start from specific month (default January) of current year
+            $start = $startMonth ? (int)$startMonth : 1;
+            $startDate = \Carbon\Carbon::now()->month($start)->startOfMonth();
+            
+            // Loop from start month to current real-time month
+            $currentMonth = \Carbon\Carbon::now()->month;
+            $monthsToLoop = ($start > $currentMonth) ? 1 : ($currentMonth - $start + 1);
+
+            for ($i = 0; $i < $monthsToLoop; $i++) {
+                $periods[$startDate->copy()->addMonths($i)->format('Y-m')] = [
+                    'Normal' => 0,
+                    'Tinggi' => 0,
+                    'Stunting' => 0,
+                    'Sangat Stunting' => 0,
+                ];
+            }
         }
 
         // Ambil data hanya dalam rentang waktu yang relevan, diurutkan dari terbaru
@@ -112,29 +161,6 @@ class HistoriPrediksiController extends Controller
                 ->where('created_at', '>=', $startDate)
                 ->orderBy('created_at', 'desc')
                 ->get();
-        }
-
-        $periods = [];
-        if ($filter === 'minggu') {
-            // Siapkan array untuk 7 hari terakhir
-            for ($i = 6; $i >= 0; $i--) {
-                $periods[\Carbon\Carbon::now()->subDays($i)->format('Y-m-d')] = [
-                    'Normal' => 0,
-                    'Tinggi' => 0,
-                    'Stunting' => 0,
-                    'Sangat Stunting' => 0,
-                ];
-            }
-        } else {
-            // Siapkan array bulan untuk 12 bulan terakhir
-            for ($i = 11; $i >= 0; $i--) {
-                $periods[\Carbon\Carbon::now()->subMonths($i)->format('Y-m')] = [
-                    'Normal' => 0,
-                    'Tinggi' => 0,
-                    'Stunting' => 0,
-                    'Sangat Stunting' => 0,
-                ];
-            }
         }
 
         foreach ($histori as $item) {
@@ -186,7 +212,7 @@ class HistoriPrediksiController extends Controller
             if ($filter === 'minggu') {
                 $labels[] = \Carbon\Carbon::createFromFormat('Y-m-d', $k)->translatedFormat('d M');
             } else {
-                $labels[] = \Carbon\Carbon::createFromFormat('Y-m', $k)->translatedFormat('M Y');
+                $labels[] = \Carbon\Carbon::createFromFormat('!Y-m', $k)->translatedFormat('M Y');
             }
             $dataNormal[] = $v['Normal'];
             $dataTinggi[] = $v['Tinggi'];
