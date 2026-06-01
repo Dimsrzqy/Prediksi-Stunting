@@ -26,6 +26,7 @@ class RekomendasiNutrisi extends Model
      */
     protected $fillable = [
         'kategori_risiko',
+        'rentang_umur',
         'id_nutrisi',
     ];
 

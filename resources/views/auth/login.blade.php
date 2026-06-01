@@ -224,11 +224,7 @@
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2">
-                    <div class="flex items-center">
-                        <input id="remember" name="remember" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded bg-white dark:bg-gray-900 dark:border-gray-700">
-                        <label for="remember" class="ml-2 block text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</label>
-                    </div>
+                <div class="flex items-center justify-end pt-2">
                     @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors">{{ __('Forgot password?') }}</a>
                     @endif
@@ -248,7 +244,7 @@
 
         <!-- Footer text -->
         <div class="mt-8 text-center relative z-10">
-            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __("Don't have an account?") }} <a href="#" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors hover:underline">{{ __('Contact Administrator') }}</a></p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __("Don't have an account?") }} <a href="https://wa.me/6285234063810?text=Halo%20Admin%20StuntCheck,%20saya%20ingin%20meminta%20bantuan%20terkait%20akun%20saya." target="_blank" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors hover:underline">{{ __('Contact Administrator') }}</a></p>
         </div>
     </div>
 

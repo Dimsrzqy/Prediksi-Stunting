@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\ArtikelController;
 // ==========================================
 Route::post('/register', [AuthController::class, 'registerApi']);
 Route::post('/login', [AuthController::class, 'loginApi']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/inspirasi/sync', [ArtikelController::class, 'sync']); // Endpoint untuk Web Scraper Python
 
 // ==========================================

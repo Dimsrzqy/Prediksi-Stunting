@@ -148,10 +148,24 @@
                     <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight transition-colors">{{ __('Tren Prediksi') }}</h3>
                     <p id="subtitleChart" class="text-slate-500 dark:text-slate-400 font-medium mt-1 transition-colors">{{ __('Status gizi anak dalam 12 bulan terakhir') }}</p>
                 </div>
-                <div class="mt-4 sm:mt-0 flex p-1 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur rounded-full transition-colors">
+                <div class="mt-4 sm:mt-0 flex items-center p-1 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur rounded-full transition-colors">
                     <button id="btnMinggu" class="px-5 py-2 hover:text-slate-800 dark:hover:text-slate-100 text-slate-500 dark:text-slate-400 rounded-full text-sm font-bold transition-all">{{ __('Minggu') }}</button>
                     <button id="btnBulan" class="px-5 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-full text-sm font-bold shadow-sm transition-all">{{ __('Bulan') }}</button>
                 </div>
+                <select id="monthSelector" class="mt-4 sm:mt-0 ml-3 px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-full text-sm font-bold shadow-sm border border-slate-200 dark:border-slate-600 outline-none cursor-pointer transition-all">
+                    <option value="1">Mulai: Januari</option>
+                    <option value="2">Mulai: Februari</option>
+                    <option value="3">Mulai: Maret</option>
+                    <option value="4">Mulai: April</option>
+                    <option value="5">Mulai: Mei</option>
+                    <option value="6">Mulai: Juni</option>
+                    <option value="7">Mulai: Juli</option>
+                    <option value="8">Mulai: Agustus</option>
+                    <option value="9">Mulai: September</option>
+                    <option value="10">Mulai: Oktober</option>
+                    <option value="11">Mulai: November</option>
+                    <option value="12">Mulai: Desember</option>
+                </select>
             </div>
 
             <div class="relative w-full h-80 lg:h-96">
@@ -214,20 +228,9 @@
             currentFilter = filter;
             try {
                 const isDark = document.documentElement.classList.contains('dark');
-                // Tetap mengambil data dari Controller (tanpa limit di backend)
-                const res = await fetch(`/api-chart-histori?filter=bulan`);
+                const startMonth = document.getElementById('monthSelector').value;
+                const res = await fetch(`/api-chart-histori?filter=${filter}&start_month=${startMonth}`);
                 const chartData = await res.json();
-
-                // LOGIKA BARU: Jika filter adalah 'bulan', potong data menjadi 6 terakhir
-                if (filter === 'bulan' && chartData.labels && chartData.labels.length > 6) {
-                    // slice(-6) akan selalu mengambil 6 elemen terakhir dari array
-                    chartData.labels = chartData.labels.slice(-6);
-                    chartData.datasets.forEach(ds => {
-                        ds.data = ds.data.slice(-6);
-                    });
-                }
-
-                // --- SISANYA TETAP SAMA ---
                 if (chartData.datasets) {
                     chartData.datasets.forEach((ds) => {
                         ds.tension = 0.4;
@@ -311,16 +314,24 @@
 
         btnMinggu.addEventListener('click', () => {
             currentFilter = 'minggu';
-            subtitleChart.innerText = "{{ __('Status gizi anak dalam 7 hari terakhir') }}";
+            subtitleChart.innerText = "{{ __('Status gizi anak dalam minggu ini') }}";
+            document.getElementById('monthSelector').style.display = 'none';
             updateButtonStyles();
             fetchChart('minggu');
         });
 
         btnBulan.addEventListener('click', () => {
             currentFilter = 'bulan';
-            subtitleChart.innerText = "{{ __('Status gizi anak dalam 12 bulan terakhir') }}";
+            subtitleChart.innerText = "{{ __('Status gizi anak mulai bulan yang dipilih') }}";
+            document.getElementById('monthSelector').style.display = 'block';
             updateButtonStyles();
             fetchChart('bulan');
+        });
+
+        document.getElementById('monthSelector').addEventListener('change', () => {
+            if (currentFilter === 'bulan') {
+                fetchChart('bulan');
+            }
         });
 
         // Listen for theme toggle to update chart

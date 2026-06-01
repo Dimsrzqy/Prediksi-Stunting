@@ -66,6 +66,24 @@ class AuthController extends Controller
         ], 201); 
     }
 
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['pesan' => 'Email tidak ditemukan'], 404);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json(['pesan' => 'Password berhasil diubah'], 200);
+    }
+
     // ---------------------------------------------
     // FUNGSI LOGOUT API (Cabut Token Sanctum)
     // ---------------------------------------------
